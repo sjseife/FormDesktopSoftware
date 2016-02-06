@@ -19,3 +19,8 @@ CREATE TABLE `user_accounts` (
   UNIQUE KEY `username_UNIQUE` (`username`),
   UNIQUE KEY `salt_UNIQUE` (`salt`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+
+ALTER TABLE `schaum`.`user_accounts` 
+ADD COLUMN `email` VARCHAR(45) NOT NULL  AFTER `username`,
+ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC)  ;
