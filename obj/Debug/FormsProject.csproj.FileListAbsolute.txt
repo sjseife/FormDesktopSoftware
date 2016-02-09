@@ -1,0 +1,11 @@
+C:\Users\Danny Morrow\Documents\sp2016_se1_group2\bin\Debug\LoginForms.exe.config
+C:\Users\Danny Morrow\Documents\sp2016_se1_group2\obj\Debug\LoginForms.exe
+C:\Users\Danny Morrow\Documents\sp2016_se1_group2\obj\Debug\LoginForms.pdb
+C:\Users\Danny Morrow\Documents\sp2016_se1_group2\bin\Debug\LoginForms.exe
+C:\Users\Danny Morrow\Documents\sp2016_se1_group2\bin\Debug\LoginForms.pdb
+C:\Users\Danny Morrow\Documents\sp2016_se1_group2\obj\Debug\FormsProject.csprojResolveAssemblyReference.cache
+C:\Users\Danny Morrow\Documents\sp2016_se1_group2\obj\Debug\LoginForms.InfoForm.resources
+C:\Users\Danny Morrow\Documents\sp2016_se1_group2\obj\Debug\LoginForms.LoginForm.resources
+C:\Users\Danny Morrow\Documents\sp2016_se1_group2\obj\Debug\LoginForms.MainForm.resources
+C:\Users\Danny Morrow\Documents\sp2016_se1_group2\obj\Debug\LoginForms.Properties.Resources.resources
+C:\Users\Danny Morrow\Documents\sp2016_se1_group2\obj\Debug\FormsProject.csproj.GenerateResource.Cache

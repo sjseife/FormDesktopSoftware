@@ -1,0 +1,11 @@
+C:\Users\Danny Morrow\Desktop\Computer Applications\@Programming@\C#\LoginForms\LoginForms\bin\Debug\LoginForms.exe.config
+C:\Users\Danny Morrow\Desktop\Computer Applications\@Programming@\C#\LoginForms\LoginForms\bin\Debug\LoginForms.exe
+C:\Users\Danny Morrow\Desktop\Computer Applications\@Programming@\C#\LoginForms\LoginForms\bin\Debug\LoginForms.pdb
+C:\Users\Danny Morrow\Desktop\Computer Applications\@Programming@\C#\LoginForms\LoginForms\obj\Debug\LoginForms.csprojResolveAssemblyReference.cache
+C:\Users\Danny Morrow\Desktop\Computer Applications\@Programming@\C#\LoginForms\LoginForms\obj\Debug\LoginForms.Properties.Resources.resources
+C:\Users\Danny Morrow\Desktop\Computer Applications\@Programming@\C#\LoginForms\LoginForms\obj\Debug\LoginForms.csproj.GenerateResource.Cache
+C:\Users\Danny Morrow\Desktop\Computer Applications\@Programming@\C#\LoginForms\LoginForms\obj\Debug\LoginForms.exe
+C:\Users\Danny Morrow\Desktop\Computer Applications\@Programming@\C#\LoginForms\LoginForms\obj\Debug\LoginForms.pdb
+C:\Users\Danny Morrow\Desktop\Computer Applications\@Programming@\C#\LoginForms\LoginForms\obj\Debug\LoginForms.LoginForm.resources
+C:\Users\Danny Morrow\Desktop\Computer Applications\@Programming@\C#\LoginForms\LoginForms\obj\Debug\LoginForms.MainForm.resources
+C:\Users\Danny Morrow\Desktop\Computer Applications\@Programming@\C#\LoginForms\LoginForms\obj\Debug\LoginForms.InfoForm.resources
