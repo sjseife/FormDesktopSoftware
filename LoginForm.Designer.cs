@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.LoginContainer = new System.Windows.Forms.GroupBox();
+            this.ErrorLabel = new System.Windows.Forms.Label();
             this.LoginButton = new System.Windows.Forms.Button();
             this.PasswordLabel = new System.Windows.Forms.Label();
             this.UsernameLabel = new System.Windows.Forms.Label();
             this.PasswordTextbox = new System.Windows.Forms.TextBox();
             this.UsernameTextbox = new System.Windows.Forms.TextBox();
-            this.ErrorLabel = new System.Windows.Forms.Label();
             this.LoginContainer.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,6 +53,17 @@
             this.LoginContainer.TabIndex = 1;
             this.LoginContainer.TabStop = false;
             this.LoginContainer.Text = "Login";
+            // 
+            // ErrorLabel
+            // 
+            this.ErrorLabel.AutoSize = true;
+            this.ErrorLabel.ForeColor = System.Drawing.Color.Red;
+            this.ErrorLabel.Location = new System.Drawing.Point(8, 24);
+            this.ErrorLabel.Name = "ErrorLabel";
+            this.ErrorLabel.Size = new System.Drawing.Size(192, 13);
+            this.ErrorLabel.TabIndex = 5;
+            this.ErrorLabel.Text = "Username and password do not match!";
+            this.ErrorLabel.Visible = false;
             // 
             // LoginButton
             // 
@@ -101,17 +112,6 @@
             this.UsernameTextbox.Name = "UsernameTextbox";
             this.UsernameTextbox.Size = new System.Drawing.Size(176, 20);
             this.UsernameTextbox.TabIndex = 0;
-            // 
-            // ErrorLabel
-            // 
-            this.ErrorLabel.AutoSize = true;
-            this.ErrorLabel.ForeColor = System.Drawing.Color.Red;
-            this.ErrorLabel.Location = new System.Drawing.Point(8, 24);
-            this.ErrorLabel.Name = "ErrorLabel";
-            this.ErrorLabel.Size = new System.Drawing.Size(192, 13);
-            this.ErrorLabel.TabIndex = 5;
-            this.ErrorLabel.Text = "Username and password do not match!";
-            this.ErrorLabel.Visible = false;
             // 
             // LoginForm
             // 
