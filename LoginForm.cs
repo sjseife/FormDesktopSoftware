@@ -26,7 +26,7 @@ namespace LoginForms
             string user = UsernameTextbox.Text;
             string pass = PasswordTextbox.Text;
 
-            string validateUser = "SELECT user_id FROM user_accounts WHERE username = '" + user + "' AND password = '" + pass + "'";
+            string validateUser = "SELECT user_id FROM user_accounts WHERE BINARY username = '" + user + "' AND BINARY password = '" + pass + "'";
 
             MySqlCommand command = new MySqlCommand(validateUser, Parent.Connection);
 
@@ -34,13 +34,16 @@ namespace LoginForms
 
             if (value != 0)
             {
-                MySqlDataReader rdr = command.ExecuteReader();
-                rdr.Read();
-                int userId = int.Parse(rdr.GetString(0));
-                rdr.Close();
+                int userId;
+                using (MySqlDataReader rdr = command.ExecuteReader())
+                {
+                    rdr.Read();
+                    userId = int.Parse(rdr.GetString(0));
+                    rdr.Close();
+                }
 
                 this.Hide();
-                Parent.ShowInfo(userId);
+                Parent.LogIn(userId);
             }
             else
             {
