@@ -47,6 +47,7 @@
             this.Controls.Add(this.InvisibleStrip);
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.InvisibleStrip;
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "Forms Project";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);

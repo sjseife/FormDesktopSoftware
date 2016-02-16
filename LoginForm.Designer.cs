@@ -67,7 +67,6 @@
             // 
             // LoginButton
             // 
-            this.LoginButton.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.LoginButton.Location = new System.Drawing.Point(112, 152);
             this.LoginButton.Name = "LoginButton";
             this.LoginButton.Size = new System.Drawing.Size(75, 23);
@@ -78,7 +77,6 @@
             // 
             // PasswordLabel
             // 
-            this.PasswordLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.PasswordLabel.AutoSize = true;
             this.PasswordLabel.Location = new System.Drawing.Point(8, 96);
             this.PasswordLabel.Name = "PasswordLabel";
@@ -88,7 +86,6 @@
             // 
             // UsernameLabel
             // 
-            this.UsernameLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.UsernameLabel.AutoSize = true;
             this.UsernameLabel.Location = new System.Drawing.Point(8, 48);
             this.UsernameLabel.Name = "UsernameLabel";
@@ -98,7 +95,6 @@
             // 
             // PasswordTextbox
             // 
-            this.PasswordTextbox.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.PasswordTextbox.Location = new System.Drawing.Point(8, 112);
             this.PasswordTextbox.Name = "PasswordTextbox";
             this.PasswordTextbox.Size = new System.Drawing.Size(176, 20);
@@ -107,7 +103,6 @@
             // 
             // UsernameTextbox
             // 
-            this.UsernameTextbox.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.UsernameTextbox.Location = new System.Drawing.Point(8, 64);
             this.UsernameTextbox.Name = "UsernameTextbox";
             this.UsernameTextbox.Size = new System.Drawing.Size(176, 20);
