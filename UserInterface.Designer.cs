@@ -151,7 +151,7 @@ namespace userform
             // 
             this.etsuLogo.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("etsuLogo.ImageStream")));
             this.etsuLogo.TransparentColor = System.Drawing.Color.Transparent;
-            this.etsuLogo.Images.SetKeyName(0, "etsu.jpg");
+            //this.etsuLogo.Images.SetKeyName(0, "etsu.jpg");
             // 
             // pictureBox1
             // 
