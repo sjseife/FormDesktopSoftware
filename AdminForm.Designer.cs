@@ -95,6 +95,7 @@
             this.CreateFormButton.TabIndex = 3;
             this.CreateFormButton.Text = "Create Form";
             this.CreateFormButton.UseVisualStyleBackColor = true;
+            this.CreateFormButton.Click += new System.EventHandler(this.CreateFormButton_Click);
             // 
             // AddUserButton
             // 
