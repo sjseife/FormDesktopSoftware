@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using AdminFormCreationInterface;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -57,5 +58,19 @@ namespace LoginForms
         {
             Parent.EditInfo(this, 0, true);
         }
+
+        private void CreateFormButton_Click(object sender, EventArgs e)
+        {
+            System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(ThreadProc));
+            t.Start();
+            //this.Close();
+        }
+
+        public static void ThreadProc()
+        {
+           // launch form creator
+            Application.Run(new FormCreator());
+        }
     }
+    
 }
