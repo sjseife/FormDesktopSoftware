@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace LoginForms
+namespace FormsProject
 {
     public partial class FormViewer : Form
     {
@@ -44,7 +44,7 @@ namespace LoginForms
                 {
                     FormID = Convert.ToInt32(rdr[0].ToString());
                     object data = rdr[1];
-                    HTML = Encoding.ASCII.GetString((byte[])data);
+                    HTML = Encoding.UTF8.GetString((byte[])data);
                 }
                 rdr.Close();
             }
@@ -65,7 +65,7 @@ namespace LoginForms
                     post = Encoding.ASCII.GetString(PostData).Trim('\0');
                 }
 
-                if (url == "about:create_user")
+                if (url == "about:submit_form")
                 {
                     if (ready)
                     {

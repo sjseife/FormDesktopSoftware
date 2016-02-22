@@ -1,4 +1,4 @@
-﻿namespace AdminFormCreationInterface
+﻿namespace FormsProject
 {
     partial class ComboSelection
     {
@@ -78,7 +78,7 @@
             this.Controls.Add(this.addCombo);
             this.Controls.Add(this.textCollectionBox);
             this.Name = "ComboSelection";
-            this.Text = "ComboSelection";
+            this.Text = "Dropdown Creation";
             this.Load += new System.EventHandler(this.ComboSelection_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

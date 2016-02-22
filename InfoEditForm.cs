@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 
-namespace LoginForms
+namespace FormsProject
 {
     public partial class InfoEditForm : Form
     {
@@ -73,7 +73,7 @@ namespace LoginForms
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            string checkExistingUser = "SELECT username FROM user_accounts WHERE username = '" + UsernameTextbox.Text + "'";
+            string checkExistingUser = "SELECT COUNT(username) FROM user_accounts WHERE username = '" + UsernameTextbox.Text + "'";
             string createUser1 = string.Format("INSERT INTO user_accounts (username, password, f_name, l_name, address_street, address_number, address_city, address_state, address_zip, primary_phone, user_title, user_level, email) VALUES ('{0}','{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', {10}, {11}, '{12}')", UsernameTextbox.Text, PasswordTextBox.Text, FNameTextbox.Text, LNameTextbox.Text, StreetNameTextbox.Text, StreetNumberTextbox.Text, CityTextbox.Text, StateTextbox.Text, ZipTextbox.Text, PhoneAreaTextbox.Text + "-" + PhoneFirst3Textbox.Text + "-" + PhoneLast4Textbox.Text, TitleTextbox.Text, LevelDropdown.SelectedIndex, EmailTextbox.Text);
             string createUser2 = string.Format("INSERT INTO user_accounts (username, password, f_name, l_name, address_street, address_number, address_city, address_state, address_zip, primary_phone, user_level, email) VALUES ('{0}','{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', {10}, '{11}')", UsernameTextbox.Text, PasswordTextBox.Text, FNameTextbox.Text, LNameTextbox.Text, StreetNameTextbox.Text, StreetNumberTextbox.Text, CityTextbox.Text, StateTextbox.Text, ZipTextbox.Text, PhoneAreaTextbox.Text + "-" + PhoneFirst3Textbox.Text + "-" + PhoneLast4Textbox.Text, LevelDropdown.SelectedIndex, EmailTextbox.Text);
             string updateUser = string.Format("UPDATE user_accounts SET f_name = '{0}', l_name = '{1}', address_street = '{2}', address_number = '{3}', address_city = '{4}', address_state = '{5}', address_zip = '{6}', primary_phone = '{7}', user_title = '{8}', user_level = {9}, email = '{10}' WHERE user_id = {11}", FNameTextbox.Text, LNameTextbox.Text, StreetNameTextbox.Text, StreetNumberTextbox.Text, CityTextbox.Text, StateTextbox.Text, ZipTextbox.Text, PhoneAreaTextbox.Text + "-" + PhoneFirst3Textbox.Text + "-" + PhoneLast4Textbox.Text, TitleTextbox.Text, LevelDropdown.SelectedIndex, EmailTextbox.Text, UserID);
@@ -82,7 +82,8 @@ namespace LoginForms
             {
                 MySqlCommand checkExists = new MySqlCommand(checkExistingUser, Parent.Connection);
 
-                int value = Convert.ToInt32(checkExists.ExecuteScalar());
+                object test = checkExists.ExecuteScalar();
+                int value = Convert.ToInt32(test);
 
                 if (value == 0) // Username does not already exist
                 {

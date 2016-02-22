@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace LoginForms
+namespace FormsProject
 {
     public partial class LoginForm : Form
     {
@@ -48,6 +48,22 @@ namespace LoginForms
             else
             {
                 ErrorLabel.Visible = true;
+            }
+        }
+
+        private void UsernameTextbox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13) // If Enter key, attempt login
+            {
+                LoginButton_Click(null, null);
+            }
+        }
+
+        private void PasswordTextbox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13) // If Enter key, attempt login
+            {
+                LoginButton_Click(null, null);
             }
         }
     }

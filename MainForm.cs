@@ -12,7 +12,7 @@ using MySql.Data;
 using MySql.Data.MySqlClient;
 using System.IO;
 
-namespace LoginForms
+namespace FormsProject
 {
     public partial class MainForm : Form
     {
@@ -85,6 +85,7 @@ namespace LoginForms
             info.MdiParent = this;
             info.Dock = DockStyle.Fill;
             info.Show();
+            RedrawForm();
         }
 
         public void LogIn(int userID)
@@ -113,6 +114,7 @@ namespace LoginForms
                 User.MdiParent = this;
                 User.Dock = DockStyle.Fill;
                 User.Show();
+                RedrawForm();
             }
             else if (userLevel > 0)
             {
@@ -120,11 +122,12 @@ namespace LoginForms
                 Admin.MdiParent = this;
                 Admin.Dock = DockStyle.Fill;
                 Admin.Show();
+                RedrawForm();
             }
             else
             {
-                MessageBox.Show("UserLevel Error!");
-                Environment.Exit(1);
+                MessageBox.Show("User is not finished being created");
+                Login.Show();
             }
         }
 
@@ -143,6 +146,19 @@ namespace LoginForms
             Login.MdiParent = this;
             Login.Dock = DockStyle.Fill;
             Login.Show();
+            RedrawForm();
+        }
+
+        public void CreateForm(Form hide)
+        {
+            TempForm = hide; // Save currently open form, then show info edit/add form
+
+            FormCreator formCreate = new FormCreator(this);
+            formCreate.MdiParent = this;
+            formCreate.Dock = DockStyle.Fill;
+            hide.Visible = false;
+            formCreate.Show();
+            RedrawForm();
         }
 
         public void EditInfo(Form hide, int userID, bool createNew)
@@ -154,6 +170,7 @@ namespace LoginForms
             editMyInfo.Dock = DockStyle.Fill;
             hide.Visible = false;
             editMyInfo.Show();
+            RedrawForm();
         }
 
         public void ExitInfo()
@@ -171,6 +188,7 @@ namespace LoginForms
             viewUsers.Dock = DockStyle.Fill;
             hide.Visible = false;
             viewUsers.Show();
+            RedrawForm();
         }
 
         public void RedrawForm()
@@ -189,6 +207,7 @@ namespace LoginForms
             view.Dock = DockStyle.Fill;
             hide.Visible = false;
             view.Show();
+            RedrawForm();
         }
 
         public void ContinueForm(Form hide, string formname, int userID)
@@ -200,6 +219,7 @@ namespace LoginForms
             view.Dock = DockStyle.Fill;
             hide.Visible = false;
             view.Show();
+            RedrawForm();
         }
     }
 }
