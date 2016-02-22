@@ -1,4 +1,4 @@
-﻿namespace LoginForms
+﻿namespace FormsProject
 {
     partial class InfoEditForm
     {

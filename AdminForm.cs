@@ -1,5 +1,4 @@
-﻿using AdminFormCreationInterface;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace LoginForms
+namespace FormsProject
 {
     public partial class AdminForm : Form
     {
@@ -61,15 +60,16 @@ namespace LoginForms
 
         private void CreateFormButton_Click(object sender, EventArgs e)
         {
-            System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(ThreadProc));
-            t.Start();
+            Parent.CreateForm(this);
+            //System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(ThreadProc));
+            //t.Start();
             //this.Close();
         }
 
         public static void ThreadProc()
         {
            // launch form creator
-            Application.Run(new FormCreator());
+            //Application.Run(new FormCreator());
         }
     }
     

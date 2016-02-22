@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,33 +9,36 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AdminFormCreationInterface
+namespace FormsProject
 {
 
     public partial class FormCreator : Form
     {
-        private static int indexForText = 0;
-        private static int indexForUser = 0;
-        private static int indexForPassword = 0;
-        private static int[,] radioGroupTracker = new int[100, 1];
-        private static int indexForRadio = 0;
-        private static int indexForRadioTitle = 0;
-        private static int[,] checkGroupTracker = new int[100, 1];
-        private static int indexForCheck = 0;
-        private static int indexForCheckTitle = 0;
-        private static List<TextBox> labelText = new List<TextBox>();
-        private static List<TextBox> textBox = new List<TextBox>();
-        private static List<TextBox> radioTextBox = new List<TextBox>();
-        private static List<TextBox> radioGroupTitleBox = new List<TextBox>();
-        private static List<TextBox> checkTextBox = new List<TextBox>();
-        private static List<TextBox> checkGroupTitleBox = new List<TextBox>();
-        private static string[,] ComboSelection = new string[100, 100];
-        private static int indexForCombo = 0;
-        private static ComboSelection cs;
-        private static List<int> order = new List<int>();
+        private MainForm Parent;
 
-        public FormCreator()
+        private int indexForText = 0;
+        private int indexForUser = 0;
+        private int indexForPassword = 0;
+        private int[,] radioGroupTracker = new int[100, 1];
+        private int indexForRadio = 0;
+        private int indexForRadioTitle = 0;
+        private int[,] checkGroupTracker = new int[100, 1];
+        private int indexForCheck = 0;
+        private int indexForCheckTitle = 0;
+        private List<TextBox> labelText = new List<TextBox>();
+        private List<TextBox> textBox = new List<TextBox>();
+        private List<TextBox> radioTextBox = new List<TextBox>();
+        private List<TextBox> radioGroupTitleBox = new List<TextBox>();
+        private List<TextBox> checkTextBox = new List<TextBox>();
+        private List<TextBox> checkGroupTitleBox = new List<TextBox>();
+        private string[,] ComboSelection = new string[100, 100];
+        private int indexForCombo = 0;
+        private ComboSelection cs;
+        private List<int> order = new List<int>();
+
+        public FormCreator(MainForm parent)
         {
+            Parent = parent;
             InitializeComponent();
         }
 
@@ -42,38 +46,38 @@ namespace AdminFormCreationInterface
         {
             string label;
             //dynamically generates form objects based on user selection
-            if (comboBox1.SelectedIndex == 1)//username
+            if (NewObjectCombo.SelectedIndex == 1)//username
             {
-                order.Add(comboBox1.SelectedIndex);
+                order.Add(NewObjectCombo.SelectedIndex);
                 indexForUser = indexForText;
                 label = "User Name: ";
                 textBoxSelected(label);
                 indexForText++;
 
             }
-            else if (comboBox1.SelectedIndex == 2)//password
+            else if (NewObjectCombo.SelectedIndex == 2)//password
             {
-                order.Add(comboBox1.SelectedIndex);
+                order.Add(NewObjectCombo.SelectedIndex);
                 indexForPassword = indexForText;
                 label = "Password: ";
                 textBoxSelected(label);
                 indexForText++;
 
             }
-            else if (comboBox1.SelectedIndex == 3)//text box
+            else if (NewObjectCombo.SelectedIndex == 3)//text box
             {
                 label = "(Enter Label Here)";
-                order.Add(comboBox1.SelectedIndex);
+                order.Add(NewObjectCombo.SelectedIndex);
                 textBoxSelected(label);
                 indexForText++;
 
             }
-            else if (comboBox1.SelectedIndex == 4)//combobox
+            else if (NewObjectCombo.SelectedIndex == 4)//combobox
             {
                 //addCombo.Location = new Point(Add1.Location.X, Add1.Location.Y);
-                order.Add(comboBox1.SelectedIndex);
+                order.Add(NewObjectCombo.SelectedIndex);
                 Add1.Visible = false;
-                comboBox1.Visible = false;
+                NewObjectCombo.Visible = false;
                 radioLabel.Visible = true;
 
                 cs = new ComboSelection();
@@ -84,38 +88,34 @@ namespace AdminFormCreationInterface
                 radioLabel.Text = "Press done when finished adding selections";
                 radioLabel.Location = new Point(Add1.Location.X - 260, Add1.Location.Y);
 
-                cs.Show();
+                cs.ShowDialog();
             }
-            else if (comboBox1.SelectedIndex == 5)//radio button
+            else if (NewObjectCombo.SelectedIndex == 5)//radio button
             {
-                order.Add(comboBox1.SelectedIndex);
+                order.Add(NewObjectCombo.SelectedIndex);
                 addRadio.Location = new Point(Add1.Location.X, Add1.Location.Y);
                 numberCombo.Location = new Point(Add1.Location.X - 50, Add1.Location.Y);
                 radioLabel.Location = new Point(Add1.Location.X - 220, Add1.Location.Y);
                 radioLabel.Text = "Number of Buttons to Add";
                 addRadio.Visible = true;
                 Add1.Visible = false;
-                comboBox1.Visible = false;
+                NewObjectCombo.Visible = false;
                 radioLabel.Visible = true;
                 numberCombo.Visible = true;
             }
-            else if (comboBox1.SelectedIndex == 6)//checkbox
+            else if (NewObjectCombo.SelectedIndex == 6)//checkbox
             {
-                order.Add(comboBox1.SelectedIndex);
+                order.Add(NewObjectCombo.SelectedIndex);
                 addCheckBox.Location = new Point(Add1.Location.X, Add1.Location.Y);
                 numberCombo.Location = new Point(Add1.Location.X - 50, Add1.Location.Y);
                 radioLabel.Location = new Point(Add1.Location.X - 220, Add1.Location.Y);
                 radioLabel.Text = "Number of CheckBoxes to Add";
                 addCheckBox.Visible = true;
                 Add1.Visible = false;
-                comboBox1.Visible = false;
+                NewObjectCombo.Visible = false;
                 radioLabel.Visible = true;
                 numberCombo.Visible = true;
             }
-
-
-
-
         }
 
         private void textBoxSelected(string label) //adds text box to form
@@ -128,15 +128,17 @@ namespace AdminFormCreationInterface
             textBox.Add(new TextBox());
             textBox[indexForText].Enabled = false;
             textBox[indexForText].Location = new Point(Add1.Location.X - 240, Add1.Location.Y + 27);
-            textBox[indexForText].Size = new Size(225, 60); 
+            textBox[indexForText].Size = new Size(225, 60);
 
-            ActiveForm.Controls.Add(labelText[indexForText]);
-            ActiveForm.Controls.Add(textBox[indexForText]);
+            ButtonSplitter.Panel2.Controls.Add(labelText[indexForText]);
+            ButtonSplitter.Panel2.Controls.Add(textBox[indexForText]);
+            //ButtonSplitter.Panel2.Controls.Add(labelText[indexForText]);
+            //ButtonSplitter.Panel2.Controls.Add(textBox[indexForText]);
 
             Add1.Location = new Point(Add1.Location.X, Add1.Location.Y + 75);
             //comboBox1.Location = new Point(comboBox1.Location.X, comboBox1.Location.Y + 75);
-            panel1.Location = new Point(panel1.Location.X, panel1.Location.Y + 75);
-            comboBox1.SelectedIndex = 0;
+            NewObjectContainer.Location = new Point(NewObjectContainer.Location.X, NewObjectContainer.Location.Y + 75);
+            NewObjectCombo.SelectedIndex = 0;
         }
 
      
@@ -158,7 +160,7 @@ namespace AdminFormCreationInterface
 
                 radioGroupTitleBox[indexForRadioTitle].Location = new Point(Add1.Location.X - 295, Add1.Location.Y);
                 radioGroupTitleBox[indexForRadioTitle].Text = "(Group Label)";
-                ActiveForm.Controls.Add(radioGroupTitleBox[indexForRadioTitle]);
+                ButtonSplitter.Panel2.Controls.Add(radioGroupTitleBox[indexForRadioTitle]);
 
 
                 for (int i = 0; i < radioGroupTracker[indexForRadioTitle, 0]; i++) //generates total number of radio buttons selected by user
@@ -171,17 +173,17 @@ namespace AdminFormCreationInterface
                     radioTextBox[indexForRadio].Size = new Size(64, 20);
                     radioTextBox[indexForRadio].Text = "(Label " + (i + 1) + ")";
                     radioTextBox[indexForRadio].Location = new Point(Add1.Location.X - (295 - locChange), Add1.Location.Y + 27);
-                    ActiveForm.Controls.Add(dynamicRadio);
-                    ActiveForm.Controls.Add(radioTextBox[indexForRadio]);
+                    ButtonSplitter.Panel2.Controls.Add(dynamicRadio);
+                    ButtonSplitter.Panel2.Controls.Add(radioTextBox[indexForRadio]);
                     indexForRadio++;
                 }
 
 
                 Add1.Location = new Point(Add1.Location.X, Add1.Location.Y + 75);
-                panel1.Location = new Point(panel1.Location.X, panel1.Location.Y + 75);
-                comboBox1.SelectedIndex = 0;
+                NewObjectContainer.Location = new Point(NewObjectContainer.Location.X, NewObjectContainer.Location.Y + 75);
+                NewObjectCombo.SelectedIndex = 0;
                 Add1.Visible = true;
-                comboBox1.Visible = true;
+                NewObjectCombo.Visible = true;
                 radioLabel.Visible = false;
                 numberCombo.Visible = false;
                 addRadio.Visible = false;
@@ -211,7 +213,7 @@ namespace AdminFormCreationInterface
 
                 checkGroupTitleBox[indexForCheckTitle].Location = new Point(Add1.Location.X - 295, Add1.Location.Y);
                 checkGroupTitleBox[indexForCheckTitle].Text = "(Group Label)";
-                ActiveForm.Controls.Add(checkGroupTitleBox[indexForCheckTitle]);
+                ButtonSplitter.Panel2.Controls.Add(checkGroupTitleBox[indexForCheckTitle]);
 
                 for (int i = 0; i < checkGroupTracker[indexForCheckTitle, 0]; i++)
                 {
@@ -223,17 +225,17 @@ namespace AdminFormCreationInterface
                     checkTextBox[indexForCheck].Size = new Size(64, 20);
                     checkTextBox[indexForCheck].Text = "(Label " + (i + 1) + ")";
                     checkTextBox[indexForCheck].Location = new Point(Add1.Location.X - (295 - locChange), Add1.Location.Y + 27);
-                    ActiveForm.Controls.Add(dynamicCheck);
-                    ActiveForm.Controls.Add(checkTextBox[indexForCheck]);
+                    ButtonSplitter.Panel2.Controls.Add(dynamicCheck);
+                    ButtonSplitter.Panel2.Controls.Add(checkTextBox[indexForCheck]);
                     indexForCheck++;
                 }
 
 
                 Add1.Location = new Point(Add1.Location.X, Add1.Location.Y + 75);
-                panel1.Location = new Point(panel1.Location.X, panel1.Location.Y + 75);
-                comboBox1.SelectedIndex = 0;
+                NewObjectContainer.Location = new Point(NewObjectContainer.Location.X, NewObjectContainer.Location.Y + 75);
+                NewObjectCombo.SelectedIndex = 0;
                 Add1.Visible = true;
-                comboBox1.Visible = true;
+                NewObjectCombo.Visible = true;
                 radioLabel.Visible = false;
                 numberCombo.Visible = false;
                 addCheckBox.Visible = false;
@@ -251,7 +253,7 @@ namespace AdminFormCreationInterface
 
         private void ComboChange_Click(object sender, EventArgs e) //opens form to fill out collection
         {
-            cs.Show();
+            cs.ShowDialog();
         }
 
         private void ComboDone_Click(object sender, EventArgs e) //generates combobox after user has finished filling out the collection
@@ -270,12 +272,12 @@ namespace AdminFormCreationInterface
             cs.Close();
             dynamicCombo.SelectedIndex = 0;
 
-            ActiveForm.Controls.Add(dynamicCombo);
+            ButtonSplitter.Panel2.Controls.Add(dynamicCombo);
             Add1.Location = new Point(Add1.Location.X, Add1.Location.Y + 75);
-            panel1.Location = new Point(panel1.Location.X, panel1.Location.Y + 75);
-            comboBox1.SelectedIndex = 0;
+            NewObjectContainer.Location = new Point(NewObjectContainer.Location.X, NewObjectContainer.Location.Y + 75);
+            NewObjectCombo.SelectedIndex = 0;
             Add1.Visible = true;
-            comboBox1.Visible = true;
+            NewObjectCombo.Visible = true;
             ComboDone.Visible = false;
             ComboChange.Visible = false;
             radioLabel.Visible = false;
@@ -350,20 +352,13 @@ namespace AdminFormCreationInterface
             html.save();
         }
 
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
         {
-            System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(ThreadProc));
-            t.Start();
+            Parent.ExitInfo();
             this.Close();
         }
 
-        public static void ThreadProc()
-        {
-           // FormCreator f;
-            Application.Run(new FormCreator());
-        }
-
-        private void submitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SubmitButton_Click(object sender, EventArgs e)
         {
             HTMLConverter html = new HTMLConverter();
             int indexText = 0;
@@ -429,7 +424,30 @@ namespace AdminFormCreationInterface
                 }
             }
 
-            html.send();
+            DateTime date = DateTime.Now;
+            string newdate = date.ToString("yyyy-MM-dd");
+
+            string htmlString = html.GetHTML();
+            byte[] rawData = Encoding.UTF8.GetBytes(htmlString);
+
+            string SQL = String.Format("INSERT INTO form_template(form_name, form_file, form_creation_date) VALUES(@form_name, @form_file, @form_creation_date)");
+            
+            MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand(SQL, Parent.Connection);
+            cmd.Parameters.AddWithValue("@form_name", Title.Text);
+            cmd.Parameters.AddWithValue("@form_file", rawData);
+            cmd.Parameters.AddWithValue("@form_creation_date", newdate);
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+                MessageBox.Show("File Inserted into database successfully!", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                Parent.ExitInfo();
+                this.Close();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                MessageBox.Show("Error " + ex.Number + " has occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

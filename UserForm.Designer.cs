@@ -1,4 +1,4 @@
-﻿namespace LoginForms
+﻿namespace FormsProject
 {
     partial class UserForm
     {
@@ -95,6 +95,7 @@
             // 
             // FormTypeSeperator
             // 
+            this.FormTypeSeperator.AutoScroll = true;
             this.FormTypeSeperator.AutoSize = true;
             this.FormTypeSeperator.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.FormTypeSeperator.ColumnCount = 1;
@@ -204,6 +205,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(358, 389);
             this.Controls.Add(this.LoginInfoSplitter);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;

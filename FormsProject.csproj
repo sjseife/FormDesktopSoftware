@@ -7,7 +7,7 @@
     <ProjectGuid>{5AC96FE5-7EFA-4DEA-B27E-8D8FD27967AA}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LoginForms</RootNamespace>
+    <RootNamespace>FormsProject</RootNamespace>
     <AssemblyName>LoginForms</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -58,11 +58,15 @@
     <Compile Include="ComboSelection.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ComboSelection.Designer.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="ComboSelection.Designer.cs">
+      <DependentUpon>ComboSelection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormCreator.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs" />
+    <Compile Include="FormCreator.Designer.cs">
+      <DependentUpon>FormCreator.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,8 +122,12 @@
     <EmbeddedResource Include="AdminForm.resx">
       <DependentUpon>AdminForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ComboSelection.resx" />
-    <EmbeddedResource Include="Form1.resx" />
+    <EmbeddedResource Include="ComboSelection.resx">
+      <DependentUpon>ComboSelection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormCreator.resx">
+      <DependentUpon>FormCreator.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormViewer.resx">
       <DependentUpon>FormViewer.cs</DependentUpon>
     </EmbeddedResource>
@@ -143,6 +151,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="UserForm.resx">
       <DependentUpon>UserForm.cs</DependentUpon>

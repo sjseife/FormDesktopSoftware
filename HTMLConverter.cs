@@ -10,17 +10,19 @@ using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using System.Data;
 
-namespace AdminFormCreationInterface
+namespace FormsProject
 {
     class HTMLConverter
     {
         private string top = "<!DOCTYPE html>\n<html>\n<head>\n<meta charset = 'utf-8'>\n";
         private string title;
-        private string action = "<form action=\"action_page.php\" method=\"post\">\n";
+        private string action = "<form method=post action=submit_form>\n";
         private string formBody;
         private string fieldset = "<fieldset style=\"display:inline-block\">\n";
         private Regex rgx = new Regex("[^a-zA-Z0-9 -]");
-        private string bottom = "<input type=\"submit\" value=\"Submit\">\n<input type = \"reset\" value=\"Reset!\">\n</form>\n</body>\n</html>";
+        private string bottom = "<input type='submit' name='submit' value='Submit'>\n<input type = \"reset\" value=\"Reset\">\n<input type='submit' name='cancel' value='Cancel'>\n</form>\n</body>\n</html>";
+        //private string bottom = "<input type=\"submit\" value=\"Submit\">\n<input type = \"reset\" value=\"Reset\">\n</form>\n</body>\n</html>";
+        //private string bottom = "<input type='submit' name='submit' value='Submit'><input type='submit' name='save' value='Save'><input type='submit' name='cancel' value='Cancel'>\n\t\t</form>\n\t</body>\n</html>"; // bottom when Save function is complete
 
         public void setTitle(string input)
         {
@@ -122,51 +124,34 @@ namespace AdminFormCreationInterface
         public void send()
         {
             string output = top + action + formBody + bottom;
-            string fileName = String.Format("{0}.htm", formatString(title));
-            using (FileStream fs = new FileStream(fileName, FileMode.Create)) //combine into html
-            {
-                using (StreamWriter w = new StreamWriter(fs, Encoding.UTF8))
-                {
-                    w.WriteLine(output);
-                }
-            }
-            MySql.Data.MySqlClient.MySqlConnection conn;
-            MySql.Data.MySqlClient.MySqlCommand cmd;
 
-            conn = new MySql.Data.MySqlClient.MySqlConnection();
-            cmd = new MySql.Data.MySqlClient.MySqlCommand();
+            MySql.Data.MySqlClient.MySqlConnection conn = new MySql.Data.MySqlClient.MySqlConnection(); ;
+            MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand();
+
             DateTime date = DateTime.Now;
             string newdate = date.ToString("yyyy-MM-dd");
-            string SQL;
-            int FileSize;
-            byte[] rawData;
-            FileStream fs1;
+
             string serverName = "server=einstein.etsu.edu";
             string databaseName = "database=schaum";
             string username = "uid=schaum";
             string password = "pwd=12345";
-
-                conn.ConnectionString = (string.Format("{0};{1};{2};{3}", serverName, databaseName, username, password));
+            
+            conn.ConnectionString = (string.Format("{0};{1};{2};{3}", serverName, databaseName, username, password));
             // MySqlCommand cmd = new MySqlCommand(
             //  "SELECT form_id, form_file FROM form_template", conn);
 
             // Writes the BLOB to a file (*.bmp).
             try
             {
-                fs1 = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-                FileSize = (int)fs1.Length;
-
-                rawData = new byte[FileSize];
-                fs1.Read(rawData, 0, FileSize);
-                fs1.Close();
+                byte[] rawData = Encoding.UTF8.GetBytes(output);
 
                 conn.Open();
 
-                SQL = String.Format("INSERT INTO form_template(form_name, form_file, form_creation_date) VALUES(@form_name, @form_file, @form_creation_date)");
+                string SQL = String.Format("INSERT INTO form_template(form_name, form_file, form_creation_date) VALUES(@form_name, @form_file, @form_creation_date)");
                 cmd.Connection = conn;
                 cmd.CommandText = SQL;
-                cmd.Parameters.AddWithValue("@form_name", formatString(title));
-               // cmd.Parameters.AddWithValue("@FileSize", FileSize);
+                cmd.Parameters.AddWithValue("@form_name", title);
+                //cmd.Parameters.AddWithValue("@FileSize", FileSize);
                 cmd.Parameters.AddWithValue("@form_file", rawData);
                 cmd.Parameters.AddWithValue("@form_creation_date", newdate);
 
@@ -182,8 +167,11 @@ namespace AdminFormCreationInterface
                 MessageBox.Show("Error " + ex.Number + " has occurred: " + ex.Message,
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-
         }//send()
+
+        public string GetHTML()
+        {
+            return top + action + formBody + bottom; ;
+        }
     }
 }
