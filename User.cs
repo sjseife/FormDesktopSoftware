@@ -1,5 +1,6 @@
 ﻿using System;
 using MySql.Data.MySqlClient;
+using System.Windows.Forms;
 
 public class User
 {
@@ -19,6 +20,9 @@ public class User
     public string primary_phone { get; set; }
     public string user_title { get; set; }
     public int user_level { get; set; }
+    
+    private MySqlConnection Connection;
+    private MySqlCommand cmd;
 
 
     public User(int userID)
@@ -62,7 +66,7 @@ public class User
             this.user_title = (string)reader["user_title"];//set user_title from database query results
             this.user_level = (int)reader["user_level"];//set user_level from database query results
         }
-        con.Close();
+        Connection.Close();
 
 
 
@@ -110,10 +114,9 @@ public class User
             this.user_title = (string)reader["user_title"];//set user_title from database query results
             this.user_level = (int)reader["user_level"];//set user_level from database query results
         }
-        con.Close();
+        Connection.Close();
 
 
 
     }//end constructor with uName as param
-}
 }

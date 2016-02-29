@@ -1,6 +1,6 @@
 ﻿namespace FormsProject
 {
-    partial class InfoForm
+    partial class FormViewer
     {
         /// <summary>
         /// Required designer variable.
@@ -28,38 +28,36 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.UserInfoTextBox = new System.Windows.Forms.TextBox();
+            this.HTMLViewer = new System.Windows.Forms.WebBrowser();
             this.SuspendLayout();
             // 
-            // UserInfoTextBox
+            // HTMLViewer
             // 
-            this.UserInfoTextBox.BackColor = System.Drawing.Color.White;
-            this.UserInfoTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.UserInfoTextBox.Location = new System.Drawing.Point(0, 0);
-            this.UserInfoTextBox.Multiline = true;
-            this.UserInfoTextBox.Name = "UserInfoTextBox";
-            this.UserInfoTextBox.ReadOnly = true;
-            this.UserInfoTextBox.Size = new System.Drawing.Size(284, 262);
-            this.UserInfoTextBox.TabIndex = 0;
+            this.HTMLViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.HTMLViewer.Location = new System.Drawing.Point(0, 0);
+            this.HTMLViewer.MinimumSize = new System.Drawing.Size(20, 20);
+            this.HTMLViewer.Name = "HTMLViewer";
+            this.HTMLViewer.Size = new System.Drawing.Size(342, 351);
+            this.HTMLViewer.TabIndex = 0;
+            this.HTMLViewer.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.HTMLViewer_DocumentCompleted);
+            this.HTMLViewer.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.HTMLViewer_Navigating);
             // 
-            // InfoForm
+            // FormViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
-            this.Controls.Add(this.UserInfoTextBox);
+            this.ClientSize = new System.Drawing.Size(342, 351);
+            this.Controls.Add(this.HTMLViewer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "InfoForm";
+            this.Name = "FormViewer";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Load += new System.EventHandler(this.InfoForm_Load);
+            this.Load += new System.EventHandler(this.FormViewer_Load);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TextBox UserInfoTextBox;
-
+        private System.Windows.Forms.WebBrowser HTMLViewer;
     }
 }

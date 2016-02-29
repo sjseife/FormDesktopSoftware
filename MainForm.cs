@@ -10,14 +10,16 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data;
 using MySql.Data.MySqlClient;
+using System.IO;
 
-namespace LoginForms
+namespace FormsProject
 {
     public partial class MainForm : Form
     {
         public MySqlConnection Connection;  // Connection to MySQL Server
         private LoginForm Login;            // Login form
         private AdminForm Admin;            // Admin form
+        private UserForm User;              // User form
         public Form TempForm;               // Temporary Storage form to hold hidden forms
 
         public MainForm()
@@ -30,6 +32,7 @@ namespace LoginForms
             //string getUsers = "SELECT username FROM user_accounts";
             //string addUser = "INSERT INTO user_accounts (username, password, salt, f_name, l_name, address_street, address_number, address_city, address_state, address_zip, primary_phone) VALUES ('TestUser','password', 'salt', 'John', 'Smith', 'StreetName', '123', 'Johnson City', 'TN', '37614', '1234567890')";
             //string deleteUser = "DELETE FROM user_accounts WHERE username = 'TestUser'";
+            //string createForm = "INSERT INTO form_template (form_name, form_file, form_creation_date) VALUES ('Test Form 2', ?fileData, '{0}')";
 
             const string serverName = "server=einstein.etsu.edu";
             const string databaseName = "database=schaum";
@@ -41,6 +44,20 @@ namespace LoginForms
             try
             {
                 Connection.Open();
+
+                //DateTime date = DateTime.Now;
+                //string newdate = date.ToString("yyyy-MM-dd");
+                //createForm = string.Format(createForm, newdate);
+
+                //MySqlCommand cmd = new MySqlCommand(createForm, Connection);
+
+                //byte[] HTML = File.ReadAllBytes("new_user.html");
+                //MySqlParameter fileData = new MySqlParameter("?fileData", MySqlDbType.Blob, HTML.Length);
+                //fileData.Value = HTML;
+
+                //cmd.Parameters.Add(fileData);
+
+                //cmd.ExecuteNonQuery();
             }
             catch
             {
@@ -68,6 +85,7 @@ namespace LoginForms
             info.MdiParent = this;
             info.Dock = DockStyle.Fill;
             info.Show();
+            RedrawForm();
         }
 
         public void LogIn(int userID)
@@ -92,7 +110,11 @@ namespace LoginForms
 
             if (userLevel == 0)
             {
-                // ADD USER INTERFACE CODE HERE
+                User = new UserForm(this, userID, username);
+                User.MdiParent = this;
+                User.Dock = DockStyle.Fill;
+                User.Show();
+                RedrawForm();
             }
             else if (userLevel > 0)
             {
@@ -100,11 +122,12 @@ namespace LoginForms
                 Admin.MdiParent = this;
                 Admin.Dock = DockStyle.Fill;
                 Admin.Show();
+                RedrawForm();
             }
             else
             {
-                MessageBox.Show("UserLevel Error!");
-                Environment.Exit(1);
+                MessageBox.Show("User is not finished being created");
+                Login.Show();
             }
         }
 
@@ -114,15 +137,28 @@ namespace LoginForms
             {
                 Admin.Close();
             }
-            //else if (User != null)
-            //{
-            //    User.Close(); // Example code once User Interface is implemented
-            //}
+            else if (User != null)
+            {
+                User.Close();
+            }
 
             Login = new LoginForm(this);
             Login.MdiParent = this;
             Login.Dock = DockStyle.Fill;
             Login.Show();
+            RedrawForm();
+        }
+
+        public void CreateForm(Form hide)
+        {
+            TempForm = hide; // Save currently open form, then show info edit/add form
+
+            FormCreator formCreate = new FormCreator(this);
+            formCreate.MdiParent = this;
+            formCreate.Dock = DockStyle.Fill;
+            hide.Visible = false;
+            formCreate.Show();
+            RedrawForm();
         }
 
         public void EditInfo(Form hide, int userID, bool createNew)
@@ -134,6 +170,7 @@ namespace LoginForms
             editMyInfo.Dock = DockStyle.Fill;
             hide.Visible = false;
             editMyInfo.Show();
+            RedrawForm();
         }
 
         public void ExitInfo()
@@ -151,6 +188,7 @@ namespace LoginForms
             viewUsers.Dock = DockStyle.Fill;
             hide.Visible = false;
             viewUsers.Show();
+            RedrawForm();
         }
 
         public void RedrawForm()
@@ -158,6 +196,30 @@ namespace LoginForms
             // Changing the form size seems to be the only way to redraw it. I tried EVERYTHING before this finally worked
             this.Size = new System.Drawing.Size(this.Size.Width + 1, this.Size.Height);
             this.Size = new System.Drawing.Size(this.Size.Width - 1, this.Size.Height);
+        }
+
+        public void NewForm(Form hide, string formname, int userID)
+        {
+            TempForm = hide; // Save currently open form
+
+            FormViewer view = new FormViewer(this, formname, false, userID);
+            view.MdiParent = this;
+            view.Dock = DockStyle.Fill;
+            hide.Visible = false;
+            view.Show();
+            RedrawForm();
+        }
+
+        public void ContinueForm(Form hide, string formname, int userID)
+        {
+            TempForm = hide; // Save currently open form
+
+            FormViewer view = new FormViewer(this, formname, true, userID);
+            view.MdiParent = this;
+            view.Dock = DockStyle.Fill;
+            hide.Visible = false;
+            view.Show();
+            RedrawForm();
         }
     }
 }

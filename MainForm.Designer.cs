@@ -1,4 +1,4 @@
-﻿namespace LoginForms
+﻿namespace FormsProject
 {
     partial class MainForm
     {
@@ -43,7 +43,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(374, 427);
+            this.ClientSize = new System.Drawing.Size(768, 581);
             this.Controls.Add(this.InvisibleStrip);
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.InvisibleStrip;

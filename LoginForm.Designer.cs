@@ -1,4 +1,4 @@
-﻿namespace LoginForms
+﻿namespace FormsProject
 {
     partial class LoginForm
     {
@@ -117,6 +117,7 @@
             this.PasswordTextbox.Size = new System.Drawing.Size(176, 20);
             this.PasswordTextbox.TabIndex = 1;
             this.PasswordTextbox.UseSystemPasswordChar = true;
+            this.PasswordTextbox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PasswordTextbox_KeyPress);
             // 
             // UsernameTextbox
             // 
@@ -124,6 +125,7 @@
             this.UsernameTextbox.Name = "UsernameTextbox";
             this.UsernameTextbox.Size = new System.Drawing.Size(176, 20);
             this.UsernameTextbox.TabIndex = 0;
+            this.UsernameTextbox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.UsernameTextbox_KeyPress);
             // 
             // LoginForm
             // 

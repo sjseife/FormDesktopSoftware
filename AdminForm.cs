@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace LoginForms
+namespace FormsProject
 {
     public partial class AdminForm : Form
     {
@@ -59,6 +59,23 @@ namespace LoginForms
             Parent.EditInfo(this, 0, true);
         }
 
+<<<<<<< HEAD
 
+=======
+        private void CreateFormButton_Click(object sender, EventArgs e)
+        {
+            Parent.CreateForm(this);
+            //System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(ThreadProc));
+            //t.Start();
+            //this.Close();
+        }
+
+        public static void ThreadProc()
+        {
+           // launch form creator
+            //Application.Run(new FormCreator());
+        }
+>>>>>>> 8fbef56c88b15f2f58cd1f9dd2ec31f1c0c50a20
     }
+    
 }

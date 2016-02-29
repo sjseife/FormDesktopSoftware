@@ -7,7 +7,7 @@
     <ProjectGuid>{5AC96FE5-7EFA-4DEA-B27E-8D8FD27967AA}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LoginForms</RootNamespace>
+    <RootNamespace>FormsProject</RootNamespace>
     <AssemblyName>LoginForms</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -55,6 +55,25 @@
     <Compile Include="AdminForm.Designer.cs">
       <DependentUpon>AdminForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ComboSelection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComboSelection.Designer.cs">
+      <DependentUpon>ComboSelection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormCreator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormCreator.Designer.cs">
+      <DependentUpon>FormCreator.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormViewer.Designer.cs">
+      <DependentUpon>FormViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HTMLConverter.cs" />
     <Compile Include="InfoEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,10 +100,25 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+<<<<<<< HEAD
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+=======
+    <Compile Include="User.cs" />
+    <Compile Include="UserForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserForm.Designer.cs">
+      <DependentUpon>UserForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserInterface.Designer.cs">
+      <DependentUpon>UserInterface.cs</DependentUpon>
+>>>>>>> 8fbef56c88b15f2f58cd1f9dd2ec31f1c0c50a20
     </Compile>
     <Compile Include="ViewUsers.cs">
       <SubType>Form</SubType>
@@ -94,6 +128,15 @@
     </Compile>
     <EmbeddedResource Include="AdminForm.resx">
       <DependentUpon>AdminForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComboSelection.resx">
+      <DependentUpon>ComboSelection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormCreator.resx">
+      <DependentUpon>FormCreator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormViewer.resx">
+      <DependentUpon>FormViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InfoEditForm.resx">
       <DependentUpon>InfoEditForm.cs</DependentUpon>
@@ -112,6 +155,17 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+<<<<<<< HEAD
+=======
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="UserForm.resx">
+      <DependentUpon>UserForm.cs</DependentUpon>
+    </EmbeddedResource>
+>>>>>>> 8fbef56c88b15f2f58cd1f9dd2ec31f1c0c50a20
     <EmbeddedResource Include="ViewUsers.resx">
       <DependentUpon>ViewUsers.cs</DependentUpon>
     </EmbeddedResource>

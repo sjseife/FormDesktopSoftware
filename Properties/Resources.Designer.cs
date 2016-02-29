@@ -8,7 +8,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+<<<<<<< HEAD
 namespace LoginForms.Properties {
+=======
+namespace FormsProject.Properties {
+>>>>>>> 8fbef56c88b15f2f58cd1f9dd2ec31f1c0c50a20
     using System;
     
     
@@ -39,7 +43,11 @@ namespace LoginForms.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
+<<<<<<< HEAD
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LoginForms.Properties.Resources", typeof(Resources).Assembly);
+=======
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FormsProject.Properties.Resources", typeof(Resources).Assembly);
+>>>>>>> 8fbef56c88b15f2f58cd1f9dd2ec31f1c0c50a20
                     resourceMan = temp;
                 }
                 return resourceMan;
