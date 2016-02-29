@@ -17,6 +17,7 @@ namespace LoginForms
         MainForm Parent;
         int UserID;
         bool NewUser;
+        
 
         public InfoEditForm(MainForm parent, int userID, bool createNew)
         {
@@ -24,6 +25,7 @@ namespace LoginForms
             UserID = userID;
             NewUser = createNew;
             InitializeComponent();
+            this.BackColor = System.Drawing.Color.White;
         }
 
         private void InfoEditForm_Load(object sender, EventArgs e)

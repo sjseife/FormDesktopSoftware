@@ -43,7 +43,7 @@
             this.UserList.FormattingEnabled = true;
             this.UserList.Location = new System.Drawing.Point(0, 0);
             this.UserList.Name = "UserList";
-            this.UserList.Size = new System.Drawing.Size(342, 333);
+            this.UserList.Size = new System.Drawing.Size(342, 312);
             this.UserList.TabIndex = 0;
             this.UserList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.UserList_MouseDoubleClick);
             // 
@@ -73,8 +73,8 @@
             // SplitContainer.Panel2
             // 
             this.SplitContainer.Panel2.Controls.Add(this.UserList);
-            this.SplitContainer.Size = new System.Drawing.Size(342, 351);
-            this.SplitContainer.SplitterDistance = 14;
+            this.SplitContainer.Size = new System.Drawing.Size(342, 340);
+            this.SplitContainer.SplitterDistance = 24;
             this.SplitContainer.TabIndex = 2;
             // 
             // ViewUsers
@@ -82,7 +82,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(342, 351);
+            this.ClientSize = new System.Drawing.Size(342, 340);
             this.Controls.Add(this.SplitContainer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "ViewUsers";

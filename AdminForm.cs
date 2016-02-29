@@ -25,6 +25,7 @@ namespace LoginForms
             Username = username;
             UserLevel = userLevel;
             InitializeComponent();
+            this.BackColor = System.Drawing.Color.White;
         }
 
         private void AdminForm_Load(object sender, EventArgs e)
@@ -57,5 +58,7 @@ namespace LoginForms
         {
             Parent.EditInfo(this, 0, true);
         }
+
+
     }
 }

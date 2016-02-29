@@ -28,16 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdminForm));
             this.LoginInfoSplitter = new System.Windows.Forms.SplitContainer();
             this.LogOutButton = new System.Windows.Forms.Button();
             this.UsernameLabel = new System.Windows.Forms.Label();
             this.CreateFormButton = new System.Windows.Forms.Button();
             this.AddUserButton = new System.Windows.Forms.Button();
             this.EditUserInfoButton = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.LoginInfoSplitter)).BeginInit();
             this.LoginInfoSplitter.Panel1.SuspendLayout();
             this.LoginInfoSplitter.Panel2.SuspendLayout();
             this.LoginInfoSplitter.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // LoginInfoSplitter
@@ -57,6 +60,7 @@
             // LoginInfoSplitter.Panel2
             // 
             this.LoginInfoSplitter.Panel2.AutoScroll = true;
+            this.LoginInfoSplitter.Panel2.Controls.Add(this.pictureBox1);
             this.LoginInfoSplitter.Panel2.Controls.Add(this.CreateFormButton);
             this.LoginInfoSplitter.Panel2.Controls.Add(this.AddUserButton);
             this.LoginInfoSplitter.Panel2.Controls.Add(this.EditUserInfoButton);
@@ -67,6 +71,7 @@
             // LogOutButton
             // 
             this.LogOutButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.LogOutButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LogOutButton.Location = new System.Drawing.Point(280, 0);
             this.LogOutButton.Name = "LogOutButton";
             this.LogOutButton.Size = new System.Drawing.Size(75, 23);
@@ -89,9 +94,10 @@
             // CreateFormButton
             // 
             this.CreateFormButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.CreateFormButton.Location = new System.Drawing.Point(0, 46);
+            this.CreateFormButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CreateFormButton.Location = new System.Drawing.Point(0, 94);
             this.CreateFormButton.Name = "CreateFormButton";
-            this.CreateFormButton.Size = new System.Drawing.Size(358, 23);
+            this.CreateFormButton.Size = new System.Drawing.Size(358, 47);
             this.CreateFormButton.TabIndex = 3;
             this.CreateFormButton.Text = "Create Form";
             this.CreateFormButton.UseVisualStyleBackColor = true;
@@ -99,9 +105,10 @@
             // AddUserButton
             // 
             this.AddUserButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.AddUserButton.Location = new System.Drawing.Point(0, 23);
+            this.AddUserButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AddUserButton.Location = new System.Drawing.Point(0, 47);
             this.AddUserButton.Name = "AddUserButton";
-            this.AddUserButton.Size = new System.Drawing.Size(358, 23);
+            this.AddUserButton.Size = new System.Drawing.Size(358, 47);
             this.AddUserButton.TabIndex = 2;
             this.AddUserButton.Text = "Add User";
             this.AddUserButton.UseVisualStyleBackColor = true;
@@ -110,13 +117,25 @@
             // EditUserInfoButton
             // 
             this.EditUserInfoButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.EditUserInfoButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.EditUserInfoButton.Location = new System.Drawing.Point(0, 0);
             this.EditUserInfoButton.Name = "EditUserInfoButton";
-            this.EditUserInfoButton.Size = new System.Drawing.Size(358, 23);
+            this.EditUserInfoButton.Size = new System.Drawing.Size(358, 47);
             this.EditUserInfoButton.TabIndex = 1;
             this.EditUserInfoButton.Text = "Edit User Info";
             this.EditUserInfoButton.UseVisualStyleBackColor = true;
             this.EditUserInfoButton.Click += new System.EventHandler(this.EditUserInfoButton_Click);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(4, 197);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Padding = new System.Windows.Forms.Padding(1);
+            this.pictureBox1.Size = new System.Drawing.Size(351, 151);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 4;
+            this.pictureBox1.TabStop = false;
             // 
             // AdminForm
             // 
@@ -133,6 +152,7 @@
             this.LoginInfoSplitter.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.LoginInfoSplitter)).EndInit();
             this.LoginInfoSplitter.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -145,5 +165,6 @@
         private System.Windows.Forms.Button CreateFormButton;
         private System.Windows.Forms.Button AddUserButton;
         private System.Windows.Forms.Button EditUserInfoButton;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

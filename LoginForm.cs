@@ -19,6 +19,8 @@ namespace LoginForms
         {
             Parent = parentForm;
             InitializeComponent();
+            this.BackColor = System.Drawing.Color.White;
+
         }
 
         private void LoginButton_Click(object sender, EventArgs e)
