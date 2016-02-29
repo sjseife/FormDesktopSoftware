@@ -59,9 +59,6 @@ namespace FormsProject
             Parent.EditInfo(this, 0, true);
         }
 
-<<<<<<< HEAD
-
-=======
         private void CreateFormButton_Click(object sender, EventArgs e)
         {
             Parent.CreateForm(this);
@@ -75,7 +72,6 @@ namespace FormsProject
            // launch form creator
             //Application.Run(new FormCreator());
         }
->>>>>>> 8fbef56c88b15f2f58cd1f9dd2ec31f1c0c50a20
     }
     
 }

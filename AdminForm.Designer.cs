@@ -28,19 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdminForm));
             this.LoginInfoSplitter = new System.Windows.Forms.SplitContainer();
             this.LogOutButton = new System.Windows.Forms.Button();
             this.UsernameLabel = new System.Windows.Forms.Label();
+            this.ETSULogoPictureBox = new System.Windows.Forms.PictureBox();
             this.CreateFormButton = new System.Windows.Forms.Button();
             this.AddUserButton = new System.Windows.Forms.Button();
             this.EditUserInfoButton = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.LoginInfoSplitter)).BeginInit();
             this.LoginInfoSplitter.Panel1.SuspendLayout();
             this.LoginInfoSplitter.Panel2.SuspendLayout();
             this.LoginInfoSplitter.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ETSULogoPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // LoginInfoSplitter
@@ -60,7 +59,7 @@
             // LoginInfoSplitter.Panel2
             // 
             this.LoginInfoSplitter.Panel2.AutoScroll = true;
-            this.LoginInfoSplitter.Panel2.Controls.Add(this.pictureBox1);
+            this.LoginInfoSplitter.Panel2.Controls.Add(this.ETSULogoPictureBox);
             this.LoginInfoSplitter.Panel2.Controls.Add(this.CreateFormButton);
             this.LoginInfoSplitter.Panel2.Controls.Add(this.AddUserButton);
             this.LoginInfoSplitter.Panel2.Controls.Add(this.EditUserInfoButton);
@@ -90,6 +89,18 @@
             this.UsernameLabel.Size = new System.Drawing.Size(196, 20);
             this.UsernameLabel.TabIndex = 0;
             this.UsernameLabel.Text = "Logged in as USERNAME";
+            // 
+            // ETSULogoPictureBox
+            // 
+            this.ETSULogoPictureBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.ETSULogoPictureBox.Image = global::FormsProject.Properties.Resources.ETSUlogo;
+            this.ETSULogoPictureBox.Location = new System.Drawing.Point(4, 197);
+            this.ETSULogoPictureBox.Name = "ETSULogoPictureBox";
+            this.ETSULogoPictureBox.Padding = new System.Windows.Forms.Padding(1);
+            this.ETSULogoPictureBox.Size = new System.Drawing.Size(351, 151);
+            this.ETSULogoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.ETSULogoPictureBox.TabIndex = 4;
+            this.ETSULogoPictureBox.TabStop = false;
             // 
             // CreateFormButton
             // 
@@ -127,17 +138,6 @@
             this.EditUserInfoButton.UseVisualStyleBackColor = true;
             this.EditUserInfoButton.Click += new System.EventHandler(this.EditUserInfoButton_Click);
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(4, 197);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Padding = new System.Windows.Forms.Padding(1);
-            this.pictureBox1.Size = new System.Drawing.Size(351, 151);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 4;
-            this.pictureBox1.TabStop = false;
-            // 
             // AdminForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -153,7 +153,7 @@
             this.LoginInfoSplitter.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.LoginInfoSplitter)).EndInit();
             this.LoginInfoSplitter.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ETSULogoPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -166,6 +166,6 @@
         private System.Windows.Forms.Button CreateFormButton;
         private System.Windows.Forms.Button AddUserButton;
         private System.Windows.Forms.Button EditUserInfoButton;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox ETSULogoPictureBox;
     }
 }

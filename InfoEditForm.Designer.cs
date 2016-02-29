@@ -376,7 +376,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::LoginForms.Properties.Resources.ETSUshield;
+            this.pictureBox1.Image = global::FormsProject.Properties.Resources.ETSUshield;
             this.pictureBox1.Location = new System.Drawing.Point(130, 620);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(100, 65);
