@@ -100,12 +100,10 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<<<<<<< HEAD
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
-=======
     <Compile Include="User.cs" />
     <Compile Include="UserForm.cs">
       <SubType>Form</SubType>
@@ -118,7 +116,6 @@
     </Compile>
     <Compile Include="UserInterface.Designer.cs">
       <DependentUpon>UserInterface.cs</DependentUpon>
->>>>>>> 8fbef56c88b15f2f58cd1f9dd2ec31f1c0c50a20
     </Compile>
     <Compile Include="ViewUsers.cs">
       <SubType>Form</SubType>
@@ -155,8 +152,6 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-<<<<<<< HEAD
-=======
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -165,7 +160,6 @@
     <EmbeddedResource Include="UserForm.resx">
       <DependentUpon>UserForm.cs</DependentUpon>
     </EmbeddedResource>
->>>>>>> 8fbef56c88b15f2f58cd1f9dd2ec31f1c0c50a20
     <EmbeddedResource Include="ViewUsers.resx">
       <DependentUpon>ViewUsers.cs</DependentUpon>
     </EmbeddedResource>
