@@ -141,9 +141,6 @@ namespace FormsProject
             NewObjectCombo.SelectedIndex = 0;
         }
 
-     
-        
-
         private void FormCreator_Load(object sender, EventArgs e)
         {
 
@@ -431,8 +428,10 @@ namespace FormsProject
             byte[] rawData = Encoding.UTF8.GetBytes(htmlString);
 
             string SQL = String.Format("INSERT INTO form_template(form_name, form_file, form_creation_date) VALUES(@form_name, @form_file, @form_creation_date)");
-            
+            string getID = String.Format("SELECT MAX(form_id)AS form_id FROM form_template"); // Gets the most recently created table
+
             MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand(SQL, Parent.Connection);
+
             cmd.Parameters.AddWithValue("@form_name", Title.Text);
             cmd.Parameters.AddWithValue("@form_file", rawData);
             cmd.Parameters.AddWithValue("@form_creation_date", newdate);
@@ -441,13 +440,26 @@ namespace FormsProject
             {
                 cmd.ExecuteNonQuery();
                 MessageBox.Show("File Inserted into database successfully!", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                Parent.ExitInfo();
-                this.Close();
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
                 MessageBox.Show("Error " + ex.Number + " has occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            // Insert the data from the from into the form_element table
+            try
+            {
+                cmd = new MySql.Data.MySqlClient.MySqlCommand(getID, Parent.Connection);            
+                object form_id = cmd.ExecuteScalar();
+                Parent.ExitInfo();
+                this.Close();
+
+                html.form_elementPopulator.send(form_id.ToString());
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                MessageBox.Show("Error " + ex.Number + " has occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            } 
         }
     }
 }

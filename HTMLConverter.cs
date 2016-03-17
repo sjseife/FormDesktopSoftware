@@ -14,6 +14,8 @@ namespace FormsProject
 {
     class HTMLConverter
     {
+        public FormElementPopulator form_elementPopulator = new FormElementPopulator();
+
         private string top = "<!DOCTYPE html>\n<html>\n<head>\n<meta charset = 'utf-8'>\n";
         private string title;
         private string action = "<form method=post action=submit_form>\n";
@@ -35,6 +37,9 @@ namespace FormsProject
             string formattedInput = formatString(input);
             string output = String.Format("{0}<br>\n<input type=\"text\" name=\"{1}\"><br><br>\n", input, formattedInput);
             formBody += output;
+
+            form_elementPopulator.textBox_type();
+            form_elementPopulator.textBox_text(input);
         }//createTextBox(string)
 
         public void createPassword(string input)
@@ -42,6 +47,9 @@ namespace FormsProject
             string formattedInput = formatString(input);
             string output = String.Format("{0}<br>\n<input type=\"password\" name=\"{1}\"><br><br>\n", input, formattedInput);
             formBody += output;
+
+            form_elementPopulator.password_type();
+            form_elementPopulator.password_text(input);
         }//createTextBox(string)
 
         public void createRadio(string titleIn, string[] radioIn)
@@ -64,6 +72,8 @@ namespace FormsProject
             output += "</fieldset>\n<br><br>\n";
             formBody += output;
 
+            form_elementPopulator.radio_type();
+            form_elementPopulator.radio_text(radioIn, formattedTitle);
         }//createRadio(string,string)
 
         public void createCheckBox(string titleIn, string[] checkBoxIn)
@@ -83,19 +93,25 @@ namespace FormsProject
             output += "</fieldset>\n<br><br>\n";
             formBody += output;
 
+            form_elementPopulator.check_type();
+            form_elementPopulator.checkBox_text(checkBoxIn, formattedTitle);
+
         }//createRadio(string,string)
 
         public void createListBox(List<string> listIn)
         {
             string loop = "<select name=\"list\">\n";
 
-            foreach(string i in listIn)
+            foreach (string i in listIn)
             {
                 loop += String.Format("<option value=\"{0}\">{1}</option>\n", formatString(i), i);
             }
 
             loop += "</select>\n<br><br>\n";
             formBody += loop;
+
+            form_elementPopulator.dropdown_type();
+            form_elementPopulator.dropdown_text(listIn);
         }//createListBox(string)
 
         private string formatString(string input)
@@ -135,7 +151,7 @@ namespace FormsProject
             string databaseName = "database=schaum";
             string username = "uid=schaum";
             string password = "pwd=12345";
-            
+
             conn.ConnectionString = (string.Format("{0};{1};{2};{3}", serverName, databaseName, username, password));
             // MySqlCommand cmd = new MySqlCommand(
             //  "SELECT form_id, form_file FROM form_template", conn);
@@ -173,5 +189,112 @@ namespace FormsProject
         {
             return top + action + formBody + bottom; ;
         }
+    }
+
+    class FormElementPopulator
+    {
+        private Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+
+        List<string> element_type;  // List that will hold the element_type field
+        List<string> element_text;  // List that will hold the element text of each corresponding element type
+
+        public FormElementPopulator()
+        {
+            element_type = new List<string>();
+            element_text = new List<string>();
+        }
+
+        // All element_type functions
+        public void textBox_type()
+        {
+            element_type.Add("text");
+        }
+
+        public void password_type()
+        {
+            element_type.Add("password");
+        }
+
+        public void dropdown_type()
+        {
+            element_type.Add("dropdown");
+        }
+
+        public void radio_type()
+        {
+            element_type.Add("radio");
+        }
+
+        public void check_type()
+        {
+            element_type.Add("check");
+        }
+
+        public void radio_text(string[] radioIn, string label)
+        {
+            string output = label + ",";
+            output += string.Join(",", radioIn);
+            element_text.Add(output);
+        }
+
+        public void dropdown_text(List<string> listIn)
+        {
+            string output = string.Empty;
+            output = string.Join(",", listIn.ToArray());
+            element_text.Add(output);
+        }
+
+        public void checkBox_text(string[] checkBoxIn, string label)
+        {
+            string output = label + ",";
+            output += string.Join(",", checkBoxIn);
+            element_text.Add(output);
+        }
+
+        public void textBox_text(string input)
+        {
+            element_text.Add(input);
+        }
+
+        public void password_text(string input)
+        {
+            element_text.Add(input);
+        }
+
+        public void send(string form_id)
+        {
+            MySql.Data.MySqlClient.MySqlConnection conn = new MySql.Data.MySqlClient.MySqlConnection(); ;
+            MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand();
+
+            string serverName = "server=einstein.etsu.edu";
+            string databaseName = "database=schaum";
+            string username = "uid=schaum";
+            string password = "pwd=12345";
+
+            conn.ConnectionString = (string.Format("{0};{1};{2};{3}", serverName, databaseName, username, password));
+
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                
+                for(int i = 0; i < element_type.Count; i++)
+                {
+                    cmd.CommandText = "INSERT INTO form_element(form_id, element_type, element_text) VALUES(@form_id, @element_type, @element_text);";
+                    cmd.Parameters.AddWithValue("@element_type", element_type[i]);
+                    cmd.Parameters.AddWithValue("@element_text", element_text[i]);
+                    cmd.Parameters.AddWithValue("@form_id", form_id);
+                    cmd.ExecuteNonQuery();
+                    cmd.Parameters.Clear();
+                }
+
+                conn.Close();
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                MessageBox.Show("Error " + ex.Number + " has occurred: " + ex.Message,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }//send()
     }
 }
