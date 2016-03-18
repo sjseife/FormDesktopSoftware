@@ -31,6 +31,7 @@ namespace FormsProject
         private List<TextBox> radioGroupTitleBox = new List<TextBox>();
         private List<TextBox> checkTextBox = new List<TextBox>();
         private List<TextBox> checkGroupTitleBox = new List<TextBox>();
+        private List<TextBox> dynamicComboTitleBox = new List<TextBox>();
         private string[,] ComboSelection = new string[100, 100];
         private int indexForCombo = 0;
         private ComboSelection cs;
@@ -259,6 +260,11 @@ namespace FormsProject
 
             ComboBox dynamicCombo = new ComboBox();
             dynamicCombo.Location = new Point(radioLabel.Location.X + 70, radioLabel.Location.Y);
+            dynamicComboTitleBox.Add(new TextBox());
+
+            dynamicComboTitleBox[indexForCombo].Location = new Point(Add1.Location.X - 295, Add1.Location.Y);
+            dynamicComboTitleBox[indexForCombo].Text = "(Group Label)";
+            ButtonSplitter.Panel2.Controls.Add(dynamicComboTitleBox[indexForCombo]);
             for (int i = 0; i < temp.Length; i++)
             {
                 ComboSelection[indexForCombo, i] = temp[i];
