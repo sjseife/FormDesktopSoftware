@@ -67,6 +67,7 @@
     <Compile Include="FormCreator.Designer.cs">
       <DependentUpon>FormCreator.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormElementPopulator.cs" />
     <Compile Include="FormViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -124,6 +125,12 @@
     <Compile Include="ViewUsers.Designer.cs">
       <DependentUpon>ViewUsers.cs</DependentUpon>
     </Compile>
+    <Compile Include="WorkFlowSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WorkFlowSelector.Designer.cs">
+      <DependentUpon>WorkFlowSelector.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AdminForm.resx">
       <DependentUpon>AdminForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -159,6 +166,9 @@
     <EmbeddedResource Include="ViewUsers.resx">
       <DependentUpon>ViewUsers.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="WorkFlowSelector.resx">
+      <DependentUpon>WorkFlowSelector.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -184,6 +194,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ETSUshield.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\downArrow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

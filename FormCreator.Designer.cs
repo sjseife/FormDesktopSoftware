@@ -43,6 +43,8 @@
             this.ButtonSplitter = new System.Windows.Forms.SplitContainer();
             this.SubmitButton = new System.Windows.Forms.Button();
             this.CancelButton = new System.Windows.Forms.Button();
+            this.AddWorkflow = new System.Windows.Forms.Button();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.NewObjectContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ButtonSplitter)).BeginInit();
             this.ButtonSplitter.Panel1.SuspendLayout();
@@ -199,6 +201,7 @@
             // 
             // ButtonSplitter.Panel1
             // 
+            this.ButtonSplitter.Panel1.Controls.Add(this.AddWorkflow);
             this.ButtonSplitter.Panel1.Controls.Add(this.SubmitButton);
             this.ButtonSplitter.Panel1.Controls.Add(this.CancelButton);
             // 
@@ -239,6 +242,16 @@
             this.CancelButton.UseVisualStyleBackColor = true;
             this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
+            // AddWorkflow
+            // 
+            this.AddWorkflow.Location = new System.Drawing.Point(626, 8);
+            this.AddWorkflow.Name = "AddWorkflow";
+            this.AddWorkflow.Size = new System.Drawing.Size(125, 23);
+            this.AddWorkflow.TabIndex = 2;
+            this.AddWorkflow.Text = "Add Workflow";
+            this.AddWorkflow.UseVisualStyleBackColor = true;
+            this.AddWorkflow.Click += new System.EventHandler(this.AddWorkflow_Click);
+            // 
             // FormCreator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -278,6 +291,8 @@
         private System.Windows.Forms.SplitContainer ButtonSplitter;
         private System.Windows.Forms.Button SubmitButton;
         private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.Button AddWorkflow;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 
