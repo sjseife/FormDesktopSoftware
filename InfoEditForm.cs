@@ -76,8 +76,8 @@ namespace FormsProject
         private void SaveButton_Click(object sender, EventArgs e)
         {
             string checkExistingUser = "SELECT COUNT(username) FROM user_accounts WHERE username = '" + UsernameTextbox.Text + "'";
-            string createUser1 = string.Format("INSERT INTO user_accounts (username, password, f_name, l_name, address_street, address_number, address_city, address_state, address_zip, primary_phone, user_title, user_level, email) VALUES ('{0}','{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', {10}, {11}, '{12}')", UsernameTextbox.Text, PasswordTextBox.Text, FNameTextbox.Text, LNameTextbox.Text, StreetNameTextbox.Text, StreetNumberTextbox.Text, CityTextbox.Text, StateTextbox.Text, ZipTextbox.Text, PhoneAreaTextbox.Text + "-" + PhoneFirst3Textbox.Text + "-" + PhoneLast4Textbox.Text, TitleTextbox.Text, LevelDropdown.SelectedIndex, EmailTextbox.Text);
-            string createUser2 = string.Format("INSERT INTO user_accounts (username, password, f_name, l_name, address_street, address_number, address_city, address_state, address_zip, primary_phone, user_level, email) VALUES ('{0}','{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', {10}, '{11}')", UsernameTextbox.Text, PasswordTextBox.Text, FNameTextbox.Text, LNameTextbox.Text, StreetNameTextbox.Text, StreetNumberTextbox.Text, CityTextbox.Text, StateTextbox.Text, ZipTextbox.Text, PhoneAreaTextbox.Text + "-" + PhoneFirst3Textbox.Text + "-" + PhoneLast4Textbox.Text, LevelDropdown.SelectedIndex, EmailTextbox.Text);
+            string createUserWithTitle = string.Format("INSERT INTO user_accounts (username, password, f_name, l_name, address_street, address_number, address_city, address_state, address_zip, primary_phone, user_title, user_level, email) VALUES ('{0}','{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}', {11}, '{12}')", UsernameTextbox.Text, PasswordTextBox.Text, FNameTextbox.Text, LNameTextbox.Text, StreetNameTextbox.Text, StreetNumberTextbox.Text, CityTextbox.Text, StateTextbox.Text, ZipTextbox.Text, PhoneAreaTextbox.Text + "-" + PhoneFirst3Textbox.Text + "-" + PhoneLast4Textbox.Text, TitleTextbox.Text, LevelDropdown.SelectedIndex, EmailTextbox.Text);
+            string createUserWithoutTitle = string.Format("INSERT INTO user_accounts (username, password, f_name, l_name, address_street, address_number, address_city, address_state, address_zip, primary_phone, user_level, email) VALUES ('{0}','{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', {10}, '{11}')", UsernameTextbox.Text, PasswordTextBox.Text, FNameTextbox.Text, LNameTextbox.Text, StreetNameTextbox.Text, StreetNumberTextbox.Text, CityTextbox.Text, StateTextbox.Text, ZipTextbox.Text, PhoneAreaTextbox.Text + "-" + PhoneFirst3Textbox.Text + "-" + PhoneLast4Textbox.Text, LevelDropdown.SelectedIndex, EmailTextbox.Text);
             string updateUser = string.Format("UPDATE user_accounts SET f_name = '{0}', l_name = '{1}', address_street = '{2}', address_number = '{3}', address_city = '{4}', address_state = '{5}', address_zip = '{6}', primary_phone = '{7}', user_title = '{8}', user_level = {9}, email = '{10}' WHERE user_id = {11}", FNameTextbox.Text, LNameTextbox.Text, StreetNameTextbox.Text, StreetNumberTextbox.Text, CityTextbox.Text, StateTextbox.Text, ZipTextbox.Text, PhoneAreaTextbox.Text + "-" + PhoneFirst3Textbox.Text + "-" + PhoneLast4Textbox.Text, TitleTextbox.Text, LevelDropdown.SelectedIndex, EmailTextbox.Text, UserID);
             
             if (NewUser)
@@ -92,11 +92,11 @@ namespace FormsProject
                     MySqlCommand addUser;
                     if (TitleTextbox.Text != string.Empty)
                     {
-                        addUser = new MySqlCommand(createUser1, Parent.Connection);
+                        addUser = new MySqlCommand(createUserWithTitle, Parent.Connection);
                     }
                     else
                     {
-                        addUser = new MySqlCommand(createUser2, Parent.Connection);
+                        addUser = new MySqlCommand(createUserWithoutTitle, Parent.Connection);
                     }
                     addUser.ExecuteNonQuery();
 

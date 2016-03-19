@@ -58,10 +58,10 @@ namespace FormsProject
             element_text.Add(output);
         }
 
-        public void dropdown_text(List<string> listIn)
+        public void dropdown_text(List<string> listIn, string label)
         {
-            string output = string.Empty;
-            output = string.Join(",", listIn.ToArray());
+            string output = label + ",";
+            output += string.Join(",", listIn.ToArray());
             element_text.Add(output);
         }
 

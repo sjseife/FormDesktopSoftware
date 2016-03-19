@@ -325,7 +325,7 @@ namespace FormsProject
                         else
                         comboList.Add(ComboSelection[indexCombo, x]);
                     }//for
-                    html.createListBox(comboList);
+                    html.createListBox(comboList, dynamicComboTitleBox[indexCombo].Text);
                     indexCombo++;
                 }
                 else if (i == 5)
@@ -373,9 +373,9 @@ namespace FormsProject
             int indexCheck = 0;
             int indexCheckTitle = 0;
             int indexCombo = 0;
+
             if(wfs.checkAssignment())
             { 
-
                 html.setTitle(Title.Text);
                 foreach (int i in order)
                 {
@@ -404,7 +404,8 @@ namespace FormsProject
                             else
                                 comboList.Add(ComboSelection[indexCombo, x]);
                         }//for
-                        html.createListBox(comboList);
+
+                        html.createListBox(comboList, dynamicComboTitleBox[indexCombo].Text);
                         indexCombo++;
                     }
                     else if (i == 5)

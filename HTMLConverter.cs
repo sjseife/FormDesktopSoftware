@@ -73,7 +73,7 @@ namespace FormsProject
             formBody += output;
 
             form_elementPopulator.radio_type();
-            form_elementPopulator.radio_text(radioIn, formattedTitle);
+            form_elementPopulator.radio_text(radioIn, titleIn);
         }//createRadio(string,string)
 
         public void createCheckBox(string titleIn, string[] checkBoxIn)
@@ -94,11 +94,11 @@ namespace FormsProject
             formBody += output;
 
             form_elementPopulator.check_type();
-            form_elementPopulator.checkBox_text(checkBoxIn, formattedTitle);
+            form_elementPopulator.checkBox_text(checkBoxIn, titleIn);
 
         }//createRadio(string,string)
 
-        public void createListBox(List<string> listIn)
+        public void createListBox(List<string> listIn, string label)
         {
             string loop = "<select name=\"list\">\n";
 
@@ -111,7 +111,7 @@ namespace FormsProject
             formBody += loop;
 
             form_elementPopulator.dropdown_type();
-            form_elementPopulator.dropdown_text(listIn);
+            form_elementPopulator.dropdown_text(listIn, label);
         }//createListBox(string)
 
         private string formatString(string input)
@@ -187,7 +187,7 @@ namespace FormsProject
 
         public string GetHTML()
         {
-            return top + action + formBody + bottom; ;
+            return top + action + formBody + bottom;
         }
     }
 
