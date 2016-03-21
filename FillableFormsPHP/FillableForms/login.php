@@ -104,13 +104,13 @@ if(isset($_POST['clear']))
       <h1>Form Managment Login</h1>
       <form method="post" action="home.php"><!-- action redirects to HeritageDB.php -->
 		  
-        <p><input type='text' name='user' placeholder='Username' size='25' value=''/></p>
+        <p><input type='text' name='user' placeholder='Username' size='25' value='' required/></p>
         <p><input type="password" name="pw" value="" placeholder="Password"></p>
         
 		<p class="reset">
         	<input type="submit" name="loginSubmit" value="Login">
 			<input type="submit" name="reset" value="Reset Form" onclick="form.action='<?= $_SERVER['PHP_SELF'] ?>';">
-			<br/><br/><input type="submit" name="reset" value="Reset Password" onclick="form.action='RestPassword.php';">
+			<br/><br/><input type="submit" name="reset" value="Reset Password" onclick="form.action='ResetPassword.php';">
 		<?
 		
 			

@@ -1,6 +1,12 @@
 <?
 session_start();
+
+#supress errors to user
+error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR);
+
+#set timezone for date dunctions
 date_default_timezone_set("America/New_York");
+
 #clean function to make user input html/sql safe
 function clean($codeToBeCleaned, $maxlength)
 { 
@@ -54,10 +60,9 @@ if(isset($_POST['loginSubmit']))
 						}
 						
 						if((isset($_SESSION['connected']))
-						&& ($_SESSION['user_level'] == 0)
 						&& isset($_POST['loginSubmit']))
 						{
-							 #header("Location: default.php");
+							 
               $_SESSION['logged_in'] = true;
               
 						}	
@@ -97,7 +102,9 @@ if(isset($_POST['loginSubmit']))
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<title>Home</title>
+	<link rel="shortcut icon" href="http://s27.postimg.org/lc9yxczr3/etsu.png" type="image/x-icon" />
+ 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	</head>
@@ -112,111 +119,32 @@ if(isset($_POST['loginSubmit']))
    {
      if($_SESSION['logged_in'] == true)
       {
- 	?>			<div style="position: absolute; top: 0%; right: 0%; width:5%;">
+			 
+ 	?>			
+
+				<nav class="navbar navbar-default">
+				 <div class="container-fluid">
+					 <div class="navbar-header">
+						 <a class="navbar-brand" href="#">Fillable Forms Application</a>
+					 </div>
+					 <ul class="nav navbar-nav">
+						 <li><a href="home.php">Home</a></li>
+										<li><a href="my_forms.php">Completed Forms</a></li>
+										<li><a href="saved_forms.php">Saved Forms</a></li>
+										<li><a href="account.php">Account Management</a></li>
+								</ul>
+	
+					 <form method="post" action="login.php" style="position: absolute; top: 0%; right: 0%; width:5%;">
+						<input type="submit" class="btn btn-default"  name="logoutSubmit" value="Log out" />
+					</form>
+				 <div>
+					 			<!--		<div style="position: absolute; top: 0%; right: 0%; width:5%;">
 					<form method="post" action="login.php">
 						<input type="submit"  name="logoutSubmit" value="Log out" />
 					</form>
-				</div>
-			<div>
-				<table style="width:80%; margin-top: 1.9%; margin-right: auto; margin-left: auto; ">
-					<th  height="160" style ="width:14%" scope="col"><p><a style="color: black;" href="my_forms.php">My Completed Forms</a>
-					<th  height="160" style ="width:14%" scope="col"><p><a style="color: black;" href="saved_forms.php">Saved Progress</a>
-					<th  height="160" style ="width:14%" scope="col"><p><a style="color: black;" href="account.php">Account Management</a>
-				</table>
-			</div>	
+				</div> -->
+					<img width="100%" src="http://i.imgur.com/aXIOIvo.jpg">	
 						
-						
-<div>
-  <p>
-  	<?  #DISPLAY CURRENTLY AVAILABLE FORMS
-					try       
-    			{ 
-            #Create PDO statement and prepare database connection
-            $user="schaum";
-            $password="12345";
-            $dbname="schaum";
-    
-            $db = new PDO("mysql:host=localhost;dbname=$dbname", "$user", "$password");
-                if (!$db) {
-                    die('Could not connect: Please try again later. ');
-    
-                }
-								
-								
-
-              
-                
-    					
-                # query set - Select all indicated fields if records match search string
-                $query = "SELECT * from form_template;";
-    
-                #prepare the query
-                $statement = $db->prepare($query);
-    
-                # pass data to an array
-                $statement->execute(array());
-                $db = null;
-								?>
-								<div class="table-responsive">          
-  							<table class="table table-hover">
-                <tr>
-									<th></th>
-									<th>
-										<h2>
-											Currently Available Forms
-										</h2>
-									</th>
-									<th></th>
-                </tr>
-									<tr>
-										<th></th>
-									<th>
-										<h4>
-											Form Name
-										</h4>
-											
-										
-									</th>
-										<th></th>
-									</tr>
-                <?
-						#Dynamically build table with while loop, Loops until no rows remain. This displays all forms available
-                while($row = $statement->fetch(PDO::FETCH_ASSOC))
-                {
-                    ?>
-                    <tr>
-													<td></td>
-													<td>
-														<h4>
-															
-														
-															<?= $row['form_name'] ?>
-														</h4>
-													</td>
-													<td>
-                            <p>
-																	<form method='post' action="<?= $_SERVER['PHP_SELF']?>">
-																		<button type='submit' name='OpenForm' value='<?= $row['form_id'] ?>'>Open</button>   
-																	</form>
-														</p>
-												</td>
-											
-                        
-                    </tr>
-				
-             
-                    <?
-								
-							
-                }//end population of table while loop
-								}
-								catch(Exception $e)
-								{
-
-								}?>
-	<tr><td></td><td></td><td></td></tr>
-					</table><!-- Close data table -->
-				</div>
 
 <!--DISPLAY FORM IF OpenForm BUTTON HAS BEEN PRESSED -->						
 		
@@ -253,8 +181,9 @@ if(isset($_POST['loginSubmit']))
 								#add form name to string
 								while($row = $statement->fetch(PDO::FETCH_ASSOC))
 								{
+									$form_string .= '<div class="well well-sm"><table class="table-condensed"><tr><th colspan="2" >';
 									$form_name = $row['form_name'];
-									$form_string .= '<h1>' . $form_name . '</h1> <form method=post action="my_forms.php"> ';
+									$form_string .= ' <h1>' . $form_name . '</h1> <form method=post action="my_forms.php"> </th></tr>';
 									#echo $form_string;
 								}//end while loop to add form name to string
 
@@ -272,6 +201,7 @@ if(isset($_POST['loginSubmit']))
 								$statement2->execute(array());
 								#holds a comma delimited list of form_element PKs, used later to link repsponses to form elements.
 								$form_element_ids="";
+								$counter=0;
 #############################################################################################################################
 #		Dynamically build form with while loop, Loops until no rows remain.																											#
 #############################################################################################################################
@@ -279,64 +209,74 @@ if(isset($_POST['loginSubmit']))
                 {
 									$element_type = $row['element_type'];
 									$form_element_ids .= $row['form_element_id'].',';
-									
+									$form_string .= '<tr>
+																		<th>&nbsp;</th>
+																		<th>&nbsp;</th> 
+																	</tr>';
 									if( $element_type == "text")
 									{
 										$element_text = $row['element_text'];
 										$value_name = str_replace(' ', '',$row['element_text']); 
-										$form_string .=  $element_text . ': <br> <input type="text" name="' . $value_name . '"><br><br> ';
+										$form_string .= '<tr><td>' . $element_text . ': </td><td><input type="text" name="' . $value_name . '"></td></tr>';
 									}#end if textbox
 									elseif( $element_type == "radio")
 									{
 										$explodedArray = explode(',',$row['element_text']);
-										$form_string .= '<fieldset style="display:inline-block">
-																			<legend>'. $explodedArray[0] .'</legend>';
+										$form_string .= '<tr> <td> <fieldset class="radiogroup" "style="display:inline-block">
+																			'. $explodedArray[0] .'</td><td>';
 										array_shift($explodedArray);
 										foreach($explodedArray as $value)
 										{
-											$form_string .= '<input type="radio" name="radio" value="' . $value . '">' . $value;
+											$form_string .= '&nbsp;' . $value . ' <input type="radio"  name="radio'. $counter .'" value="' . $value . '"> ' ;
 										}
-										$form_string .= '</fieldset> <br><br>';
+										$form_string .= '</fieldset></td></tr>';
 										
 									}
 									elseif( $element_type == "password")
 									{
-										$form_string .= $element_text . ': <br>
-																		<input type="password" name="password"><br><br>';
+										$element_text = $row['element_text'];
+										$form_string .= '<tr> <td>' . $element_text . ':</td>
+																		<td><input type="password" name="password"></td></tr>';
 									}
 									elseif( $element_type == "dropdown")
 									{
 										$explodedArray = explode(',',$row['element_text']);
-										$form_string .= '<select name="list">';
-										#array_shift($explodedArray);
+										$form_string .= '<br><tr><td>'. $explodedArray[0] .'</td> <td> <select name="list">';
+										array_shift($explodedArray);
 										foreach($explodedArray as $value)
 										{
 											$form_string .= '<option value="'. $value .'">'. $value .'</option>';
 										}
-										$form_string .= '</select> <br><br>';
+										$form_string .= '</select></td></tr>';
 									}
 									elseif( $element_type == "check")
 									{
 										$explodedArray = explode(',',$row['element_text']);
-										$form_string .= '<fieldset style="display:inline-block">
-																			<legend>'. $explodedArray[0] .'</legend>';
+										$form_string .= '<tr><td><fieldset style="display:inline-block">
+																			'. $explodedArray[0] .'</td><td>';
 										array_shift($explodedArray);
 										foreach($explodedArray as $value)
 										{
-											$form_string .= '<input type="checkbox" name="check" value="' . $value . '">' . $value;
+											$form_string .= '&nbsp;' . $value . '&nbsp;<input type="checkbox" name="check" value="' . $value . '">';
 										}
-										$form_string .= '</fieldset> <br><br>';
+										$form_string .= '</fieldset></td></tr>';
 									}
-								
+									$counter++;
 								}#end form builder loop
-							$form_string .= '<br><br>
-															<input type=\'submit\' name=\'submit\' value=\'Submit\'>
-															<input type = \'reset\' value=\'Reset\' onclick=\'form.action=\'home.php\'>
-															<br><br>
-															<input type=\'submit\' name=\'SaveProgress\' value=\'Save Progress \' onclick="form.action=\'saved_forms.php\';">
-															<br><br>
-															<input type=\'submit\' name=\'cancel\' value=\'Cancel\' onclick="form.action=\'home.php\';"><br><br>
-															</form> ';
+							$form_string .= '<tr><td>
+															<input type=\'submit\' class=\'btn btn-default\' name=\'submit\' value=\'Submit\'>
+															
+															
+															<input type = \'reset\' class=\'btn btn-default\' value=\'Reset\' onclick=\'form.action=\'home.php\'>
+														
+															
+															<input type=\'submit\' class=\'btn btn-default\' name=\'SaveProgress\' value=\'Save Progress \' onclick="form.action=\'saved_forms.php\';">
+															
+															
+															<input type=\'submit\' class=\'btn btn-default\' name=\'cancel\' value=\'Cancel\' onclick="form.action=\'home.php\';">
+															</td>
+															</tr>
+															</form> </table></div>';
 							#set session variable to hold string
 							$_SESSION['form_string'] = $form_string;
 							#set session variable to hold element ids
@@ -354,8 +294,101 @@ if(isset($_POST['loginSubmit']))
 				{
 					echo "Danger Will Robinson, Danger!!!";
 				}
-			}
-		?>
+			}						
+?>						
+<div>
+  <p>
+  	<?  #DISPLAY CURRENTLY AVAILABLE FORMS
+					try       
+    			{ 
+            #Create PDO statement and prepare database connection
+            $user="schaum";
+            $password="12345";
+            $dbname="schaum";
+    
+            $db = new PDO("mysql:host=localhost;dbname=$dbname", "$user", "$password");
+                if (!$db) {
+                    die('Could not connect: Please try again later. ');
+    
+                }
+								
+    					$user_id = $_SESSION['user_id'];
+                # query set - Select all indicated fields if records match search string
+                $query = "SELECT form_name, form_id FROM form_template
+															WHERE form_name NOT IN 
+																(SELECT form_name FROM form_template
+																 	join  user_forms USING(form_id)
+																	WHERE user_id = $user_id);";
+                #prepare the query
+                $statement = $db->prepare($query);
+    
+                # pass data to an array
+                $statement->execute(array());
+                $db = null;
+								?>
+								<div class="table-responsive">          
+  							<table class="table table-hover">
+                <tr>
+									
+									<th colspan="2">
+										<h2>
+											Currently Available Forms
+										</h2>
+									</th>
+									
+                </tr>
+									<tr>
+										
+									<th colspan="2" align="center">
+										<h4>
+											Form Name
+										</h4>
+											
+										
+									</th>
+										
+									</tr>
+                <?
+						#Dynamically build table with while loop, Loops until no rows remain. This displays all forms available
+                while($row = $statement->fetch(PDO::FETCH_ASSOC))
+                {
+                    ?>
+                    <tr>
+													
+													<td>
+														<h4>
+															
+														
+															<?= $row['form_name'] ?>
+														</h4>
+													</td>
+													<td>
+                            <p>
+																	<form method='post' action="<?= $_SERVER['PHP_SELF']?>">
+																		<button type='submit' class="btn btn-default" name='OpenForm' value='<?= $row['form_id'] ?>'>Open</button>   
+																	</form>
+														</p>
+												</td>
+											
+                        
+                    </tr>
+				
+             
+                    <?
+								
+							
+                }//end population of table while loop
+								}
+								catch(Exception $e)
+								{
+
+								}?>
+	
+					</table><!-- Close data table -->
+				</div>
+
+
+
 						
 	<?  } #end if logged in == true
 		} #end if logged in insset 
@@ -374,6 +407,4 @@ if(isset($_POST['loginSubmit']))
                                 
 
   </body>
-  </html>		
-                
-                
+  </html>	
