@@ -1,6 +1,9 @@
 <?
 session_start();
-
+if(isset($_POST['remember_me']))
+			{
+				setcookie('user', "", time()+3600);
+			}
 #supress errors to user
 error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR);
 
@@ -64,16 +67,21 @@ if(isset($_POST['loginSubmit']))
 						{
 							 
               $_SESSION['logged_in'] = true;
-              
+							#logs info about sucessful logins
+              require_once('History.php');
+							
 						}	
 					}
-					else {
-						
+					else 
+					{
+						$_SESSION['connected'] = false;
+						#logs information about failed login attempts
+						require_once('FailedLoginLog.php');
 						echo '<script type="text/javascript">'; 
 						echo 'alert("Invalid username or password, please try again");'; 
 						echo 'window.location.href = "login.php";';
 						echo '</script>';		
-						$_SESSION['connected'] = false;
+						
 					}
 
 					//Close the database connection and statmement
@@ -87,16 +95,8 @@ if(isset($_POST['loginSubmit']))
 		
 			} 	
 
-
-	
-	
-
 	?>
 
-
-
-
-	
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -209,6 +209,7 @@ if(isset($_POST['loginSubmit']))
                 {
 									$element_type = $row['element_type'];
 									$form_element_ids .= $row['form_element_id'].',';
+									$id= $row['form_element_id'];
 									$form_string .= '<tr>
 																		<th>&nbsp;</th>
 																		<th>&nbsp;</th> 
@@ -217,7 +218,7 @@ if(isset($_POST['loginSubmit']))
 									{
 										$element_text = $row['element_text'];
 										$value_name = str_replace(' ', '',$row['element_text']); 
-										$form_string .= '<tr><td>' . $element_text . ': </td><td><input type="text" name="' . $value_name . '"></td></tr>';
+										$form_string .= '<tr><td>' . $element_text . ': </td><td><input type="text" name="' . $id . '"></td></tr>';
 									}#end if textbox
 									elseif( $element_type == "radio")
 									{
@@ -227,7 +228,7 @@ if(isset($_POST['loginSubmit']))
 										array_shift($explodedArray);
 										foreach($explodedArray as $value)
 										{
-											$form_string .= '&nbsp;' . $value . ' <input type="radio"  name="radio'. $counter .'" value="' . $value . '"> ' ;
+											$form_string .= '&nbsp;' . $value . ' <input type="radio"  name="'. $id .'" value="' . $value . '"> ' ;
 										}
 										$form_string .= '</fieldset></td></tr>';
 										
@@ -236,12 +237,12 @@ if(isset($_POST['loginSubmit']))
 									{
 										$element_text = $row['element_text'];
 										$form_string .= '<tr> <td>' . $element_text . ':</td>
-																		<td><input type="password" name="password"></td></tr>';
+																		<td><input type="password" name="'. $row['filled_form_id'] .'"></td></tr>';
 									}
 									elseif( $element_type == "dropdown")
 									{
 										$explodedArray = explode(',',$row['element_text']);
-										$form_string .= '<br><tr><td>'. $explodedArray[0] .'</td> <td> <select name="list">';
+										$form_string .= '<br><tr><td>'. $explodedArray[0] .'</td> <td> <select name="'. $id .'">';
 										array_shift($explodedArray);
 										foreach($explodedArray as $value)
 										{
@@ -257,7 +258,7 @@ if(isset($_POST['loginSubmit']))
 										array_shift($explodedArray);
 										foreach($explodedArray as $value)
 										{
-											$form_string .= '&nbsp;' . $value . '&nbsp;<input type="checkbox" name="check" value="' . $value . '">';
+											$form_string .= '&nbsp;' . $value . '&nbsp;<input type="checkbox" name="'. $id . '[]" value="' . $value . '">';
 										}
 										$form_string .= '</fieldset></td></tr>';
 									}
@@ -278,7 +279,7 @@ if(isset($_POST['loginSubmit']))
 															</tr>
 															</form> </table></div>';
 							#set session variable to hold string
-							$_SESSION['form_string'] = $form_string;
+							#$_SESSION['form_string'] = $form_string;
 							#set session variable to hold element ids
 							$_SESSION['form_element_ids'] = rtrim($form_element_ids, ",");
 					?> 	

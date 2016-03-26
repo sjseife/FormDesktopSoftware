@@ -1,10 +1,11 @@
 <?php
+
+date_default_timezone_set('UTC');
 /**
  * @author Joseph Schaum
- * Creates a log with IP address,time stamp, file accessed, and client info of any logins
+ * Creates a log with IP address,time stamp, attempted file accessed, and client info of any attempted accesses of the admin only area
  */
-date_default_timezone_set('UTC');
-
+ 
 $document = new DOMDocument;
 
 $rootElement = $document -> createElement("fileaccesses");
@@ -28,7 +29,7 @@ $client -> appendChild($browser);
 
 $filename= uniqid();
 
-$document->save("MemberHistory/$filename.xml");
+$document->save("MemberHistory/FailedLogins/$filename.xml");
 	
 
 ?>

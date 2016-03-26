@@ -4,7 +4,7 @@ session_start();
 error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR);
 date_default_timezone_set("America/New_York");
 #print_r($_SESSION['form_id']);
-#print_r($_POST);
+
 ?>
 <html>
 	<head>
@@ -23,7 +23,10 @@ date_default_timezone_set("America/New_York");
 	<body>
     
   <div>
-    <? ############### Link table at top of page for navigation ########################
+    <?
+#############################################################################################################################
+#								BEGIN Display web page if user is logged in																																	#
+#############################################################################################################################		
 	if(isset($_SESSION['logged_in']))
    {
      if($_SESSION['logged_in'] == true)
@@ -52,11 +55,13 @@ date_default_timezone_set("America/New_York");
 					 
 					 
 				<?	 
-			 
+#############################################################################################################################
+#		Dynamically build form with while loop, Loops until no rows remain.																											#
+#############################################################################################################################			 
 			 		if(isset($_POST['OpenForm']))
 					{
 						try
-				{
+						{
 					
 					            #Create PDO statement and prepare database connection
             $user="schaum";
@@ -83,10 +88,11 @@ date_default_timezone_set("America/New_York");
                
 								$statement->execute(array());
                $db = null;
+
 								#used to hold form string
 								$form_string = "";
-								#form_string .= '<div><table>';
-								#add form name to string
+								
+								#add form name to string that holds HTML for form
 								while($row = $statement->fetch(PDO::FETCH_ASSOC))
 								{
 									$form_string .= '<div class="well well-sm"><table class="table-condensed"><tr><th align="center" colspan="2" >';
@@ -113,11 +119,13 @@ date_default_timezone_set("America/New_York");
 								$statement2->execute(array());
 								$form_response = array();
 								
+								#create an array where the array key is the form_element_id and the value is the user response.
 								while($row = $statement2->fetch(PDO::FETCH_ASSOC))
 								{
 									$form_response += array( $row['form_element_id'] => $row['response_text']);
 									
 								}
+							
 							$query = "SELECT * FROM form_element WHERE form_id = $form_id
 												ORDER BY form_element_id;";
 								
@@ -125,15 +133,17 @@ date_default_timezone_set("America/New_York");
 								$statement2->execute(array());
 						#holds a comma delimited list of form_element PKs, used later to link repsponses to form elements.
 								$form_element_ids="";
-#############################################################################################################################
-#		Dynamically build form with while loop, Loops until no rows remain.																											#
-#############################################################################################################################
+
               #print_r($form_response);
 								$counter=0;
 								while($row = $statement2->fetch(PDO::FETCH_ASSOC))
                 {
+									#used to determine element type
 									$element_type = $row['element_type'];
+									$id= $row['form_element_id'];
+									#used to insert responses later
 									$form_element_ids .= $row['form_element_id'].',';
+									
 									$form_string .= '<tr>
 																		<th>&nbsp;</th>
 																		<th>&nbsp;</th> 
@@ -142,7 +152,7 @@ date_default_timezone_set("America/New_York");
 									{
 										$element_text = $row['element_text'];
 										$value_name = str_replace(' ', '',$row['element_text']); 
-										$form_string .= '<tr><td>' . $element_text . ': </td><td><input type="text" name="' . $value_name . '"'; 
+										$form_string .= '<tr><td>' . $element_text . ': </td><td><input type="text" name="' . $id . '"'; 
 																		 if($form_response[$row['form_element_id']]!= null || $form_response[$row['form_element_id']] != "")
 																		 {
 																			 $form_string .= 'value="' . $form_response[$row['form_element_id']] . '"';
@@ -158,15 +168,14 @@ date_default_timezone_set("America/New_York");
 										foreach($explodedArray as $value)
 										{
 											
-											$form_string .= '&nbsp;' . $value . ' <input type="radio" name="radio'. $counter .'" value="' . $value . '"';
+											$form_string .= '&nbsp;' . $value . ' <input type="radio" name="'. $id .'" value="' . $value . '"';
 																	
-																		 if($form_response[$row['form_element_id']] == $value)
-																		 {
-																			 $form_string .= 'checked ';
-																		 } 
-																		 
-																	 
 																		
+																				 if($form_response[$row['form_element_id']] == $value)
+																				 {
+																					 $form_string .= 'checked ';
+																				 } 
+																	
 											$form_string.= '> ' ;
 										}
 										$form_string .= '</fieldset></td></tr>';
@@ -176,7 +185,7 @@ date_default_timezone_set("America/New_York");
 									{
 										$element_text = $row['element_text'];
 										$form_string .= '<tr> <td>' . $element_text . ':</td>
-																		<td><input type="password" name="password"';
+																		<td><input type="password" name="'. $id .'"';
 																
 										 if($form_response[$counter]!= null || $form_response[$row['form_element_id']] != "")
 											 {
@@ -187,7 +196,7 @@ date_default_timezone_set("America/New_York");
 									elseif( $element_type == "dropdown")
 									{
 										$explodedArray = explode(',',$row['element_text']);
-										$form_string .= '<br><tr><td>'. $explodedArray[0] .'</td> <td> <select name="list">';
+										$form_string .= '<br><tr><td>'. $explodedArray[0] .'</td> <td> <select name="'. $id .'">';
 										array_shift($explodedArray);
 										foreach($explodedArray as $value)
 										{
@@ -202,19 +211,37 @@ date_default_timezone_set("America/New_York");
 									}
 									elseif( $element_type == "check")
 									{
-										$explodedArray = explode(',',$row['element_text']);
+										$explodedArray = explode(',',$row['element_text']);#turns csv element text into an array
 										$form_string .= '<tr><td><fieldset style="display:inline-block">
-																			<legend>'. $explodedArray[0] .'</legend></td><td>';
+																			'. $explodedArray[0] .'</td><td>';
 										array_shift($explodedArray);
+										
+										
+												 $explodedResponse = explode(',',$form_response[$row['form_element_id']]);
+													
+										
+											 
+										
+										
 										foreach($explodedArray as $value)
 										{
-											$form_string .= '&nbsp;' . $value . '&nbsp;<input type="checkbox" name="check" value="' . $value . '"';
-													 					if($form_response[$row['form_element_id']] == $value)
-																		 {
-																			 $form_string .= 'checked ';
-																		 } 
+											$form_string .= '&nbsp;' . $value . '&nbsp;<input type="checkbox" name="' . $id . '[]" value="' . $value . '"';
+													 				
+																	
+																	if(isset($explodedResponse))
+																	{
+																		foreach($explodedResponse as $value2)
+																		{
+																			if($value2 == $value)
+																				{
+																					$form_string .= 'checked ';
+																				}
+																		}
+																	}
+																
+																			
 														
-											$form_string.='>';
+											$form_string.= '>';
 										}
 										$form_string .= '</fieldset></td></tr>';
 									}
@@ -235,11 +262,12 @@ date_default_timezone_set("America/New_York");
 															</tr>
 															</form> </table></div>';
 							#set session variable to hold string
-							$_SESSION['form_string'] = $form_string;
+							#_SESSION['form_string'] = $form_string;
 							#set session variable to hold element ids
 							$_SESSION['form_element_ids'] = rtrim($form_element_ids, ",");
-					?> 	
-				
+
+					 ?> 	
+		
 				<div style="margin-right:10%; margin-left:20%;"><!--Needs positioned on right side of the screen -->
 								<?= $form_string ?>
 							</div>
@@ -251,10 +279,18 @@ date_default_timezone_set("America/New_York");
 				{
 					echo "Danger Will Robinson, Danger!!!";
 				}
-			}	
+			}	//end if isset OpenForm
+#############################################################################################################################
+#																				END Dynamic form builder																														#
+#############################################################################################################################
 						
-					}
-			 
+					
+			 			 ################################################################
+						 # 					SUBMISSION HANDLING FOR COMPLETED FORMS							#
+						 # make entry into user_forms table for new form								#
+						 # call stored procedure to map workflow for new form						#
+						 # write all responses to form elements to form_response table	#
+						 ################################################################
 					
 			 		if(isset($_POST['SaveProgress']) || isset($_POST['SaveProgress2']))
 					{
@@ -285,12 +321,7 @@ date_default_timezone_set("America/New_York");
     						#execute query
 								$statement->execute(array());
 						}
-						 ################################################################
-						 # 					SUBMISSION HANDLING FOR COMPLETED FORMS							#
-						 # make entry into user_forms table for new form								#
-						 # call stored procedure to map workflow for new form						#
-						 # write all responses to form elements to form_response table	#
-						 ################################################################
+
 			
 					
 
@@ -357,19 +388,35 @@ date_default_timezone_set("America/New_York");
 							#ignore post variable representing the submit button
 							if($response != "Submit" && $response != null && $response != "Save Progress ")
 							{
+								if(gettype($response)== "array")
+								{
+									$formattedResponse = "";
+									foreach($response as $value)
+									{
+										$formattedResponse .= $value . ",";
+									}
+									$formattedResponse =  rtrim($formattedResponse, ",");
+								}
+								else
+								{
+									$formattedResponse = $response;
+								}
 								#enter responses into form_response table
-								$query= "INSERT INTO form_response 
-													(`form_element_id`, 
-													 `filled_form_id`, 
-													 `response_text`)
-													 VALUES
-													 ('$form_element_ids[$counter]',
-													  '$filled_form_id',
-														'$response');";
-                #prepare the query
-                $statement = $db->prepare($query);
-    						#execute query
-								$statement->execute(array());
+								
+										$query= "INSERT INTO form_response 
+														(`form_element_id`, 
+														 `filled_form_id`, 
+														 `response_text`)
+														 VALUES
+														 ('$key',
+															'$filled_form_id',
+															'$formattedResponse');";
+									#prepare the query
+									$statement = $db->prepare($query);
+									#execute query
+									$statement->execute(array());
+								
+								
 								
 							}
 							$counter++;
@@ -378,15 +425,17 @@ date_default_timezone_set("America/New_York");
 					
 					$db = null;
 				
-			 ######### END SUBMISSION HANDLING FOR COMPLETED FORMS ##########
+			 
 					}//end if SaveProgress is set
 					 
+			 			 ################################################################
+						 # 					END SUBMISSION HANDLING FOR COMPLETED FORMS					#
+						 ################################################################
 			 
 			 
-			 
-			 
-			 
-			 #DISPLAY INCOMPLTE FORMS
+			 			 ################################################################
+						 # 			BEGIN DISPLAY INCOMPLETE FORMS AS A LIST FOR USER				#
+						 ################################################################
 					try       
     			{ 
             #Create PDO statement and prepare database connection
@@ -425,7 +474,7 @@ date_default_timezone_set("America/New_York");
                 <tr>
 									<th>
 										<h2>
-											Completed Forms
+											Saved Forms
 										</h2>
 									</th>
                 </tr>
@@ -471,25 +520,27 @@ date_default_timezone_set("America/New_York");
 								}
 								catch(Exception $e)
 								{
-
+									echo "Danger Will Robinson, Danger!";
 								}?>
 					</table><!-- Close data table -->
 				</div>			
 					 
 					 
-					 <?		#use this query for populating partial forms
-					 			#SELECT response_text, element_text, element_type, form_name FROM form_response
-									#JOIN form_element USING(form_element_id)
-									#JOIN form_template USING(form_id)
-									#WHERE filled_form_id = 50
-			 						#AND incomplete = 1;
+					 <?		
+			 			 ################################################################
+						 # 			BEGIN DISPLAY INCOMPLETE FORMS AS A LIST FOR USER				#
+						 ################################################################			 
 					 ?>
 					 
 					 
 					 
 					 
-	<?  } #end if logged in == true
-		 #end if logged in insset ?> 
+	<? 	}//end if logged_in == true 
+		 } #end if logged in isset
+#############################################################################################################################
+#																				END Display web page if user is logged in																						#
+#############################################################################################################################
+		 ?> 
 
   </body>
   </html>		
