@@ -1,9 +1,6 @@
 <? 	session_start();
 
-if(isset($_POST['remember_me']))
-			{
-				setcookie('user', "", time()+3600);
-			}
+
 		
 if(isset($_POST['clear']))
 			{
@@ -110,7 +107,7 @@ if(isset($_POST['clear']))
 		<p class="reset">
         	<input type="submit" name="loginSubmit" value="Login">
 			<input type="submit" name="reset" value="Reset Form" onclick="form.action='<?= $_SERVER['PHP_SELF'] ?>';">
-			<br/><br/><input type="submit" name="reset" value="Reset Password" onclick="form.action='ResetPassword.php';">
+			<br/><br/><input type="submit" name="reset" value="Reset Password" onclick="form.action='RestPassword.php';">
 		<?
 		
 			

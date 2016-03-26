@@ -7,8 +7,6 @@ date_default_timezone_set("America/New_York");
 #echo "<br> POST:";
 #print_r($_POST);
 #print_r($_SESSION);
-#Blake can you see this ?
-#Yes
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -216,13 +214,7 @@ date_default_timezone_set("America/New_York");
     						#execute query
 								$statement->execute(array());
 								
-						}
-							
-						
-					
-						
-					
-					
+						}		
 					
 							  $user="schaum";
 								$password="12345";
@@ -231,7 +223,6 @@ date_default_timezone_set("America/New_York");
 								$db = new PDO("mysql:host=localhost;dbname=$dbname", "$user", "$password");
 										if (!$db) {
 												die('Could not connect: Please try again later. ');
-    
                 }
 								
                 $date = date("Y-m-d");
@@ -251,6 +242,7 @@ date_default_timezone_set("America/New_York");
 														'$date',
 														0
 													 );";
+					
                 #prepare the query
                 $statement = $db->prepare($query);
     						#execute query
@@ -283,8 +275,21 @@ date_default_timezone_set("America/New_York");
 					foreach($_POST as $key => $response)
 						{
 							#ignore post variable representing the submit button
-							if($response != "Submit")
+							if($response != "Submit" && $response != null && $response != "Save Progress ")
 							{
+								if(gettype($response)== "array")
+								{
+									$formattedResponse = "";
+									foreach($response as $value)
+									{
+										$formattedResponse .= $value . ",";
+									}
+									$formattedResponse =  rtrim($formattedResponse, ",");
+								}
+								else
+								{
+									$formattedResponse = $response;
+								}
 								#enter responses into form_response table
 								$query= "INSERT INTO form_response 
 													(`form_element_id`, 
@@ -293,13 +298,14 @@ date_default_timezone_set("America/New_York");
 													 VALUES
 													 ('$form_element_ids[$counter]',
 													  '$filled_form_id',
-														'$response');";
+														'$formattedResponse');";
                 #prepare the query
                 $statement = $db->prepare($query);
     						#execute query
 								$statement->execute(array());
-								$counter++;
+								
 							}
+							$counter++;
 							
 						}//end foreach $_POST loop 
 								
@@ -320,10 +326,7 @@ date_default_timezone_set("America/New_York");
                     die('Could not connect: Please try again later. ');
     
                 }
-								
-								
-
-              
+								  
                 
     					 $user_id = $_SESSION['user_id'];
                 # query set - Select all indicated fields if records match search string
@@ -380,22 +383,16 @@ date_default_timezone_set("America/New_York");
 												</td>
 											
                         
-                    </tr>
-				
-             
+                    </tr>          
                     <?
-								
-							
                 }//end population of table while loop
 								}
 								catch(Exception $e)
 								{
-
 								}?>
 					</table><!-- Close data table -->
 				</div>			
-			<?
-		
+			<?	
 	?>
 	<?  } #end if logged in == true
 		} #end if logged in insset ?> 
