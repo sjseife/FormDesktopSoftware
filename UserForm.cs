@@ -139,7 +139,7 @@ namespace FormsProject
 
         private void NewForm(string formName)
         {
-            Parent.NewForm(this, formName, UserID);
+            //Parent.NewForm(this, formName, UserID);
         }
     }
 }

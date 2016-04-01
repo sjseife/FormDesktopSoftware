@@ -34,8 +34,7 @@ namespace FormsProject
 
             if (UserLevel < 2) // Hide these if not superadmin
             {
-                EditUserInfoButton.Visible = false;
-                AddUserButton.Visible = false;
+                UserManageButton.Visible = false;
             }
         }
 
@@ -62,15 +61,11 @@ namespace FormsProject
         private void CreateFormButton_Click(object sender, EventArgs e)
         {
             Parent.CreateForm(this);
-            //System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(ThreadProc));
-            //t.Start();
-            //this.Close();
         }
 
-        public static void ThreadProc()
+        private void UserManageButton_Click(object sender, EventArgs e)
         {
-           // launch form creator
-            //Application.Run(new FormCreator());
+            Parent.UserManagement(this);
         }
     }
     
