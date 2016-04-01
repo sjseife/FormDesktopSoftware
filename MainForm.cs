@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace FormsProject
 {
@@ -21,6 +22,12 @@ namespace FormsProject
         private AdminForm Admin;            // Admin form
         private UserForm User;              // User form
         public Form TempForm;               // Temporary Storage form to hold hidden forms
+        public Form AdminForm;
+        public Form UserManage;
+
+        [DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, Int32 wMsg, bool wParam, Int32 lParam);
+        private const int WM_SETREDRAW = 11; 
 
         public MainForm()
         {
@@ -110,11 +117,13 @@ namespace FormsProject
 
             if (userLevel == 0)
             {
-                User = new UserForm(this, userID, username);
-                User.MdiParent = this;
-                User.Dock = DockStyle.Fill;
-                User.Show();
-                RedrawForm();
+                MessageBox.Show("This application is for SuperAdmins and Admins only!");
+
+                //User = new UserForm(this, userID, username);
+                //User.MdiParent = this;
+                //User.Dock = DockStyle.Fill;
+                //User.Show();
+                //RedrawForm();
             }
             else if (userLevel > 0)
             {
@@ -151,7 +160,7 @@ namespace FormsProject
 
         public void CreateForm(Form hide)
         {
-            TempForm = hide; // Save currently open form, then show info edit/add form
+            AdminForm = hide; // Save currently open form, then show info edit/add form
 
             FormCreator formCreate = new FormCreator(this);
             formCreate.MdiParent = this;
@@ -161,9 +170,15 @@ namespace FormsProject
             RedrawForm();
         }
 
+        public void ExitFormCreater()
+        {
+            AdminForm.Visible = true;
+            RedrawForm();
+        }
+
         public void EditInfo(Form hide, int userID, bool createNew)
         {
-            TempForm = hide; // Save currently open form, then show info edit/add form
+            UserManage = hide; // Save currently open form, then show info edit/add form
 
             InfoEditForm editMyInfo = new InfoEditForm(this, userID, createNew);
             editMyInfo.MdiParent = this;
@@ -173,9 +188,33 @@ namespace FormsProject
             RedrawForm();
         }
 
+        public void UserManagement(Form hide)
+        {
+            AdminForm = hide; // Save currently open form, then show info edit/add form
+
+            UserManage = new UserManagmentForm(this);
+            UserManage.MdiParent = this;
+            UserManage.Dock = DockStyle.Fill;
+            hide.Visible = false;
+            UserManage.Show();
+            RedrawForm();
+        }
+
+        public void ExitUserManagement()
+        {
+            AdminForm.Visible = true;
+            RedrawForm();
+        }
+
         public void ExitInfo()
         {
-            TempForm.Visible = true;
+            // The SendMessage code is for disabling redrawing while the table is repopulated. C# has a bad problem with jitter
+
+            SendMessage(this.Handle, WM_SETREDRAW, false, 0);
+            UserManage.Visible = true;
+            (UserManage as UserManagmentForm).RefreshTable();
+            SendMessage(this.Handle, WM_SETREDRAW, true, 0);
+            
             RedrawForm();
         }
 
@@ -196,30 +235,6 @@ namespace FormsProject
             // Changing the form size seems to be the only way to redraw it. I tried EVERYTHING before this finally worked
             this.Size = new System.Drawing.Size(this.Size.Width + 1, this.Size.Height);
             this.Size = new System.Drawing.Size(this.Size.Width - 1, this.Size.Height);
-        }
-
-        public void NewForm(Form hide, string formname, int userID)
-        {
-            TempForm = hide; // Save currently open form
-
-            FormViewer view = new FormViewer(this, formname, false, userID);
-            view.MdiParent = this;
-            view.Dock = DockStyle.Fill;
-            hide.Visible = false;
-            view.Show();
-            RedrawForm();
-        }
-
-        public void ContinueForm(Form hide, string formname, int userID)
-        {
-            TempForm = hide; // Save currently open form
-
-            FormViewer view = new FormViewer(this, formname, true, userID);
-            view.MdiParent = this;
-            view.Dock = DockStyle.Fill;
-            hide.Visible = false;
-            view.Show();
-            RedrawForm();
         }
     }
 }

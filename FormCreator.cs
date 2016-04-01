@@ -359,7 +359,7 @@ namespace FormsProject
 
         private void CancelButton_Click(object sender, EventArgs e)
         {
-            Parent.ExitInfo();
+            Parent.ExitFormCreater();
             this.Close();
             wfs.Close();
         }
@@ -466,7 +466,7 @@ namespace FormsProject
                 {
                     cmd = new MySql.Data.MySqlClient.MySqlCommand(getID, Parent.Connection);            
                     object form_id = cmd.ExecuteScalar();
-                    Parent.ExitInfo();
+                    Parent.ExitFormCreater();
                     this.Close();
 
                     html.form_elementPopulator.send(form_id.ToString());

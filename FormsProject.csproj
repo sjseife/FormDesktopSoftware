@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\etsu.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MySql.Data, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -113,11 +116,11 @@
     <Compile Include="UserForm.Designer.cs">
       <DependentUpon>UserForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserInterface.cs">
+    <Compile Include="UserManagmentForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserInterface.Designer.cs">
-      <DependentUpon>UserInterface.cs</DependentUpon>
+    <Compile Include="UserManagmentForm.Designer.cs">
+      <DependentUpon>UserManagmentForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewUsers.cs">
       <SubType>Form</SubType>
@@ -163,6 +166,9 @@
     <EmbeddedResource Include="UserForm.resx">
       <DependentUpon>UserForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserManagmentForm.resx">
+      <DependentUpon>UserManagmentForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ViewUsers.resx">
       <DependentUpon>ViewUsers.cs</DependentUpon>
     </EmbeddedResource>
@@ -184,9 +190,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ETSU 2014.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\ETSU1.jpg" />
   </ItemGroup>
   <ItemGroup>
@@ -197,6 +200,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\downArrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\etsu.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
