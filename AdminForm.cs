@@ -40,32 +40,22 @@ namespace FormsProject
 
         private void LogOutButton_Click(object sender, EventArgs e)
         {
-            Parent.LogOut();
-        }
-
-        public void ResetForm()
-        {
-            InitializeComponent();
-        }
-
-        private void EditUserInfoButton_Click(object sender, EventArgs e)
-        {
-            Parent.GetUsers(this);
-        }
-
-        private void AddUserButton_Click(object sender, EventArgs e)
-        {
-            Parent.EditInfo(this, 0, true);
-        }
-
-        private void CreateFormButton_Click(object sender, EventArgs e)
-        {
-            Parent.CreateForm(this);
+            this.Close();
         }
 
         private void UserManageButton_Click(object sender, EventArgs e)
         {
             Parent.UserManagement(this);
+        }
+
+        private void FormManagementButton_Click(object sender, EventArgs e)
+        {
+            Parent.FormManagement(this);
+        }
+
+        private void AdminForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Parent.LogOut();
         }
     }
     
