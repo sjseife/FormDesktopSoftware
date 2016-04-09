@@ -41,9 +41,9 @@
             this.ComboChange = new System.Windows.Forms.Button();
             this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ButtonSplitter = new System.Windows.Forms.SplitContainer();
+            this.AddWorkflow = new System.Windows.Forms.Button();
             this.SubmitButton = new System.Windows.Forms.Button();
             this.CancelButton = new System.Windows.Forms.Button();
-            this.AddWorkflow = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.NewObjectContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ButtonSplitter)).BeginInit();
@@ -222,6 +222,17 @@
             this.ButtonSplitter.SplitterDistance = 43;
             this.ButtonSplitter.TabIndex = 20;
             // 
+            // AddWorkflow
+            // 
+            this.AddWorkflow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.AddWorkflow.Location = new System.Drawing.Point(626, 8);
+            this.AddWorkflow.Name = "AddWorkflow";
+            this.AddWorkflow.Size = new System.Drawing.Size(125, 23);
+            this.AddWorkflow.TabIndex = 2;
+            this.AddWorkflow.Text = "Add Workflow";
+            this.AddWorkflow.UseVisualStyleBackColor = true;
+            this.AddWorkflow.Click += new System.EventHandler(this.AddWorkflow_Click);
+            // 
             // SubmitButton
             // 
             this.SubmitButton.Location = new System.Drawing.Point(8, 8);
@@ -241,16 +252,6 @@
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = true;
             this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
-            // 
-            // AddWorkflow
-            // 
-            this.AddWorkflow.Location = new System.Drawing.Point(626, 8);
-            this.AddWorkflow.Name = "AddWorkflow";
-            this.AddWorkflow.Size = new System.Drawing.Size(125, 23);
-            this.AddWorkflow.TabIndex = 2;
-            this.AddWorkflow.Text = "Add Workflow";
-            this.AddWorkflow.UseVisualStyleBackColor = true;
-            this.AddWorkflow.Click += new System.EventHandler(this.AddWorkflow_Click);
             // 
             // FormCreator
             // 

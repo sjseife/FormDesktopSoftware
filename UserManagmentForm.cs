@@ -25,6 +25,8 @@ namespace FormsProject
 
         private void UserManagmentForm_Load(object sender, EventArgs e)
         {
+            Parent.StopDrawing();
+
             UserNames = new List<string>();
             UserIDs = new List<int>();
 
@@ -70,6 +72,8 @@ namespace FormsProject
                 UserTable.Controls.Add(username, 0, UserTable.RowCount - 1);
                 UserTable.Controls.Add(temp, 1, UserTable.RowCount - 1);
             }
+
+            Parent.ResumeDrawing();
         }
 
         private void Edit_Click(object sender, EventArgs e)
@@ -108,12 +112,14 @@ namespace FormsProject
 
         public void RefreshTable()
         {
+            Parent.StopDrawing();
             int count = UserTable.RowCount - 2;
 
             for (int i = 0; i < count; i++)
             {
                 remove_row(UserTable, 2);
             }
+            Parent.ResumeDrawing();
 
             UserManagmentForm_Load(null, null);
         }

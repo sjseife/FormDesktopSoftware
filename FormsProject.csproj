@@ -71,6 +71,12 @@
       <DependentUpon>FormCreator.cs</DependentUpon>
     </Compile>
     <Compile Include="FormElementPopulator.cs" />
+    <Compile Include="FormManagmentForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormManagmentForm.Designer.cs">
+      <DependentUpon>FormManagmentForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -142,6 +148,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormCreator.resx">
       <DependentUpon>FormCreator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormManagmentForm.resx">
+      <DependentUpon>FormManagmentForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormViewer.resx">
       <DependentUpon>FormViewer.cs</DependentUpon>

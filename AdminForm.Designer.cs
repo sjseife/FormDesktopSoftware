@@ -32,8 +32,8 @@
             this.LogOutButton = new System.Windows.Forms.Button();
             this.UsernameLabel = new System.Windows.Forms.Label();
             this.ETSULogoPictureBox = new System.Windows.Forms.PictureBox();
-            this.CreateFormButton = new System.Windows.Forms.Button();
             this.UserManageButton = new System.Windows.Forms.Button();
+            this.FormManagementButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.LoginInfoSplitter)).BeginInit();
             this.LoginInfoSplitter.Panel1.SuspendLayout();
             this.LoginInfoSplitter.Panel2.SuspendLayout();
@@ -59,7 +59,7 @@
             // 
             this.LoginInfoSplitter.Panel2.AutoScroll = true;
             this.LoginInfoSplitter.Panel2.Controls.Add(this.ETSULogoPictureBox);
-            this.LoginInfoSplitter.Panel2.Controls.Add(this.CreateFormButton);
+            this.LoginInfoSplitter.Panel2.Controls.Add(this.FormManagementButton);
             this.LoginInfoSplitter.Panel2.Controls.Add(this.UserManageButton);
             this.LoginInfoSplitter.Size = new System.Drawing.Size(784, 619);
             this.LoginInfoSplitter.SplitterDistance = 39;
@@ -100,18 +100,6 @@
             this.ETSULogoPictureBox.TabIndex = 4;
             this.ETSULogoPictureBox.TabStop = false;
             // 
-            // CreateFormButton
-            // 
-            this.CreateFormButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.CreateFormButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CreateFormButton.Location = new System.Drawing.Point(0, 47);
-            this.CreateFormButton.Name = "CreateFormButton";
-            this.CreateFormButton.Size = new System.Drawing.Size(784, 47);
-            this.CreateFormButton.TabIndex = 3;
-            this.CreateFormButton.Text = "Create Form";
-            this.CreateFormButton.UseVisualStyleBackColor = true;
-            this.CreateFormButton.Click += new System.EventHandler(this.CreateFormButton_Click);
-            // 
             // UserManageButton
             // 
             this.UserManageButton.Dock = System.Windows.Forms.DockStyle.Top;
@@ -124,6 +112,18 @@
             this.UserManageButton.UseVisualStyleBackColor = true;
             this.UserManageButton.Click += new System.EventHandler(this.UserManageButton_Click);
             // 
+            // FormManagementButton
+            // 
+            this.FormManagementButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.FormManagementButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormManagementButton.Location = new System.Drawing.Point(0, 47);
+            this.FormManagementButton.Name = "FormManagementButton";
+            this.FormManagementButton.Size = new System.Drawing.Size(784, 47);
+            this.FormManagementButton.TabIndex = 6;
+            this.FormManagementButton.Text = "Form Management";
+            this.FormManagementButton.UseVisualStyleBackColor = true;
+            this.FormManagementButton.Click += new System.EventHandler(this.FormManagementButton_Click);
+            // 
             // AdminForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -133,6 +133,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "AdminForm";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AdminForm_FormClosing);
             this.Load += new System.EventHandler(this.AdminForm_Load);
             this.LoginInfoSplitter.Panel1.ResumeLayout(false);
             this.LoginInfoSplitter.Panel1.PerformLayout();
@@ -149,8 +150,8 @@
         private System.Windows.Forms.SplitContainer LoginInfoSplitter;
         private System.Windows.Forms.Button LogOutButton;
         private System.Windows.Forms.Label UsernameLabel;
-        private System.Windows.Forms.Button CreateFormButton;
         private System.Windows.Forms.PictureBox ETSULogoPictureBox;
         private System.Windows.Forms.Button UserManageButton;
+        private System.Windows.Forms.Button FormManagementButton;
     }
 }

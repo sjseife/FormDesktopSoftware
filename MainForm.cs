@@ -24,6 +24,7 @@ namespace FormsProject
         public Form TempForm;               // Temporary Storage form to hold hidden forms
         public Form AdminForm;
         public Form UserManage;
+        public Form FormManage;
 
         [DllImport("user32.dll")]
         public static extern int SendMessage(IntPtr hWnd, Int32 wMsg, bool wParam, Int32 lParam);
@@ -142,15 +143,6 @@ namespace FormsProject
 
         public void LogOut()
         {
-            if (Admin != null)
-            {
-                Admin.Close();
-            }
-            else if (User != null)
-            {
-                User.Close();
-            }
-
             Login = new LoginForm(this);
             Login.MdiParent = this;
             Login.Dock = DockStyle.Fill;
@@ -160,7 +152,7 @@ namespace FormsProject
 
         public void CreateForm(Form hide)
         {
-            AdminForm = hide; // Save currently open form, then show info edit/add form
+            FormManage = hide;
 
             FormCreator formCreate = new FormCreator(this);
             formCreate.MdiParent = this;
@@ -172,13 +164,14 @@ namespace FormsProject
 
         public void ExitFormCreater()
         {
-            AdminForm.Visible = true;
+            FormManage.Visible = true;
+            (FormManage as FormManagmentForm).RefreshTable();
             RedrawForm();
         }
 
         public void EditInfo(Form hide, int userID, bool createNew)
         {
-            UserManage = hide; // Save currently open form, then show info edit/add form
+            UserManage = hide;
 
             InfoEditForm editMyInfo = new InfoEditForm(this, userID, createNew);
             editMyInfo.MdiParent = this;
@@ -206,14 +199,28 @@ namespace FormsProject
             RedrawForm();
         }
 
+        public void FormManagement(Form hide)
+        {
+            AdminForm = hide; // Save currently open form, then show info edit/add form
+
+            FormManage = new FormManagmentForm(this);
+            FormManage.MdiParent = this;
+            FormManage.Dock = DockStyle.Fill;
+            hide.Visible = false;
+            FormManage.Show();
+            RedrawForm();
+        }
+
+        public void ExitFormManagement()
+        {
+            AdminForm.Visible = true;
+            RedrawForm();
+        }
+
         public void ExitInfo()
         {
-            // The SendMessage code is for disabling redrawing while the table is repopulated. C# has a bad problem with jitter
-
-            SendMessage(this.Handle, WM_SETREDRAW, false, 0);
             UserManage.Visible = true;
             (UserManage as UserManagmentForm).RefreshTable();
-            SendMessage(this.Handle, WM_SETREDRAW, true, 0);
             
             RedrawForm();
         }
@@ -235,6 +242,16 @@ namespace FormsProject
             // Changing the form size seems to be the only way to redraw it. I tried EVERYTHING before this finally worked
             this.Size = new System.Drawing.Size(this.Size.Width + 1, this.Size.Height);
             this.Size = new System.Drawing.Size(this.Size.Width - 1, this.Size.Height);
+        }
+
+        public void StopDrawing()
+        {
+            SendMessage(this.Handle, WM_SETREDRAW, false, 0);
+        }
+
+        public void ResumeDrawing()
+        {
+            SendMessage(this.Handle, WM_SETREDRAW, true, 0);
         }
     }
 }
