@@ -374,115 +374,113 @@ namespace FormsProject
             int indexCheckTitle = 0;
             int indexCombo = 0;
 
-            if(wfs.checkAssignment())
-            { 
-                html.setTitle(Title.Text);
-                foreach (int i in order)
+            
+
+            
+            
+            html.setTitle(Title.Text);
+            foreach (int i in order)
+            {
+                if (i == 1)
                 {
-                    if (i == 1)
-                    {
-                        html.createTextBox(labelText[indexText].Text);
-                        indexText++;
-                    }
-                    else if (i == 2)
-                    {
-                        html.createPassword(labelText[indexText].Text);
-                        indexText++;
-                    }
-                    else if (i == 3)
-                    {
-                        html.createTextBox(labelText[indexText].Text);
-                        indexText++;
-                    }
-                    else if (i == 4)
-                    {
-                        List<string> comboList = new List<string>();
-                        for (int x = 0; x < 100; x++)
-                        {
-                            if (ComboSelection[indexCombo, x] == null)
-                                continue;
-                            else
-                                comboList.Add(ComboSelection[indexCombo, x]);
-                        }//for
-
-                        html.createListBox(comboList, dynamicComboTitleBox[indexCombo].Text);
-                        indexCombo++;
-                    }
-                    else if (i == 5)
-                    {
-                        string[] radioArr = new string[radioGroupTracker[indexRadioTitle, 0]];
-
-                        for (int x = 0; x < radioGroupTracker[indexRadioTitle, 0]; x++)
-                        {
-                            radioArr[x] = radioTextBox[indexRadio].Text;
-                            indexRadio++;
-                        }//for
-                        html.createRadio(radioGroupTitleBox[indexRadioTitle].Text, radioArr);
-                        indexRadioTitle++;
-                    }
-                    else if (i == 6)
-                    {
-                        string[] checkBoxArr = new string[checkGroupTracker[indexCheckTitle, 0]];
-
-                        for (int x = 0; x < checkGroupTracker[indexCheckTitle, 0]; x++)
-                        {
-                            checkBoxArr[x] = checkTextBox[indexCheck].Text;
-                            indexCheck++;
-                        }
-                        html.createCheckBox(checkGroupTitleBox[indexCheckTitle].Text, checkBoxArr);
-                        indexCheckTitle++;
-                    }
+                    html.createTextBox(labelText[indexText].Text);
+                    indexText++;
                 }
+                else if (i == 2)
+                {
+                    html.createPassword(labelText[indexText].Text);
+                    indexText++;
+                }
+                else if (i == 3)
+                {
+                    html.createTextBox(labelText[indexText].Text);
+                    indexText++;
+                }
+                else if (i == 4)
+                {
+                    List<string> comboList = new List<string>();
+                    for (int x = 0; x < 100; x++)
+                    {
+                        if (ComboSelection[indexCombo, x] == null)
+                            continue;
+                        else
+                            comboList.Add(ComboSelection[indexCombo, x]);
+                    }//for
+
+                    html.createListBox(comboList, dynamicComboTitleBox[indexCombo].Text);
+                    indexCombo++;
+                }
+                else if (i == 5)
+                {
+                    string[] radioArr = new string[radioGroupTracker[indexRadioTitle, 0]];
+
+                    for (int x = 0; x < radioGroupTracker[indexRadioTitle, 0]; x++)
+                    {
+                        radioArr[x] = radioTextBox[indexRadio].Text;
+                        indexRadio++;
+                    }//for
+                    html.createRadio(radioGroupTitleBox[indexRadioTitle].Text, radioArr);
+                    indexRadioTitle++;
+                }
+                else if (i == 6)
+                {
+                    string[] checkBoxArr = new string[checkGroupTracker[indexCheckTitle, 0]];
+
+                    for (int x = 0; x < checkGroupTracker[indexCheckTitle, 0]; x++)
+                    {
+                        checkBoxArr[x] = checkTextBox[indexCheck].Text;
+                        indexCheck++;
+                    }
+                    html.createCheckBox(checkGroupTitleBox[indexCheckTitle].Text, checkBoxArr);
+                    indexCheckTitle++;
+                }
+            }
                 
             
 
-                DateTime date = DateTime.Now;
-                string newdate = date.ToString("yyyy-MM-dd");
+            DateTime date = DateTime.Now;
+            string newdate = date.ToString("yyyy-MM-dd");
 
-                string htmlString = html.GetHTML();
-                byte[] rawData = Encoding.UTF8.GetBytes(htmlString);
+            string htmlString = html.GetHTML();
+            byte[] rawData = Encoding.UTF8.GetBytes(htmlString);
 
-                string SQL = String.Format("INSERT INTO form_template(form_name, form_file, form_creation_date) VALUES(@form_name, @form_file, @form_creation_date)");
-                string getID = String.Format("SELECT MAX(form_id)AS form_id FROM form_template"); // Gets the most recently created table
+            string SQL = String.Format("INSERT INTO form_template(form_name, form_file, form_creation_date) VALUES(@form_name, @form_file, @form_creation_date)");
+            string getID = String.Format("SELECT MAX(form_id)AS form_id FROM form_template"); // Gets the most recently created table
 
-                MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand(SQL, Parent.Connection);
+            MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand(SQL, Parent.Connection);
 
-                cmd.Parameters.AddWithValue("@form_name", Title.Text);
-                cmd.Parameters.AddWithValue("@form_file", rawData);
-                cmd.Parameters.AddWithValue("@form_creation_date", newdate);
+            cmd.Parameters.AddWithValue("@form_name", Title.Text);
+            cmd.Parameters.AddWithValue("@form_file", rawData);
+            cmd.Parameters.AddWithValue("@form_creation_date", newdate);
 
-                try
+            try
+            {
+                cmd.ExecuteNonQuery();
+                MessageBox.Show("File Inserted into database successfully!", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+            catch (MySql.Data.MySqlClient.MySqlException ex)
+            {
+                MessageBox.Show("Error " + ex.Number + " has occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            // Insert the data from the from into the form_element table
+            try
+            {
+                cmd = new MySql.Data.MySqlClient.MySqlCommand(getID, Parent.Connection);            
+                object form_id = cmd.ExecuteScalar();
+                Parent.ExitFormCreater();
+                this.Close();
+
+                html.form_elementPopulator.send(form_id.ToString());
+                if (wfs.checkAssignment())
                 {
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("File Inserted into database successfully!", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                }
-                catch (MySql.Data.MySqlClient.MySqlException ex)
-                {
-                    MessageBox.Show("Error " + ex.Number + " has occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-
-                // Insert the data from the from into the form_element table
-                try
-                {
-                    cmd = new MySql.Data.MySqlClient.MySqlCommand(getID, Parent.Connection);            
-                    object form_id = cmd.ExecuteScalar();
-                    Parent.ExitFormCreater();
-                    this.Close();
-
-                    html.form_elementPopulator.send(form_id.ToString());
                     wfs.send(form_id.ToString());
                 }
-                catch (MySql.Data.MySqlClient.MySqlException ex)
-                {
-                    MessageBox.Show("Error " + ex.Number + " has occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
             }
-            else
+            catch (MySql.Data.MySqlClient.MySqlException ex)
             {
-                MessageBox.Show("Assign Workflow First", "Error!");
+                MessageBox.Show("Error " + ex.Number + " has occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-           
         }
 
         private void AddWorkflow_Click(object sender, EventArgs e)
