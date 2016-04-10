@@ -28,7 +28,9 @@ namespace FormsProject
             string user = UsernameTextbox.Text;
             string pass = PasswordTextbox.Text;
 
-            string validateUser = "SELECT user_id FROM user_accounts WHERE BINARY username = '" + user + "' AND BINARY password = '" + pass + "'";
+            string hashpass = GetUserHash(user, pass);
+
+            string validateUser = "SELECT user_id FROM user_accounts WHERE BINARY username = '" + user + "' AND BINARY password = '" + hashpass + "'";
 
             MySqlCommand command = new MySqlCommand(validateUser, Parent.Connection);
 
@@ -51,6 +53,22 @@ namespace FormsProject
             {
                 ErrorLabel.Visible = true;
             }
+        }
+
+        private string GetUserHash(string username, string password)
+        {
+            string saltString = string.Empty;
+
+            string getSalt = "SELECT salt FROM user_accounts WHERE BINARY username = '" + username + "'";
+            MySqlCommand command = new MySqlCommand(getSalt, Parent.Connection);
+            using (MySqlDataReader rdr = command.ExecuteReader())
+            {
+                rdr.Read();
+                saltString = rdr.GetString(0);
+                rdr.Close();
+            }
+
+            return Parent.HashPasswordAndSalt(password, saltString);
         }
 
         private void UsernameTextbox_KeyPress(object sender, KeyPressEventArgs e)
