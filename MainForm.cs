@@ -12,6 +12,7 @@ using MySql.Data;
 using MySql.Data.MySqlClient;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 
 namespace FormsProject
 {
@@ -252,6 +253,63 @@ namespace FormsProject
         public void ResumeDrawing()
         {
             SendMessage(this.Handle, WM_SETREDRAW, true, 0);
+        }
+
+        public string HashPasswordAndSalt(string password, string saltString)
+        {
+            byte[] passwordUTF8 = Encoding.UTF8.GetBytes(password);
+            byte[] pepperUTF8 = Encoding.UTF8.GetBytes("5hQB6y3uLRmA");
+            byte[] salt = Encoding.UTF8.GetBytes(saltString);
+
+            byte[] fullHash = new byte[passwordUTF8.Length + salt.Length + pepperUTF8.Length];
+
+            for (int i = 0; i < salt.Length; i++)
+            {
+                fullHash[i] = salt[i];                                                  // Add salt to hash
+            }
+            for (int i = 0; i < passwordUTF8.Length; i++)
+            {
+                fullHash[i + salt.Length] = passwordUTF8[i];                            // Add password to hash
+            }
+            for (int i = 0; i < pepperUTF8.Length; i++)
+            {
+                fullHash[i + salt.Length + passwordUTF8.Length] = pepperUTF8[i];        // Add pepper to hash
+            }
+
+            SHA512 hash = new SHA512Managed();
+            fullHash = hash.ComputeHash(fullHash);                                      // Compute hash
+
+            for (int i = 0; i < 100000; i++)
+            {
+                string hashHex = BitConverter.ToString(fullHash);
+                hashHex = hashHex.Replace("-", "");
+                hashHex = hashHex.ToLower();
+
+                byte[] lastHash = Encoding.UTF8.GetBytes(hashHex);
+
+                byte[] nextHash = new byte[lastHash.Length + salt.Length + pepperUTF8.Length];
+
+                for (int j = 0; j < salt.Length; j++)
+                {
+                    nextHash[j] = salt[j];                                              // Add salt to hash
+                }
+                for (int j = 0; j < lastHash.Length; j++)
+                {
+                    nextHash[j + salt.Length] = lastHash[j];                            // Add lastHash to hash
+                }
+                for (int j = 0; j < pepperUTF8.Length; j++)
+                {
+                    nextHash[j + salt.Length + lastHash.Length] = pepperUTF8[j];        // Add pepper to hash
+                }
+
+                fullHash = hash.ComputeHash(nextHash);                                  // Compute hash 100,000 more times
+            }
+
+            string hashString = BitConverter.ToString(fullHash);
+            hashString = hashString.Replace("-", "");
+            hashString = hashString.ToLower();
+
+            return hashString;
         }
     }
 }

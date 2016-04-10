@@ -75,9 +75,14 @@ namespace FormsProject
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
+            string hash = string.Empty;
+            string salt = string.Empty;
+
+            CreatePasswordHash(ref hash, ref salt, PasswordTextBox.Text);
+
             string checkExistingUser = "SELECT COUNT(username) FROM user_accounts WHERE username = '" + UsernameTextbox.Text + "'";
-            string createUserWithTitle = string.Format("INSERT INTO user_accounts (username, password, f_name, l_name, address_street, address_number, address_city, address_state, address_zip, primary_phone, user_title, user_level, email) VALUES ('{0}','{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}', {11}, '{12}')", UsernameTextbox.Text, PasswordTextBox.Text, FNameTextbox.Text, LNameTextbox.Text, StreetNameTextbox.Text, StreetNumberTextbox.Text, CityTextbox.Text, StateTextbox.Text, ZipTextbox.Text, PhoneAreaTextbox.Text + "-" + PhoneFirst3Textbox.Text + "-" + PhoneLast4Textbox.Text, TitleTextbox.Text, LevelDropdown.SelectedIndex, EmailTextbox.Text);
-            string createUserWithoutTitle = string.Format("INSERT INTO user_accounts (username, password, f_name, l_name, address_street, address_number, address_city, address_state, address_zip, primary_phone, user_level, email) VALUES ('{0}','{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', {10}, '{11}')", UsernameTextbox.Text, PasswordTextBox.Text, FNameTextbox.Text, LNameTextbox.Text, StreetNameTextbox.Text, StreetNumberTextbox.Text, CityTextbox.Text, StateTextbox.Text, ZipTextbox.Text, PhoneAreaTextbox.Text + "-" + PhoneFirst3Textbox.Text + "-" + PhoneLast4Textbox.Text, LevelDropdown.SelectedIndex, EmailTextbox.Text);
+            string createUserWithTitle = string.Format("INSERT INTO user_accounts (username, password, salt, f_name, l_name, address_street, address_number, address_city, address_state, address_zip, primary_phone, user_title, user_level, email) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', {12}, '{13}')", UsernameTextbox.Text, hash, salt, FNameTextbox.Text, LNameTextbox.Text, StreetNameTextbox.Text, StreetNumberTextbox.Text, CityTextbox.Text, StateTextbox.Text, ZipTextbox.Text, PhoneAreaTextbox.Text + "-" + PhoneFirst3Textbox.Text + "-" + PhoneLast4Textbox.Text, TitleTextbox.Text, LevelDropdown.SelectedIndex, EmailTextbox.Text);
+            string createUserWithoutTitle = string.Format("INSERT INTO user_accounts (username, password, salt, f_name, l_name, address_street, address_number, address_city, address_state, address_zip, primary_phone, user_level, email) VALUES ('{0}','{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}', {11}, '{12}')", UsernameTextbox.Text, hash, salt, FNameTextbox.Text, LNameTextbox.Text, StreetNameTextbox.Text, StreetNumberTextbox.Text, CityTextbox.Text, StateTextbox.Text, ZipTextbox.Text, PhoneAreaTextbox.Text + "-" + PhoneFirst3Textbox.Text + "-" + PhoneLast4Textbox.Text, LevelDropdown.SelectedIndex, EmailTextbox.Text);
             string updateUser = string.Format("UPDATE user_accounts SET f_name = '{0}', l_name = '{1}', address_street = '{2}', address_number = '{3}', address_city = '{4}', address_state = '{5}', address_zip = '{6}', primary_phone = '{7}', user_title = '{8}', user_level = {9}, email = '{10}' WHERE user_id = {11}", FNameTextbox.Text, LNameTextbox.Text, StreetNameTextbox.Text, StreetNumberTextbox.Text, CityTextbox.Text, StateTextbox.Text, ZipTextbox.Text, PhoneAreaTextbox.Text + "-" + PhoneFirst3Textbox.Text + "-" + PhoneLast4Textbox.Text, TitleTextbox.Text, LevelDropdown.SelectedIndex, EmailTextbox.Text, UserID);
             
             if (NewUser)
@@ -116,6 +121,21 @@ namespace FormsProject
                 Parent.ExitInfo();
                 this.Close();
             }
+        }
+
+        private void CreatePasswordHash(ref string hashString, ref string saltString, string password)
+        {
+            byte[] charsUTF8 = Encoding.UTF8.GetBytes("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
+            byte[] salt = new byte[15];
+
+            Random rng = new Random();
+            for (int i = 0; i < salt.Length; i++)
+            {
+                salt[i] = charsUTF8[rng.Next(charsUTF8.Length)];                    // Select random Alphanumeric bytes for salt
+            }
+            saltString = Encoding.UTF8.GetString(salt);                             // Pass salt back for inserting into database
+
+            hashString = Parent.HashPasswordAndSalt(password, saltString);
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
