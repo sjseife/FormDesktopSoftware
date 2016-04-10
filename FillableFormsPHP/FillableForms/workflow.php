@@ -1,11 +1,12 @@
 <?
 session_start();
+
 #supress errors to user
 error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR);
 date_default_timezone_set("America/New_York");
 #echo $_SESSION['form_element_ids'];
 #echo "<br> POST:";
-print_r($_POST);
+#print_r($_POST);
 #print_r($_SESSION);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -13,8 +14,9 @@ print_r($_POST);
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<title>My Forms</title>
-	<link rel="shortcut icon" href="http://s27.postimg.org/lc9yxczr3/etsu.png" type="image/x-icon" />
+	<title>Workflow Authorization</title>
+	
+		<link rel="shortcut icon" href="http://s27.postimg.org/lc9yxczr3/etsu.png" type="image/x-icon" />
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
@@ -40,7 +42,7 @@ print_r($_POST);
 										<li><a href="my_forms.php">Completed Forms</a></li>
 										<li><a href="saved_forms.php">Saved Forms</a></li>
 										<li><a href="account.php">Account Management</a></li>
-						 				<li><a href="workflow.php">Workflow Management</a></li>
+                    <li><a href="workflow.php">Workflow Management</a></li>
 								</ul>
 	
 					 <form method="post" action="login.php" style="position: absolute; top: 0%; right: 0%; width:5%;">
@@ -48,15 +50,61 @@ print_r($_POST);
 					</form>
 		</div>
 				 <div>
-					 			<!--		<div style="position: absolute; top: 0%; right: 0%; width:5%;">
-					<form method="post" action="login.php">
-						<input type="submit"  name="logoutSubmit" value="Log out" />
-					</form>
-				</div> -->
+				
 					<img width="100%" src="http://i.imgur.com/aXIOIvo.jpg">	
   </div>
 		
-		
+		<? 
+		##################AUTHORIZE FORM ON AUTHORIZE BUTTON CLICK #################################
+			 
+			 if(isset($_POST['Authorize']))
+			 {
+				 try
+				 {
+					 	$filled_form_id = $_POST['filled_form_id'];
+				 		$workflow_id = $_POST['workflow_id'];
+					 $form_id = $_POST['form_id'];
+					 					            #Create PDO statement and prepare database connection
+            $user="schaum";
+            $password="12345";
+            $dbname="schaum";
+    
+            $db = new PDO("mysql:host=localhost;dbname=$dbname", "$user", "$password");
+                if (!$db) {
+                    die('Could not connect: Please try again later. ');
+    
+                }
+								
+
+
+								$db = new PDO("mysql:host=localhost;dbname=$dbname", "$user", "$password");
+										if (!$db) {
+												die('Could not connect: Please try again later. ');
+
+										}
+								
+								# get all 
+								$query = "UPDATE workflow_user_form
+														SET fulfilled = 1
+														WHERE filled_form_id = $filled_form_id
+														AND workflow_id = $workflow_id;";
+								$statement = $db->prepare($query);
+								$statement->execute(array());
+					 			$query = "call schaum.isFormAuthorized($filled_form_id);";
+								$statement2 = $db->prepare($query);
+								$statement2->execute(array());
+								
+					 
+				 }
+				 catch(Exception $e)
+				 {
+					 
+				 }
+				 
+				 
+				 
+			 }
+		?>
 		
 		<!--DISPLAY FORM IF OpenForm BUTTON HAS BEEN PRESSED -->						
 		
@@ -85,21 +133,21 @@ print_r($_POST);
 												die('Could not connect: Please try again later. ');
 
 										}
-								$user_id = $_SESSION['user_id'];
+								$user_idA = $_POST['user_id'];
 								# get all 
 								$query = "SELECT element_text, response_text, element_type, form_name FROM schaum.form_response
 															JOIN user_forms USING(filled_form_id)
 															JOIN form_template USING(form_id)
 															JOIN form_element USING(form_element_id)
 															WHERE form_element.form_id = '$form_id'
-															AND user_id = $user_id
+															AND user_id = $user_idA
 															ORDER BY form_element.form_element_id ;";
 								$statement2 = $db->prepare($query);
 								$statement2->execute(array());
-								
+
 								
 #############################################################################################################################
-#		Dynamically build table to show COMPLETED forms with while loop, Loops until no rows remain.														#
+#		Dynamically build table to show forms that require this user's authorization with while loop, Loops until no rows remain.														#
 #############################################################################################################################
                 
 								?>
@@ -108,6 +156,9 @@ print_r($_POST);
 					
 									<table  class="table">
 								<?
+									$filled_form_id = $_POST['filled_form_id'];
+				 					$workflow_id = $_POST['workflow_id'];
+									$form_id = $_POST['form_id'];
 								while($row = $statement2->fetch(PDO::FETCH_ASSOC))
                 {
 									if(!(isset($form_name)))
@@ -158,6 +209,10 @@ print_r($_POST);
 							
 							<th text-align="right">
 								<form action="<?=$_SERVER['PHP_SELF'] ?>" method="post">
+									<input type="hidden" id="form_id" name="form_id" value ="<?= $form_id?>" />
+									<input type="hidden" id="filled_form_id" name="filled_form_id" value ="<?= $filled_form_id?>" />
+									<input type="hidden" id="workflow_id" name="workflow_id" value ="<?= $workflow_id ?>" />
+                  <input type="submit" class="btn btn-default" class="btn btn-default" name="Authorize" value="Authorize">
 									<input type="submit" class="btn btn-default" class="btn btn-default" name="noaction" value="Close">
 								</form>
 							</th>
@@ -174,152 +229,12 @@ print_r($_POST);
 				{
 					echo "Danger Will Robinson, Danger!!!";
 				}
-			}							
+			}	
+       
+      ###############END OPEN SELECTED FORM #################################
 		
-			 ################################################################
-			 # 					SUBMISSION HANDLING FOR COMPLETED FORMS							#
-			 # make entry into user_forms table for new form								#
-			 # call stored procedure to map workflow for new form						#
-			 # write all responses to form elements to form_response table	#
-			 ################################################################
-				if(isset($_POST['submit']) || isset($_POST['submit2']))
-				{
-						
-					
-						#Delete any past entry of the same form
-						#This is used when a partially filled form from Saved forms page
-						# is submitted as completed.
-						if(isset($_POST['submit2']))
-						{
-						
-								$user="schaum";
-								$password="12345";
-								$dbname="schaum";
-
-								$db = new PDO("mysql:host=localhost;dbname=$dbname", "$user", "$password");
-										if (!$db) {
-												die('Could not connect: Please try again later. ');
-    
-                }
-								$filled_form_id = $_SESSION['filled_form_id'];
-								#delete old response entries and overwrite with new
-								$query= "DELETE FROM form_response WHERE filled_form_id = $filled_form_id";
-                #prepare the query
-                $statement = $db->prepare($query);
-    						#execute query
-								$statement->execute(array());
-																
-								#delete old response entries and overwrite with new
-								$query= "DELETE FROM user_forms WHERE filled_form_id = $filled_form_id";
-                #prepare the query
-                $statement = $db->prepare($query);
-    						#execute query
-								$statement->execute(array());
-								
-						}		
-					
-							  $user="schaum";
-								$password="12345";
-								$dbname="schaum";
-
-								$db = new PDO("mysql:host=localhost;dbname=$dbname", "$user", "$password");
-										if (!$db) {
-												die('Could not connect: Please try again later. ');
-                }
-								
-                $date = date("Y-m-d");
-								$user_id = $_SESSION['user_id'];
-								$form_id = $_SESSION['form_id'];
-								#Insert user and form information into user_forms table
-    						$query= "INSERT INTO user_forms 
-													(`user_id`,
-													 `form_id`,
-													 `incomplete`,
-													 `date_of_completion`,
-													 `authorization_complete`)
-													 VALUES
-													 ('$user_id',
-													  '$form_id',
-														0,
-														'$date',
-														0
-													 );";
-					
-                #prepare the query
-                $statement = $db->prepare($query);
-    						#execute query
-								$statement->execute(array());
-								
-								#assign workflows to specific instance of form in database
-								$query= "call schaum.WorkflowAssignment();";
-                #prepare the query
-                $statement = $db->prepare($query);
-    						#execute query
-								$statement->execute(array());
-								
-								#get filled_form_id for use in form_response INSERT statements below
-								$query= "SELECT MAX(filled_form_id) as filled_form_id  FROM user_forms;";
-                #prepare the query
-                $statement = $db->prepare($query);
-    						#execute query
-								$statement->execute(array());
-
-                
-					$filled_form_id = "";
-					while($row = $statement->fetch(PDO::FETCH_ASSOC))
-					{
-						$filled_form_id = $row['filled_form_id'];
-					}
-					$form_element_ids_holder = $_SESSION['form_element_ids'];
-					$form_element_ids = explode(",",$form_element_ids_holder);
-					$counter =0;	
-					#loop through $_POST for user responses
-					foreach($_POST as $key => $response)
-						{
-							#ignore post variable representing the submit button
-							if($response != "Submit" && $response != null && $response != "Save Progress ")
-							{
-								if(gettype($response)== "array")
-								{
-									$formattedResponse = "";
-									foreach($response as $value)
-									{
-										$formattedResponse .= $value . ",";
-									}
-									$formattedResponse =  rtrim($formattedResponse, ",");
-								}
-								else
-								{
-									$formattedResponse = $response;
-								}
-								#enter responses into form_response table
-								$query= "INSERT INTO form_response 
-													(`form_element_id`, 
-													 `filled_form_id`, 
-													 `response_text`)
-													 VALUES
-													 ('$key',
-													  '$filled_form_id',
-														'$formattedResponse');";
-                #prepare the query
-                $statement = $db->prepare($query);
-    						#execute query
-								$statement->execute(array());
-								
-							}
-							$counter++;
-							
-						}//end foreach $_POST loop 
-								$query= "call schaum.isFormAuthorized($filled_form_id);";
-                #prepare the query
-                $statement = $db->prepare($query);
-    						#execute query
-								$statement->execute(array());
-					
-					$db = null;
-				}//end if submit was pressed
-			 ######### END SUBMISSION HANDLING FOR COMPLETED FORMS ##########
-  	  #DISPLAY COMPLETED FORMS
+			
+  	  #DISPLAY UNAUTHORIZED FORMS
 					try       
     			{ 
             #Create PDO statement and prepare database connection
@@ -333,38 +248,47 @@ print_r($_POST);
     
                 }
 								  
-                
+                $user_title = $_SESSION['user_title'];
     					 $user_id = $_SESSION['user_id'];
                 # query set - Select all indicated fields if records match search string
-                $query = "SELECT form_name, form_id from form_template
-														JOIN user_forms USING(form_id)
-														WHERE user_id = '$user_id'
-														AND incomplete = 0;";
-    
-                #prepare the query
+ 
+                   $query = "SELECT DISTINCT form_name, form_template.form_id, user_id, username, filled_form_id, workflow_id FROM form_element
+                      JOIN form_response USING(form_element_id)
+                      JOIN form_template USING(form_id)
+                      JOIN user_forms USING(filled_form_id)
+                      JOIN workflow_user_form USING(filled_form_id)
+                      JOIN workflow USING(workflow_id)
+                      JOIN user_accounts USING(user_id)
+                      WHERE workflow.user_title = '$user_title'
+                      AND authorization_complete = 0
+                      AND incomplete = 0
+                      AND fulfilled = 0
+                      AND user_id <> '$user_id';";
+                                  #prepare the query
                 $statement = $db->prepare($query);
     
                 # pass data to an array
                 $statement->execute(array());
-                $db = null;
+                
 								?>
 								<div class="table-responsive">          
   							<table class="table table-hover">
                 <tr>
-									<th text-align="center" colspan="2">
+									<th style="text-align: center" colspan="2">
 										<h2>
-											Completed Forms
+											Forms that require authorization
 										</h2>
 									</th>
                 </tr>
 									<tr>
 									<th>
-										<h4>
-											Form Name
-										</h4>
-											
-										
-									</th>
+                      <h4>
+                        Form Name
+                      </h4>
+										</th>
+                    <th>
+                      Username
+                    </th>
 										<th></th>
 									</tr>
                 <?
@@ -380,9 +304,16 @@ print_r($_POST);
 															<?= $row['form_name'] ?>
 														</h4>
 													</td>
+                          <td>
+                              <?= $row['username'] ?>
+                          </td>
 													<td>
                             <p>
-																	<form method='post' action="<?= $_SERVER['PHP_SELF']?>">
+																	<form method="POST" action="<?= $_SERVER['PHP_SELF']?>">
+																		<input type="hidden" id="form_id" name="form_id" value ="<?= $row['form_id'] ?>" />
+																		<input type="hidden" id="filled_form_id" name="filled_form_id" value ="<?= $row['filled_form_id'] ?>" />
+																		<input type="hidden" id="workflow_id" name="workflow_id" value ="<?= $row['workflow_id'] ?>" />
+                                    <input type="hidden" id="user_id" name="user_id" value ="<?= $row['user_id'] ?>" />
 																		<button type='submit' class="btn btn-default" name='OpenForm' value='<?= $row['form_id'] ?>'>Open</button>   
 																	</form>
 														</p>
@@ -392,6 +323,7 @@ print_r($_POST);
                     </tr>          
                     <?
                 }//end population of table while loop
+                  $db = null;
 								}
 								catch(Exception $e)
 								{
@@ -404,12 +336,6 @@ print_r($_POST);
 		} #end if logged in insset ?> 
 	</div>
                                 
-<div>
-    <p>
-     <?
-			
-			?>
-  </p>
-</div>
+
   </body>
   </html>		

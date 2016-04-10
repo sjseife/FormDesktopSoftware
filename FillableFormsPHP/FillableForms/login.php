@@ -25,80 +25,23 @@ if(isset($_POST['clear']))
 			<link href="loginstyle.css" rel="stylesheet" type="text/css" />
 		<title>User Login</title>
 		<style>
+			
 		body 
-		{
-			width: 100%;
-			background-color: #041E42;
-		}
-
-		.wrapper 
-		{
-			width: 80%;
-			height: auto;
-			margin: 20px auto;
-			padding: 20px;
-		}
-
-		nav 
-		{
-			width: 100%;
-			text-align: center;
-			font-size: 16;
-		}
-		nav a 
-		{
-			color: blue;
-			text-decoration: none;
-		}
+			{
+				width: 100%;
+				background-color: #fafafa  ;
+			}
 		
-		.loginWrapper 
-		{
-			background-color: #FFC72C;
-			vertical-align: middle;
-			margin: 0 auto;
-			width: 500px;
-			padding: 10px;
-			border: 2px solid black;
-			color: #000000;
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			margin-right: -50%;
-			transform: translate(-50%, -50%);
-			text-align: center;
-			box-shadow: 9px 9px 9px #000000;
-		}		
       
-  <? ?>
+  
 	</style>
 		</head>
 		<body>
-			<!--<div class="login">
-			<div class="wrapper">
-			<h2 align='center'>Please use a local account to log in.</h2>
-
-	<form name='login' method='post' action='home.php'>
-		Username: 
-		<input type='text' name='user'/><br /><br />
-		Password: 
-		<input type='password' name='pw'/><br /><br />
-		<input type='submit' name='loginSubmit' value='Login'/>
-		<input type="submit" name="reset" value="Reset Form" onclick="form.action='<? #$_SERVER['PHP_SELF'] ?>';">
-    <br><br><input type="submit" name="reset" value="Reset Password" onclick="form.action='RestPassword.php';">
-	
-	</form>
-			
-			</div>
-		<div id="userbar">
-		<input type="checkbox" id="remember_me" name="remember_me"/>
-		<label for="remember_me">Remember Me</label>
-		<br>
-			<div id="rememberme">-->
-				
+				<img width="100%" src="http://i.imgur.com/aXIOIvo.jpg">	
 	
 	
     <div class="login">
-      <h1>Form Managment Login</h1>
+      <h1 style="color:#002e62;">Form Management Login</h1>
       <form method="post" action="home.php"><!-- action redirects to HeritageDB.php -->
 		  
         <p><input type='text' name='user' placeholder='Username' size='25' value='' required/></p>
@@ -107,7 +50,7 @@ if(isset($_POST['clear']))
 		<p class="reset">
         	<input type="submit" name="loginSubmit" value="Login">
 			<input type="submit" name="reset" value="Reset Form" onclick="form.action='<?= $_SERVER['PHP_SELF'] ?>';">
-			<br/><br/><input type="submit" name="reset" value="Reset Password" onclick="form.action='RestPassword.php';">
+			<br/><br/><input type="submit" name="reset" value="Reset Password" onclick="form.action='ResetPassword.php';">
 		<?
 		
 			
