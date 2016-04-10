@@ -124,7 +124,7 @@ if(isset($_POST['loginSubmit']))
                              $_SESSION['logged_in'] = true;
 							 								require_once('History.php');
 															
-															$query = "SELECT f_name, l_name, user_level, user_id, user_title FROM user_accounts WHERE username = $user";
+															$query = "SELECT f_name, l_name, user_level, user_id, user_title FROM user_accounts WHERE username = '$user';";
 															$statement = $db -> prepare($query);
 															$statement -> execute(array(
 															'pw' => clean($_POST['pw'], 20),
@@ -133,8 +133,7 @@ if(isset($_POST['loginSubmit']))
 															initially stored in the database.
 															*/
 
-															if ($statement -> rowCount() == 1)
-															{
+															
 
 																while($row=$statement->fetch(PDO::FETCH_BOTH))
 																{
@@ -143,12 +142,12 @@ if(isset($_POST['loginSubmit']))
 																$_SESSION['last_name'] = $row['l_name'];
 																$_SESSION['user_id'] = $row['user_id'];
 																$_SESSION{'user_title'} = $row['user_title'];
+																$_SESSION['connected'] = true;
 
+																
 
-																}
-
-															$db = null;
-															}      
+														
+															}   	$db = null;   
 												}
 												else 
 												{
@@ -199,6 +198,7 @@ if(isset($_POST['loginSubmit']))
    {
      if($_SESSION['logged_in'] == true)
       {
+			 
 
 			 
  	?>			

@@ -5,7 +5,7 @@ error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR);
 date_default_timezone_set("America/New_York");
 #echo $_SESSION['form_element_ids'];
 #echo "<br> POST:";
-print_r($_POST);
+
 #print_r($_SESSION);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
