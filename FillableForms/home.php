@@ -1,5 +1,6 @@
 <?
 session_start();
+#remember me cookie
 if(isset($_POST['remember_me']))
 			{
 				setcookie('user', "", time()+3600);
@@ -19,7 +20,7 @@ function clean($codeToBeCleaned, $maxlength)
     $cleanCode = htmlspecialchars($cleanCode,ENT_QUOTES); 
     return $cleanCode;
 }
-
+#
 if(isset($_POST['loginSubmit']))
 			{
 				try
@@ -36,64 +37,142 @@ if(isset($_POST['loginSubmit']))
 				{
 					die("Connection to database failed: Please try again. ");
 				}
-				try {
-					$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-					$query = "SELECT f_name, l_name, user_level, user_id FROM user_accounts WHERE username = :user and password = :pw";
-					$statement = $db -> prepare($query);
-					$statement -> execute(array(
-					'pw' => clean($_POST['pw'], 20),
-					'user' => clean($_POST['user'], 20)));
-					/*Attempt to return the single record containing user details
-					initially stored in the database.
-					*/
-          $user = clean($_POST['user'], 20);
+				try {  
+					$user = clean($_POST['user'], 20);
           $pw = clean($_POST['pw'], 20);
-					if ($statement -> rowCount() == 1)
-					{
-						
-						while($row=$statement->fetch(PDO::FETCH_BOTH))
-            {
-						$_SESSION['user_level'] = $row['user_level'];
-						$_SESSION['f_name'] = $row['f_name'];
-						$_SESSION['last_name'] = $row['l_name'];
-						$_SESSION['connected'] = true;
-						$_SESSION['user_id'] = $row['user_id'];
-           
-							
-						}
-						
-						if((isset($_SESSION['connected']))
-						&& isset($_POST['loginSubmit']))
-						{
-							 
-              $_SESSION['logged_in'] = true;
-							#logs info about sucessful logins
-              require_once('History.php');
-							
-						}	
-					}
-					else 
-					{
-						$_SESSION['connected'] = false;
-						#logs information about failed login attempts
-						require_once('FailedLoginLog.php');
-						echo '<script type="text/javascript">'; 
-						echo 'alert("Invalid username or password, please try again");'; 
-						echo 'window.location.href = "login.php";';
-						echo '</script>';		
-						
-					}
 
-					//Close the database connection and statmement
-					$statement = null;
+            
+                        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            
+            # Set variables for use in query
+            //$username = clean($_POST['username'], 12);
+            
+          
+            
+
+            # query set, retrieve salt for specific member that is trying to login. Salt is stored in database
+
+			$query = "SELECT salt FROM user_accounts WHERE username = '$user';";
+            #prepare the query
+            $statement = $db->prepare($query);
+
+            # pass data to an array
+            $statement->execute(array());
+            
+            while($row = $statement->fetch(PDO::FETCH_BOTH))
+            {
+                $salt = $row[0];
+				
+            }
+
 					$db = null;
-				}
-				catch (Exception $e) 
-				{
-					echo "Error: A problem occured accessing client privileges: ";
-				}
+            #HASHING ALGORITHM
+            if(isset($salt))
+            {
+			
+                $pepper="5hQB6y3uLRmA";#pepper stored serverside in code
+                $count=0;
+                #hash password with salt and pepper
+								
+                $pw = hash('sha512', $salt . $pw . $pepper);
+				
+                #Hash is itterated 100,000 times. This is done to drastically reduce the speed at which a brute force attack can be done.
+              
+                while($count < 100000)
+                    {
+                        $pw = hash('sha512', $salt . $pw . $pepper);
+                        $count++;    
+                    }
+						}
+
+				 # connect to mysql database
+           $db = new PDO("mysql:host=localhost;dbname=schaum", "schaum", "12345");
+            if (!$db) {
+                die('Could not connect: Please try again later. ');
+
+            }
+            
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            
+          
+          # query set, get username and admin status from DB if username and pw match relevant fields in DB
+            
+			$query = "SELECT `username` FROM `user_accounts` WHERE `username` = '$user' AND `password` = '$pw';";
+
+            #prepare the query
+            $statement = $db->prepare($query);
+
+            # Execute the query
+            $statement->execute(array());
+            
+            while($row=$statement->fetch(PDO::FETCH_BOTH))
+            {   
+                if($statement->rowCount($row) == 1)#only allow variables to be set if a single row was returned.
+                {
+                    
+                    $username_returned_from_query = $row[0];
+                    
+                }
+                
+               
+                
+            }
+                if(isset($username_returned_from_query)&& count($row) == 1)#if $username_returned_from_query was set and row count == 1
+                {
+                    if($username_returned_from_query == $user )# is $username_returned_from_query matches username given by user(for this to be true $pw must have also matched)
+                        {
+                             $_SESSION['logged_in'] = true;
+							 								require_once('History.php');
+															
+															$query = "SELECT f_name, l_name, user_level, user_id, user_title FROM user_accounts WHERE username = '$user';";
+															$statement = $db -> prepare($query);
+															$statement -> execute(array(
+															'pw' => clean($_POST['pw'], 20),
+															'user' => clean($_POST['user'], 20)));
+															/*Attempt to return the single record containing user details
+															initially stored in the database.
+															*/
+
+															
+
+																while($row=$statement->fetch(PDO::FETCH_BOTH))
+																{
+																$_SESSION['user_level'] = $row['user_level'];
+																$_SESSION['f_name'] = $row['f_name'];
+																$_SESSION['last_name'] = $row['l_name'];
+																$_SESSION['user_id'] = $row['user_id'];
+																$_SESSION{'user_title'} = $row['user_title'];
+																$_SESSION['connected'] = true;
+
+																
+
+														
+															}   	$db = null;   
+												}
+												else 
+												{
+													$_SESSION['connected'] = false;
+													#logs information about failed login attempts
+													require_once('FailedLoginLog.php');
+													echo '<script type="text/javascript">'; 
+													echo 'alert("Invalid username or password, please try again");'; 
+													echo 'window.location.href = "login.php";';
+													echo '</script>';		
+
+												}
+
+												//Close the database connection and statmement
+												$statement = null;
+												$db = null;
+								
 		
-			} 	
+			} 
+		}
+		catch(Exception $e)
+		{
+			
+		}
+}
 
 	?>
 
@@ -120,6 +199,8 @@ if(isset($_POST['loginSubmit']))
      if($_SESSION['logged_in'] == true)
       {
 			 
+
+			 
  	?>			
 
 				<nav class="navbar navbar-default">
@@ -132,20 +213,18 @@ if(isset($_POST['loginSubmit']))
 										<li><a href="my_forms.php">Completed Forms</a></li>
 										<li><a href="saved_forms.php">Saved Forms</a></li>
 										<li><a href="account.php">Account Management</a></li>
+						 				<li><a href="workflow.php">Workflow Management</a></li>
 								</ul>
 	
 					 <form method="post" action="login.php" style="position: absolute; top: 0%; right: 0%; width:5%;">
 						<input type="submit" class="btn btn-default"  name="logoutSubmit" value="Log out" />
 					</form>
+					</div>
 				 <div>
-					 			<!--		<div style="position: absolute; top: 0%; right: 0%; width:5%;">
-					<form method="post" action="login.php">
-						<input type="submit"  name="logoutSubmit" value="Log out" />
-					</form>
-				</div> -->
+					 
 					<img width="100%" src="http://i.imgur.com/aXIOIvo.jpg">	
 						
-
+					</div>
 <!--DISPLAY FORM IF OpenForm BUTTON HAS BEEN PRESSED -->						
 		
 		<?
@@ -237,7 +316,7 @@ if(isset($_POST['loginSubmit']))
 									{
 										$element_text = $row['element_text'];
 										$form_string .= '<tr> <td>' . $element_text . ':</td>
-																		<td><input type="password" name="'. $row['filled_form_id'] .'"></td></tr>';
+																		<td><input type="password" name="'. $id .'"></td></tr>';
 									}
 									elseif( $element_type == "dropdown")
 									{
@@ -333,7 +412,7 @@ if(isset($_POST['loginSubmit']))
 									
 									<th colspan="2">
 										<h2>
-											Currently Available Forms
+											Available Forms
 										</h2>
 									</th>
 									
@@ -400,9 +479,10 @@ if(isset($_POST['loginSubmit']))
 ?>
 	
 	<form method='post' action="login.php">
-		<button type='submit' name='NoAction' value=''>Login</button>   
+		<button type='submit' name='NoAction' value=''>Login</button>  
+		
 	</form>
-<?
+<? 
 		}?> 
 	</div>
                                 

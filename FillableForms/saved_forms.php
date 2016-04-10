@@ -43,15 +43,17 @@ date_default_timezone_set("America/New_York");
 										<li><a href="my_forms.php">Completed Forms</a></li>
 										<li><a href="saved_forms.php">Saved Forms</a></li>
 										<li><a href="account.php">Account Management</a></li>
+						 				<li><a href="workflow.php">Workflow Management</a></li>
 								</ul>
 	
 					 <form method="post" action="login.php" style="position: absolute; top: 0%; right: 0%; width:5%;">
 						<input type="submit" class="btn btn-default" name="logoutSubmit" value="Log out" />
 					</form>
+						</div>
 				 <div>
 
 					<img width="100%" src="http://i.imgur.com/aXIOIvo.jpg">	
-
+						</div>
 					 
 					 
 				<?	 
@@ -87,7 +89,7 @@ date_default_timezone_set("America/New_York");
                 # pass data to an array
                
 								$statement->execute(array());
-               $db = null;
+               	$db = null;
 
 								#used to hold form string
 								$form_string = "";

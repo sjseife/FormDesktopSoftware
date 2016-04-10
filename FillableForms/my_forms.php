@@ -5,7 +5,7 @@ error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR);
 date_default_timezone_set("America/New_York");
 #echo $_SESSION['form_element_ids'];
 #echo "<br> POST:";
-#print_r($_POST);
+
 #print_r($_SESSION);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -40,11 +40,13 @@ date_default_timezone_set("America/New_York");
 										<li><a href="my_forms.php">Completed Forms</a></li>
 										<li><a href="saved_forms.php">Saved Forms</a></li>
 										<li><a href="account.php">Account Management</a></li>
+						 				<li><a href="workflow.php">Workflow Management</a></li>
 								</ul>
 	
 					 <form method="post" action="login.php" style="position: absolute; top: 0%; right: 0%; width:5%;">
 						<input type="submit" class="btn btn-default" name="logoutSubmit" value="Log out" />
 					</form>
+		</div>
 				 <div>
 					 			<!--		<div style="position: absolute; top: 0%; right: 0%; width:5%;">
 					<form method="post" action="login.php">
@@ -52,7 +54,7 @@ date_default_timezone_set("America/New_York");
 					</form>
 				</div> -->
 					<img width="100%" src="http://i.imgur.com/aXIOIvo.jpg">	
-  
+  </div>
 		
 		
 		
@@ -296,7 +298,7 @@ date_default_timezone_set("America/New_York");
 													 `filled_form_id`, 
 													 `response_text`)
 													 VALUES
-													 ('$form_element_ids[$counter]',
+													 ('$key',
 													  '$filled_form_id',
 														'$formattedResponse');";
                 #prepare the query
@@ -308,7 +310,11 @@ date_default_timezone_set("America/New_York");
 							$counter++;
 							
 						}//end foreach $_POST loop 
-								
+								$query= "call schaum.isFormAuthorized($filled_form_id);";
+                #prepare the query
+                $statement = $db->prepare($query);
+    						#execute query
+								$statement->execute(array());
 					
 					$db = null;
 				}//end if submit was pressed
