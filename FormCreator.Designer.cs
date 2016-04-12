@@ -84,7 +84,8 @@
             "Add Text Box",
             "Add Dropdown",
             "Add Radio Buttons",
-            "Add Checkboxes"});
+            "Add Checkboxes",
+            "Add Date"});
             this.NewObjectCombo.Location = new System.Drawing.Point(21, 17);
             this.NewObjectCombo.Name = "NewObjectCombo";
             this.NewObjectCombo.Size = new System.Drawing.Size(263, 21);

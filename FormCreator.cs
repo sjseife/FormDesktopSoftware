@@ -119,6 +119,14 @@ namespace FormsProject
                 radioLabel.Visible = true;
                 numberCombo.Visible = true;
             }
+            else if (NewObjectCombo.SelectedIndex == 7)//date
+            {
+                order.Add(NewObjectCombo.SelectedIndex);
+                label = "Date: ";
+                textBoxSelected(label);
+                indexForText++;
+
+            }
         }
 
         private void textBoxSelected(string label) //adds text box to form
@@ -352,6 +360,12 @@ namespace FormsProject
                     html.createCheckBox(checkGroupTitleBox[indexCheckTitle].Text, checkBoxArr);
                     indexCheckTitle++;
                 }
+                else if (i==7)
+                {
+                    html.createTextBox(labelText[indexText].Text);
+                    indexText++;
+                }
+
             }
 
             html.save();
@@ -433,6 +447,11 @@ namespace FormsProject
                     }
                     html.createCheckBox(checkGroupTitleBox[indexCheckTitle].Text, checkBoxArr);
                     indexCheckTitle++;
+                }
+                else if (i == 7)
+                {
+                    html.createTextBox(labelText[indexText].Text);
+                    indexText++;
                 }
             }
                 
