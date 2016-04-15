@@ -17,6 +17,7 @@ namespace FormsProject
         private MainForm Parent;
 
         private int indexForText = 0;
+        private int indexForMultiLineText = 0;
         private int indexForUser = 0;
         private int indexForPassword = 0;
         private int[,] radioGroupTracker = new int[100, 1];
@@ -27,6 +28,8 @@ namespace FormsProject
         private int indexForCheckTitle = 0;
         private List<TextBox> labelText = new List<TextBox>();
         private List<TextBox> textBox = new List<TextBox>();
+        private List<TextBox> multiLineTextBox = new List<TextBox>();
+        private List<TextBox> multiLineLabelText = new List<TextBox>();
         private List<TextBox> radioTextBox = new List<TextBox>();
         private List<TextBox> radioGroupTitleBox = new List<TextBox>();
         private List<TextBox> checkTextBox = new List<TextBox>();
@@ -127,6 +130,38 @@ namespace FormsProject
                 indexForText++;
 
             }
+            else if (NewObjectCombo.SelectedIndex == 8)//text field
+            {
+                label = "(Enter Label Here)";
+                order.Add(NewObjectCombo.SelectedIndex);
+                multiLineTextBoxSelected(label);
+                indexForMultiLineText++;
+
+            }
+        }
+
+        private void multiLineTextBoxSelected(string label) //adds text box to form
+        {
+            multiLineLabelText.Add(new TextBox());
+            multiLineLabelText[indexForMultiLineText].Text = label;
+            multiLineLabelText[indexForMultiLineText].TextAlign = HorizontalAlignment.Center;
+            multiLineLabelText[indexForMultiLineText].Location = new Point(Add1.Location.X - 175, Add1.Location.Y);
+
+            multiLineTextBox.Add(new TextBox());
+            multiLineTextBox[indexForMultiLineText].Enabled = false;
+            multiLineTextBox[indexForMultiLineText].Multiline = true;
+            multiLineTextBox[indexForMultiLineText].Location = new Point(Add1.Location.X - 240, Add1.Location.Y + 27);
+            multiLineTextBox[indexForMultiLineText].Size = new Size(225, 60);
+
+            ButtonSplitter.Panel2.Controls.Add(multiLineLabelText[indexForMultiLineText]);
+            ButtonSplitter.Panel2.Controls.Add(multiLineTextBox[indexForMultiLineText]);
+            //ButtonSplitter.Panel2.Controls.Add(labelText[indexForText]);
+            //ButtonSplitter.Panel2.Controls.Add(textBox[indexForText]);
+
+            Add1.Location = new Point(Add1.Location.X, Add1.Location.Y + 125);
+            //comboBox1.Location = new Point(comboBox1.Location.X, comboBox1.Location.Y + 75);
+            NewObjectContainer.Location = new Point(NewObjectContainer.Location.X, NewObjectContainer.Location.Y + 125);
+            NewObjectCombo.SelectedIndex = 0;
         }
 
         private void textBoxSelected(string label) //adds text box to form
@@ -300,6 +335,7 @@ namespace FormsProject
         {
             HTMLConverter html = new HTMLConverter();
             int indexText = 0;
+            int indexForMultiLineText = 0;
             int indexRadioTitle = 0;
             int indexRadio = 0;
             int indexCheck = 0;
@@ -365,6 +401,11 @@ namespace FormsProject
                     html.createTextBox(labelText[indexText].Text);
                     indexText++;
                 }
+                else if (i == 8)
+                {
+                    html.createMulitLineTextBox(multiLineLabelText[indexForMultiLineText].Text);
+                    indexForMultiLineText++;
+                }
 
             }
 
@@ -382,16 +423,13 @@ namespace FormsProject
         {
             HTMLConverter html = new HTMLConverter();
             int indexText = 0;
+            int indexForMultiLineText = 0;
             int indexRadioTitle = 0;
             int indexRadio = 0;
             int indexCheck = 0;
             int indexCheckTitle = 0;
             int indexCombo = 0;
 
-            
-
-            
-            
             html.setTitle(Title.Text);
             foreach (int i in order)
             {
@@ -452,6 +490,11 @@ namespace FormsProject
                 {
                     html.createTextBox(labelText[indexText].Text);
                     indexText++;
+                }
+                else if (i == 8)
+                {
+                    html.createMulitLineTextBox(multiLineLabelText[indexForMultiLineText].Text);
+                    indexForMultiLineText++;
                 }
             }
                 
