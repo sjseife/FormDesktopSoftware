@@ -51,6 +51,11 @@ namespace FormsProject
             element_type.Add("check");
         }
 
+        public void multiLineText_type()
+        {
+            element_type.Add("multiLineText");
+        }
+
         public void radio_text(string[] radioIn, string label)
         {
             string output = label + ",";
@@ -78,6 +83,11 @@ namespace FormsProject
         }
 
         public void password_text(string input)
+        {
+            element_text.Add(input);
+        }
+
+        public void mulitiLineText_text(string input)
         {
             element_text.Add(input);
         }

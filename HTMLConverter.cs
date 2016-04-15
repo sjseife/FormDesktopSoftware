@@ -22,7 +22,7 @@ namespace FormsProject
         private string formBody;
         private string fieldset = "<fieldset style=\"display:inline-block\">\n";
         private Regex rgx = new Regex("[^a-zA-Z0-9 -]");
-        private string bottom = "<input type='submit' name='submit' value='Submit'>\n<input type = \"reset\" value=\"Reset\">\n<input type='submit' name='cancel' value='Cancel'>\n</form>\n</body>\n</html>";
+        private string bottom = "<input type='submit' name='submit' value='Submit'>\n<input type='reset' value='Reset'>\n<input type='submit' name='cancel' value='Cancel'>\n</form>\n</body>\n</html>";
         //private string bottom = "<input type=\"submit\" value=\"Submit\">\n<input type = \"reset\" value=\"Reset\">\n</form>\n</body>\n</html>";
         //private string bottom = "<input type='submit' name='submit' value='Submit'><input type='submit' name='save' value='Save'><input type='submit' name='cancel' value='Cancel'>\n\t\t</form>\n\t</body>\n</html>"; // bottom when Save function is complete
 
@@ -41,6 +41,16 @@ namespace FormsProject
             form_elementPopulator.textBox_type();
             form_elementPopulator.textBox_text(input);
         }//createTextBox(string)
+
+        public void createMulitLineTextBox(string input)
+        {
+            string formattedInput = formatString(input);
+            string output = String.Format("{0}<br>\n<textarea rows=\"5\" cols=\"50\" name=\"{1}\"></textarea><br><br>\n", input, formattedInput);
+            formBody += output;
+
+            form_elementPopulator.multiLineText_type();
+            form_elementPopulator.mulitiLineText_text(input);
+        }
 
         public void createPassword(string input)
         {
