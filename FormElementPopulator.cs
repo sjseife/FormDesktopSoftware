@@ -18,11 +18,13 @@ namespace FormsProject
 
         List<string> element_type;  // List that will hold the element_type field
         List<string> element_text;  // List that will hold the element text of each corresponding element type
+        
 
         public FormElementPopulator()
         {
             element_type = new List<string>();
             element_text = new List<string>();
+           
         }
 
         // All element_type functions
@@ -54,6 +56,10 @@ namespace FormsProject
         public void multiLineText_type()
         {
             element_type.Add("multiLineText");
+        }
+        public void date_type()
+        {
+            element_type.Add("date");
         }
 
         public void radio_text(string[] radioIn, string label)
@@ -92,6 +98,10 @@ namespace FormsProject
             element_text.Add(input);
         }
 
+        public void date_text(string input)
+        {
+            element_text.Add(input);
+        }
         public void send(string form_id)
         {
             MySql.Data.MySqlClient.MySqlConnection conn = new MySql.Data.MySqlClient.MySqlConnection(); ;

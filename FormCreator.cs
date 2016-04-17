@@ -18,6 +18,7 @@ namespace FormsProject
 
         private int indexForText = 0;
         private int indexForMultiLineText = 0;
+        private int indexForDate = 0;
         private int indexForUser = 0;
         private int indexForPassword = 0;
         private int[,] radioGroupTracker = new int[100, 1];
@@ -30,6 +31,8 @@ namespace FormsProject
         private List<TextBox> textBox = new List<TextBox>();
         private List<TextBox> multiLineTextBox = new List<TextBox>();
         private List<TextBox> multiLineLabelText = new List<TextBox>();
+        private List<TextBox> dateTextLabel = new List<TextBox>();
+        private List<TextBox> dateTextBox = new List<TextBox>();
         private List<TextBox> radioTextBox = new List<TextBox>();
         private List<TextBox> radioGroupTitleBox = new List<TextBox>();
         private List<TextBox> checkTextBox = new List<TextBox>();
@@ -40,6 +43,7 @@ namespace FormsProject
         private ComboSelection cs;
         private WorkFlowSelector wfs = new WorkFlowSelector();
         private List<int> order = new List<int>();
+		
 
 
         public FormCreator(MainForm parent)
@@ -126,9 +130,8 @@ namespace FormsProject
             {
                 order.Add(NewObjectCombo.SelectedIndex);
                 label = "Date: ";
-                textBoxSelected(label);
-                indexForText++;
-
+                dateSelected(label);
+                indexForDate++;
             }
             else if (NewObjectCombo.SelectedIndex == 8)//text field
             {
@@ -139,7 +142,6 @@ namespace FormsProject
 
             }
         }
-
         private void multiLineTextBoxSelected(string label) //adds text box to form
         {
             multiLineLabelText.Add(new TextBox());
@@ -163,7 +165,28 @@ namespace FormsProject
             NewObjectContainer.Location = new Point(NewObjectContainer.Location.X, NewObjectContainer.Location.Y + 125);
             NewObjectCombo.SelectedIndex = 0;
         }
+        private void dateSelected(string label) //adds text box for date
+        {
+            dateTextLabel.Add(new TextBox());
+            dateTextLabel[indexForDate].Text = label;
+            dateTextLabel[indexForDate].TextAlign = HorizontalAlignment.Center;
+            dateTextLabel[indexForDate].Location = new Point(Add1.Location.X - 175, Add1.Location.Y);
 
+            dateTextBox.Add(new TextBox());
+            dateTextBox[indexForDate].Enabled = false;
+            dateTextBox[indexForDate].Location = new Point(Add1.Location.X - 240, Add1.Location.Y + 27);
+            dateTextBox[indexForDate].Size = new Size(225, 60);
+
+            ButtonSplitter.Panel2.Controls.Add(dateTextLabel[indexForDate]);
+            ButtonSplitter.Panel2.Controls.Add(dateTextBox[indexForDate]);
+            //ButtonSplitter.Panel2.Controls.Add(labelText[indexForText]);
+            //ButtonSplitter.Panel2.Controls.Add(textBox[indexForText]);
+
+            Add1.Location = new Point(Add1.Location.X, Add1.Location.Y + 75);
+            //comboBox1.Location = new Point(comboBox1.Location.X, comboBox1.Location.Y + 75);
+            NewObjectContainer.Location = new Point(NewObjectContainer.Location.X, NewObjectContainer.Location.Y + 75);
+            NewObjectCombo.SelectedIndex = 0;
+        }
         private void textBoxSelected(string label) //adds text box to form
         {
             labelText.Add(new TextBox());
@@ -336,6 +359,7 @@ namespace FormsProject
             HTMLConverter html = new HTMLConverter();
             int indexText = 0;
             int indexForMultiLineText = 0;
+            int indexForDate = 0;
             int indexRadioTitle = 0;
             int indexRadio = 0;
             int indexCheck = 0;
@@ -398,8 +422,8 @@ namespace FormsProject
                 }
                 else if (i==7)
                 {
-                    html.createTextBox(labelText[indexText].Text);
-                    indexText++;
+                    html.createDateTextBox(dateTextLabel[indexForDate].Text);
+                    indexForDate++;
                 }
                 else if (i == 8)
                 {
@@ -424,6 +448,7 @@ namespace FormsProject
             HTMLConverter html = new HTMLConverter();
             int indexText = 0;
             int indexForMultiLineText = 0;
+            int indexForDate = 0;
             int indexRadioTitle = 0;
             int indexRadio = 0;
             int indexCheck = 0;
@@ -488,8 +513,8 @@ namespace FormsProject
                 }
                 else if (i == 7)
                 {
-                    html.createTextBox(labelText[indexText].Text);
-                    indexText++;
+                    html.createDateTextBox(dateTextLabel[indexForDate].Text);
+                    indexForDate++;
                 }
                 else if (i == 8)
                 {

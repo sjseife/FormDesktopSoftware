@@ -51,7 +51,15 @@ namespace FormsProject
             form_elementPopulator.multiLineText_type();
             form_elementPopulator.mulitiLineText_text(input);
         }
+        public void createDateTextBox(string input)
+        {
+            string formattedInput = formatString(input);
+            string output = String.Format("{0}<br>\n<input type=\"date\" name=\"{1}\"><br><br>\n", input, formattedInput);
+            formBody += output;
 
+            form_elementPopulator.date_type();
+            form_elementPopulator.date_text(input);
+        }
         public void createPassword(string input)
         {
             string formattedInput = formatString(input);
