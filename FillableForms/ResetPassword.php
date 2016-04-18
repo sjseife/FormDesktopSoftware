@@ -19,7 +19,7 @@ function clean($codeToBeCleaned, $maxlength)
 //Checks if the user submits email address
 if(isset($_POST['submit']))
 {
-  	 $email = clean($_POST['remail'], 50);
+  	 $remail = clean($_POST['remail'], 50);
   
 try
 {
@@ -33,14 +33,17 @@ try
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   
   //check to see if the email is being used
-  $query = "SELECT email FROM user_accounts WHERE email = '$email';";
+  $query = "SELECT email FROM user_accounts WHERE email = '$remail';";
   $statement = $db->prepare($query);
     $statement->execute(array());
       while($row = $statement->fetch(PDO::FETCH_BOTH))
       {
           $email = $row[0];
       } //end while
-    
+    	if($email == null || $email == "")
+			{
+				$email = "nope@nope.com";	
+			}
   	//if the email exists
 		 $query = "SELECT username FROM user_accounts WHERE email = '$email';";
 		 $statement = $db->prepare($query);
@@ -125,12 +128,8 @@ try
 	  Hello $username ,<br/>You have requested to reset your password. Here is a temporary password: $random.  <br/>Please login and change your password as soon as possible. <br/>Regards, <br />The Brogrammers.";
 	  $mail->AltBody = '';
     
-    if(!$mail->Send())
-	  { 
-          echo "Message could not be sent. <p>";
-	        echo "Mailer Error: " . $mail->ErrorInfo;
-          exit;
-    }//end if
+    $mail->Send();
+
 	$rsent = true;	
 	
 }//end try

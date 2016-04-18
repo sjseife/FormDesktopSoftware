@@ -1,10 +1,6 @@
 <?
 session_start();
-#remember me cookie
-if(isset($_POST['remember_me']))
-			{
-				setcookie('user', "", time()+3600);
-			}
+
 #supress errors to user
 error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR);
 /*
@@ -46,8 +42,7 @@ if(isset($_POST['loginSubmit']))
             
                         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             
-            # Set variables for use in query
-            //$username = clean($_POST['username'], 12);
+            
             
           
             
@@ -245,7 +240,7 @@ if(isset($_POST['loginSubmit']))
                     die('Could not connect: Please try again later. ');
     
                 }
-								$form_id = $_POST['OpenForm'];
+								$form_id = clean($_POST['OpenForm'], 12);
                 $_SESSION['form_id'] = $form_id;
 								#get information from form templates table to display form name
     						$query= "Select * from form_template WHERE form_id = '$form_id';";

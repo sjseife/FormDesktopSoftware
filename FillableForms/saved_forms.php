@@ -6,7 +6,7 @@ date_default_timezone_set("America/New_York");
 /**
  * @author Joseph Schaum, Blake Johnson
  */
-#print_r($_SESSION['form_id']);
+
 #clean function to make user input html/sql safe
 function clean($codeToBeCleaned, $maxlength)
 { 
