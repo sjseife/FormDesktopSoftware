@@ -1,13 +1,22 @@
 <?
 session_start();
-
+/**
+ * @author Joseph Schaum
+ */
 #supress errors to user
 error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR);
 date_default_timezone_set("America/New_York");
-#echo $_SESSION['form_element_ids'];
-#echo "<br> POST:";
-#print_r($_POST);
-#print_r($_SESSION);
+
+#clean function to make user input html/sql safe
+#implemented
+function clean($codeToBeCleaned, $maxlength)
+{ 
+    $cleanCode = $codeToBeCleaned;
+    $cleanCode = substr($cleanCode,0,$maxlength);
+    $cleanCode = escapeshellcmd($cleanCode); 
+    $cleanCode = htmlspecialchars($cleanCode,ENT_QUOTES); 
+    return $cleanCode;
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -41,8 +50,8 @@ date_default_timezone_set("America/New_York");
 						 <li><a href="home.php">Home</a></li>
 										<li><a href="my_forms.php">Completed Forms</a></li>
 										<li><a href="saved_forms.php">Saved Forms</a></li>
-										<li><a href="account.php">Account Management</a></li>
                     <li><a href="workflow.php">Workflow Management</a></li>
+										<li><a href="account.php">Account Management</a></li>
 								</ul>
 	
 					 <form method="post" action="login.php" style="position: absolute; top: 0%; right: 0%; width:5%;">
@@ -61,9 +70,9 @@ date_default_timezone_set("America/New_York");
 			 {
 				 try
 				 {
-					 	$filled_form_id = $_POST['filled_form_id'];
-				 		$workflow_id = $_POST['workflow_id'];
-					 $form_id = $_POST['form_id'];
+					 	$filled_form_id = clean($_POST['filled_form_id'], 12);
+				 		$workflow_id = clean($_POST['workflow_id'], 12);
+					 $form_id = clean($_POST['form_id'], 12);
 					 					            #Create PDO statement and prepare database connection
             $user="schaum";
             $password="12345";
@@ -125,7 +134,7 @@ date_default_timezone_set("America/New_York");
                     die('Could not connect: Please try again later. ');
     
                 }
-								$form_id = $_POST['OpenForm'];
+								$form_id = clean($_POST['OpenForm'], 12);
 
 
 								$db = new PDO("mysql:host=localhost;dbname=$dbname", "$user", "$password");
@@ -133,7 +142,7 @@ date_default_timezone_set("America/New_York");
 												die('Could not connect: Please try again later. ');
 
 										}
-								$user_idA = $_POST['user_id'];
+								$user_idA = clean($_POST['user_id'], 12);
 								# get all 
 								$query = "SELECT element_text, response_text, element_type, form_name FROM schaum.form_response
 															JOIN user_forms USING(filled_form_id)
@@ -248,8 +257,8 @@ date_default_timezone_set("America/New_York");
     
                 }
 								  
-                $user_title = $_SESSION['user_title'];
-    					 $user_id = $_SESSION['user_id'];
+                $user_title = clean($_SESSION['user_title'], 30);
+    					 $user_id = clean($_SESSION['user_id'], 12);
                 # query set - Select all indicated fields if records match search string
  
                    $query = "SELECT DISTINCT form_name, form_template.form_id, user_id, username, filled_form_id, workflow_id FROM form_element
@@ -276,7 +285,7 @@ date_default_timezone_set("America/New_York");
                 <tr>
 									<th style="text-align: center" colspan="2">
 										<h2>
-											Forms that require authorization
+												Authorization Forms
 										</h2>
 									</th>
                 </tr>
@@ -333,9 +342,20 @@ date_default_timezone_set("America/New_York");
 			<?	
 	?>
 	<?  } #end if logged in == true
-		} #end if logged in insset ?> 
+		} #end if logged in insset 
+				else
+		{
+			echo "Please login to access this page."
+	
+?>
+	
+	<form method='post' action="login.php">
+		<button type='submit' class="btn btn-default" name='NoAction' value=''>Login</button>  
+		
+	</form>
+
 	</div>
-                                
+     <? } ?>                           
 
   </body>
   </html>		

@@ -7,7 +7,9 @@ if(isset($_POST['remember_me']))
 			}
 #supress errors to user
 error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR);
-
+/*
+* @author Joseph Schaum, Blake Johnson
+*/
 #set timezone for date dunctions
 date_default_timezone_set("America/New_York");
 
@@ -212,8 +214,8 @@ if(isset($_POST['loginSubmit']))
 						 <li><a href="home.php">Home</a></li>
 										<li><a href="my_forms.php">Completed Forms</a></li>
 										<li><a href="saved_forms.php">Saved Forms</a></li>
-										<li><a href="account.php">Account Management</a></li>
 						 				<li><a href="workflow.php">Workflow Management</a></li>
+										<li><a href="account.php">Account Management</a></li>
 								</ul>
 	
 					 <form method="post" action="login.php" style="position: absolute; top: 0%; right: 0%; width:5%;">
@@ -262,7 +264,7 @@ if(isset($_POST['loginSubmit']))
 								{
 									$form_string .= '<div class="well well-sm"><table class="table-condensed"><tr><th colspan="2" >';
 									$form_name = $row['form_name'];
-									$form_string .= ' <h1>' . $form_name . '</h1> <form method=post action="my_forms.php"> </th></tr>';
+									$form_string .= ' <h1>' . $form_name . '</h1> <form method=post action="my_forms.php" id="userForm"> </th></tr>';
 									#echo $form_string;
 								}//end while loop to add form name to string
 
@@ -340,6 +342,23 @@ if(isset($_POST['loginSubmit']))
 											$form_string .= '&nbsp;' . $value . '&nbsp;<input type="checkbox" name="'. $id . '[]" value="' . $value . '">';
 										}
 										$form_string .= '</fieldset></td></tr>';
+									}
+									elseif( $element_type == "multiLineText")
+									{
+										$element_text = $row['element_text'];
+										$value_name = str_replace(' ', '',$row['element_text']); 
+										$form_string .= '<tr><td>' . $element_text . ': </td><td><textarea name="' .$id . '" form="userForm" ></textarea></td></tr>';
+									}
+									elseif ($element_type == "date")
+									{
+																				$element_text = $row['element_text'];
+										$value_name = str_replace(' ', '',$row['element_text']); 
+										$form_string .= '<tr><td>' . $element_text . ': </td><td><input type="date" name="' . $id . '"></td></tr>';
+									}
+									elseif($element_type == "header")
+									{
+										$element_text = $row['element_text'];
+										$form_string .= '<tr><td><h1>'. $element_text .'</h1></td></tr>';
 									}
 									$counter++;
 								}#end form builder loop
@@ -479,7 +498,7 @@ if(isset($_POST['loginSubmit']))
 ?>
 	
 	<form method='post' action="login.php">
-		<button type='submit' name='NoAction' value=''>Login</button>  
+		<button type='submit' class="btn btn-default" name='NoAction' value=''>Login</button>  
 		
 	</form>
 <? 

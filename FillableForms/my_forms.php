@@ -1,11 +1,22 @@
 <?
 session_start();
+/*
+ * @author Joseph Schaum,Blake Johnson
+ */
 #supress errors to user
 error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR);
 date_default_timezone_set("America/New_York");
-#echo $_SESSION['form_element_ids'];
-#echo "<br> POST:";
 
+#clean function to make user input html/sql safe
+#implemented
+function clean($codeToBeCleaned, $maxlength)
+{ 
+    $cleanCode = $codeToBeCleaned;
+    $cleanCode = substr($cleanCode,0,$maxlength);
+    $cleanCode = escapeshellcmd($cleanCode); 
+    $cleanCode = htmlspecialchars($cleanCode,ENT_QUOTES); 
+    return $cleanCode;
+}
 #print_r($_SESSION);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -39,8 +50,8 @@ date_default_timezone_set("America/New_York");
 						 <li><a href="home.php">Home</a></li>
 										<li><a href="my_forms.php">Completed Forms</a></li>
 										<li><a href="saved_forms.php">Saved Forms</a></li>
-										<li><a href="account.php">Account Management</a></li>
 						 				<li><a href="workflow.php">Workflow Management</a></li>
+										<li><a href="account.php">Account Management</a></li>
 								</ul>
 	
 					 <form method="post" action="login.php" style="position: absolute; top: 0%; right: 0%; width:5%;">
@@ -48,11 +59,7 @@ date_default_timezone_set("America/New_York");
 					</form>
 		</div>
 				 <div>
-					 			<!--		<div style="position: absolute; top: 0%; right: 0%; width:5%;">
-					<form method="post" action="login.php">
-						<input type="submit"  name="logoutSubmit" value="Log out" />
-					</form>
-				</div> -->
+
 					<img width="100%" src="http://i.imgur.com/aXIOIvo.jpg">	
   </div>
 		
@@ -77,7 +84,7 @@ date_default_timezone_set("America/New_York");
                     die('Could not connect: Please try again later. ');
     
                 }
-								$form_id = $_POST['OpenForm'];
+								$form_id = clean($_POST['OpenForm'], 12);
 
 
 								$db = new PDO("mysql:host=localhost;dbname=$dbname", "$user", "$password");
@@ -85,7 +92,7 @@ date_default_timezone_set("America/New_York");
 												die('Could not connect: Please try again later. ');
 
 										}
-								$user_id = $_SESSION['user_id'];
+								$user_id = clean($_SESSION['user_id'], 12);
 								# get all 
 								$query = "SELECT element_text, response_text, element_type, form_name FROM schaum.form_response
 															JOIN user_forms USING(filled_form_id)
@@ -201,7 +208,7 @@ date_default_timezone_set("America/New_York");
 												die('Could not connect: Please try again later. ');
     
                 }
-								$filled_form_id = $_SESSION['filled_form_id'];
+								$filled_form_id = clean($_SESSION['filled_form_id'], 12);
 								#delete old response entries and overwrite with new
 								$query= "DELETE FROM form_response WHERE filled_form_id = $filled_form_id";
                 #prepare the query
@@ -228,8 +235,8 @@ date_default_timezone_set("America/New_York");
                 }
 								
                 $date = date("Y-m-d");
-								$user_id = $_SESSION['user_id'];
-								$form_id = $_SESSION['form_id'];
+								$user_id = clean($_SESSION['user_id'], 12);
+								$form_id = clean($_SESSION['form_id'], 12);
 								#Insert user and form information into user_forms table
     						$query= "INSERT INTO user_forms 
 													(`user_id`,
@@ -284,13 +291,13 @@ date_default_timezone_set("America/New_York");
 									$formattedResponse = "";
 									foreach($response as $value)
 									{
-										$formattedResponse .= $value . ",";
+										$formattedResponse .= clean($value, 500) . ",";
 									}
 									$formattedResponse =  rtrim($formattedResponse, ",");
 								}
 								else
 								{
-									$formattedResponse = $response;
+									$formattedResponse = clean($response, 500);
 								}
 								#enter responses into form_response table
 								$query= "INSERT INTO form_response 
