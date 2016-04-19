@@ -3,8 +3,19 @@ session_start();
 #supress errors to user
 error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR);
 date_default_timezone_set("America/New_York");
-#print_r($_SESSION['form_id']);
+/**
+ * @author Joseph Schaum, Blake Johnson
+ */
 
+#clean function to make user input html/sql safe
+function clean($codeToBeCleaned, $maxlength)
+{ 
+    $cleanCode = $codeToBeCleaned;
+    $cleanCode = substr($cleanCode,0,$maxlength);
+    $cleanCode = escapeshellcmd($cleanCode); 
+    $cleanCode = htmlspecialchars($cleanCode,ENT_QUOTES); 
+    return $cleanCode;
+}
 ?>
 <html>
 	<head>
@@ -42,8 +53,8 @@ date_default_timezone_set("America/New_York");
 						 <li><a href="home.php">Home</a></li>
 										<li><a href="my_forms.php">Completed Forms</a></li>
 										<li><a href="saved_forms.php">Saved Forms</a></li>
-										<li><a href="account.php">Account Management</a></li>
 						 				<li><a href="workflow.php">Workflow Management</a></li>
+										<li><a href="account.php">Account Management</a></li>
 								</ul>
 	
 					 <form method="post" action="login.php" style="position: absolute; top: 0%; right: 0%; width:5%;">
@@ -75,9 +86,9 @@ date_default_timezone_set("America/New_York");
                     die('Could not connect: Please try again later. ');
     
                 }
-								$form_id = $_POST['OpenForm'];
+								$form_id = clean($_POST['OpenForm'], 12);
                 $_SESSION['form_id'] = $form_id;
-								$user_id = $_SESSION['user_id'];
+								$user_id = clean($_SESSION['user_id'], 12);
 								#get information from form templates table to display form name
     						$query= "Select * from form_template 
 													join user_forms USING(form_id)
@@ -99,7 +110,7 @@ date_default_timezone_set("America/New_York");
 								{
 									$form_string .= '<div class="well well-sm"><table class="table-condensed"><tr><th align="center" colspan="2" >';
 									$form_name = $row['form_name'];
-									$form_string .= '<h1>' . $form_name . '</h1> <form method=post action="my_forms.php"> </th></tr>';
+									$form_string .= '<h1>' . $form_name . '</h1> <form method=post action="my_forms.php" id="userForm"> </th></tr>';
 									#echo $form_string;
 								}//end while loop to add form name to string
 
@@ -247,6 +258,35 @@ date_default_timezone_set("America/New_York");
 										}
 										$form_string .= '</fieldset></td></tr>';
 									}
+									elseif( $element_type == "multiLineText")
+									{
+										$element_text = $row['element_text'];
+										$value_name = str_replace(' ', '',$row['element_text']); 
+										$form_string .= '<tr><td>' . $element_text . ': </td><td><textarea name="' . $id . '" form="userForm">'; 
+																		 if($form_response[$row['form_element_id']]!= null || $form_response[$row['form_element_id']] != "")
+																		 {
+																			 
+																			 $response =  $form_response[$row['form_element_id']];
+																			 $form_string .= $response;
+																		 } 
+																			$form_string .= '</textarea></td></tr>';
+									}#end if textarea
+									elseif ($element_type == "date")
+									{
+										$element_text = $row['element_text'];
+										$value_name = str_replace(' ', '',$row['element_text']); 
+										$form_string .= '<tr><td>' . $element_text . ': </td><td><input type="date" name="' . $id . '"'; 
+																		 if($form_response[$row['form_element_id']]!= null || $form_response[$row['form_element_id']] != "")
+																		 {
+																			 $form_string .= 'value="' . $form_response[$row['form_element_id']] . '"';
+																		 } 
+																			$form_string .= '></td></tr>';
+									}
+																		elseif($element_type == "header")
+									{
+										$element_text = $row['element_text'];
+										$form_string .= '<tr><td><h1>'. $element_text .'</h1></td></tr>';
+									}
 									$counter++;
 								}#end form builder loop
 							$form_string .= '<tr><td>
@@ -263,8 +303,7 @@ date_default_timezone_set("America/New_York");
 															</td>
 															</tr>
 															</form> </table></div>';
-							#set session variable to hold string
-							#_SESSION['form_string'] = $form_string;
+							
 							#set session variable to hold element ids
 							$_SESSION['form_element_ids'] = rtrim($form_element_ids, ",");
 
@@ -308,7 +347,7 @@ date_default_timezone_set("America/New_York");
 												die('Could not connect: Please try again later. ');
     
                 }
-								$filled_form_id = $_SESSION['filled_form_id'];
+								$filled_form_id = clean($_SESSION['filled_form_id'], 12);
 								#delete old response entries and overwrite with new
 								$query= "DELETE FROM form_response WHERE filled_form_id = $filled_form_id";
                 #prepare the query
@@ -341,8 +380,8 @@ date_default_timezone_set("America/New_York");
                 }
 								
                 $date = date("Y-m-d");
-								$user_id = $_SESSION['user_id'];
-								$form_id = $_SESSION['form_id'];
+								$user_id = clean($_SESSION['user_id'], 12);
+								$form_id = clean($_SESSION['form_id'], 12);
 								#Insert user and form information into user_forms table
     						$query= "INSERT INTO user_forms 
 													(`user_id`,
@@ -381,8 +420,8 @@ date_default_timezone_set("America/New_York");
 					}
 						$_SESSION['filled_form_id'] = $filled_form_id;
 
-					$form_element_ids_holder = $_SESSION['form_element_ids'];
-					$form_element_ids = explode(",",$form_element_ids_holder);
+					#$form_element_ids_holder = $_SESSION['form_element_ids'];
+					#$form_element_ids = explode(",",$form_element_ids_holder);
 					$counter =0;	
 					#loop through $_POST for user responses
 					foreach($_POST as $key => $response)
@@ -395,13 +434,13 @@ date_default_timezone_set("America/New_York");
 									$formattedResponse = "";
 									foreach($response as $value)
 									{
-										$formattedResponse .= $value . ",";
+										$formattedResponse .= clean($value, 500) . ",";
 									}
 									$formattedResponse =  rtrim($formattedResponse, ",");
 								}
 								else
 								{
-									$formattedResponse = $response;
+									$formattedResponse = clean($response, 500);
 								}
 								#enter responses into form_response table
 								
@@ -455,7 +494,7 @@ date_default_timezone_set("America/New_York");
 
               
                 
-    					 $user_id = $_SESSION['user_id'];
+    					 $user_id = clean($_SESSION['user_id'], 12);
                 # query set - Select all indicated fields if records match search string
                 $query = "SELECT DISTINCT form_name, form_template.form_id FROM form_response
 														JOIN form_element USING(form_element_id)

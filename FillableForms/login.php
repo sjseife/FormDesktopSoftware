@@ -1,5 +1,7 @@
 <? 	session_start();
-
+/**
+ * @author Joseph Schaum, Blake Johnson
+ */
 
 		
 if(isset($_POST['clear']))
@@ -42,7 +44,7 @@ if(isset($_POST['clear']))
 	
     <div class="login">
       <h1 style="color:#002e62;">Form Management Login</h1>
-      <form method="post" action="home.php"><!-- action redirects to HeritageDB.php -->
+      <form method="post" action="home.php">
 		  
         <p><input type='text' name='user' placeholder='Username' size='25' value='' required/></p>
         <p><input type="password" name="pw" value="" placeholder="Password"></p>

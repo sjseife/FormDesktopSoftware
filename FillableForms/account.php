@@ -1,5 +1,8 @@
 <?
 session_start();
+/*
+* @author Stan Seiferth, Blake Johnson
+*/
 ?>
 
 <html>
@@ -36,18 +39,14 @@ session_start();
 						 <li><a href="home.php">Home</a></li>
 										<li><a href="my_forms.php">Completed Forms</a></li>
 										<li><a href="saved_forms.php">Saved Forms</a></li>
-										<li><a href="account.php">Account Management</a></li>
 						 				<li><a href="workflow.php">Workflow Management</a></li>
+										<li><a href="account.php">Account Management</a></li>
 								</ul>	
 					 <form method="post" action="login.php" style="position: absolute; top: 0%; right: 0%; width:5%;">
 						<input type="submit" class="btn btn-default"  name="logoutSubmit" value="Log out" />
 					</form>
 				 <div>
 					<img width="100%" src="http://i.imgur.com/aXIOIvo.jpg">	
-
-	<?  } #end if logged in == true
-		} #end if logged in insset ?> 
-	</div>
                                 
 <div>
 	<h2>Account Management</h2>
@@ -76,6 +75,7 @@ session_start();
 		$user="schaum";
 		$password="12345";
 		$dbname="schaum";
+		$update = false;			 
 					 
 	  $user_id = $_SESSION['user_id'];
     $query = ""; 
@@ -98,44 +98,177 @@ session_start();
 			if (count($streetAddress) < 2) # prevents off set error if address field is blank or all one word
 				$streetAddress = array(null, null);
 			
-			$query = "UPDATE user_accounts SET ";
-			
-			#build statement for update of information to database
+			#check for change to personal information before deciding to update
 			foreach ($fieldNames as $key => $element)
-			{
-				if ($element === end($fieldNames))
-					$query .= "" . $columns[$key + 1] ." = '" . clean($_POST[$element], 30, $key + 1) . "'";
-				else if ($key == 4)
 				{
-					$query .= "$columns[4] = '" . clean($streetAddress[1], 30, 4) . "', ";
-					$query .= "$columns[5] = '" . clean($streetAddress[0], 30, 5) . "', ";
-				}
-				else if($key > 4)
-					$query .= "" . $columns[$key + 1] ." = '" . clean($_POST[$element], 30, $key + 1) . "', ";
-				else
-					$query .= "$columns[$key] = '" . clean($_POST[$element], 30, $key) . "', ";
-			}
-			$query .= " WHERE user_id = $user_id;";
-						
-		 	try
-    	{
-
-			$db = new PDO("mysql:host=localhost;dbname=$dbname", "$user", "$password");
-          if (!$db) {
-              die('Could not connect: Please try again later. ');
-				}
-				#prepare the query
-				$statement = $db->prepare($query);
-				# pass data to an array
-				$statement->execute(array());
-				echo '<h4><b>Your Information was Updated Successfully!</b></h4>';
-
-		 	}
-			catch(exception $e)
+					if($key < 4)
+					{
+						if ($_SESSION['results'][$key] != $_POST[$element])
+							{
+								$update = true;
+							}
+					}
+					else if ($key == 4)
+					{
+						if(($_SESSION['results'][4] != $streetAddress[1]) || ($_SESSION['results'][5] != $streetAddress[0]))
+						{
+							$update = true;
+						}
+					}
+					else if($key > 4)
+					{
+						if ($_SESSION['results'][$key + 1] != $_POST[$element])
+							{
+								$update = true;
+							}
+					}
+				}//foreach
+			
+###########################################################
+#								Change Personal Information								#	
+###########################################################
+			
+			#if change occured to personal information update to database
+			if ($update)
 			{
-				echo 'Caught exception: ',  $e->getMessage(), "\n";
+				$query = "UPDATE user_accounts SET ";
+
+				#build statement for update of information to database
+				foreach ($fieldNames as $key => $element)
+				{
+					if ($element === end($fieldNames))
+						$query .= "" . $columns[$key + 1] ." = '" . clean($_POST[$element], 30, $key + 1) . "'";
+					else if ($key == 4)
+					{
+						$query .= "$columns[4] = '" . clean($streetAddress[1], 30, 4) . "', ";
+						$query .= "$columns[5] = '" . clean($streetAddress[0], 30, 5) . "', ";
+					}
+					else if($key > 4)
+						$query .= "" . $columns[$key + 1] ." = '" . clean($_POST[$element], 30, $key + 1) . "', ";
+					else
+						$query .= "$columns[$key] = '" . clean($_POST[$element], 30, $key) . "', ";
+				}
+				$query .= " WHERE user_id = $user_id;";
+
+				try
+				{
+
+				$db = new PDO("mysql:host=localhost;dbname=$dbname", "$user", "$password");
+						if (!$db) {
+								die('Could not connect: Please try again later. ');
+					}
+					#prepare the query
+					$statement = $db->prepare($query);
+					# pass data to an array
+					$statement->execute(array());
+					echo ('<div class="alert alert-success fade in">
+							<h4>Your Information was Updated Successfully!</h4>
+						</div>'); 
+				}
+				catch(exception $e)
+				{
+					echo 'Caught exception: ',  $e->getMessage(), "\n";
+				}
 			}
 		}
+					 
+###########################################################
+#										Change  Password											#	
+###########################################################	
+			 
+	if(isset($_POST['update']))
+	{
+		if(($_POST['oldpw'] != "") && ($_POST['newpw'] != "") && ($_POST['confirmpw'] != ""))
+		{	
+			$newPassword1 = $_POST['newpw'];
+			$newPassword2 = $_POST['confirmpw'];
+			$oldPw = $_POST['oldpw'];
+			if($newPassword1 == $newPassword2)// <-- this checks for matching, if they match, it is then safe to query DB to check if oldPW matches the stored pw for the user.
+			{
+				try
+   		 	{
+
+					$db = new PDO("mysql:host=localhost;dbname=$dbname", "$user", "$password");
+							if (!$db) {
+									die('Could not connect: Please try again later. ');
+							}
+          
+				 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+					$query = "SELECT password, salt FROM user_accounts WHERE user_id = $user_id";
+					$pw_fields = $db->query($query)->fetchAll(PDO::FETCH_NUM);
+		 			$db = null;
+					$currentPw = $pw_fields[0][0];
+					$salt = $pw_fields[0][1];
+				}
+				catch(exception $e)
+				{
+					echo 'Caught exception: ',  $e->getMessage(), "\n";
+				}
+				
+				 #HASHING ALGORITHM
+				if(isset($salt))
+				{
+
+					$pepper="5hQB6y3uLRmA";#pepper stored serverside in code
+					$count=0;
+					#hash password with salt and pepper
+					$oldPw = hash('sha512', $salt . $oldPw . $pepper);
+
+					#Hash is itterated 100,000 times. This is done to drastically reduce the speed at which a brute force attack can be done.
+
+					while($count < 100000)
+							{
+									$oldPw = hash('sha512', $salt . $oldPw . $pepper);
+									$count++;    
+							}
+					if($oldPw == $currentPw)
+					{
+						$count=0;
+						$newPw = hash('sha512', $salt . $newPassword1 . $pepper);
+						while($count < 100000)
+						{
+							$newPw = hash('sha512', $salt . $newPw . $pepper);
+							$count++;    
+						}
+						try
+   		 			{
+							$query = "UPDATE user_accounts SET password = '" . $newPw . "' where user_id = $user_id;";
+							$db = new PDO("mysql:host=localhost;dbname=$dbname", "$user", "$password");
+								if (!$db) {
+									die('Could not connect: Please try again later. ');
+							}
+							#prepare the query
+							$statement = $db->prepare($query);
+							# pass data to an array
+							$statement->execute(array());
+							echo ('<div class="alert alert-success fade in">
+									<h4>Your Password was Updated Successfully!</h4>
+								</div>');	 
+						}
+						catch(exception $e)
+						{
+							echo 'Caught exception: ',  $e->getMessage(), "\n";
+						}
+					}//if old password matches current password
+					else 
+					{
+						echo ('<div class="alert alert-warning fade in">
+  					<strong>Warning!</strong> Entered Password Does Not Match Your Current Password.
+						</div>');
+					}
+				}
+			}//if new passwords match
+			else
+			{
+				echo('<div class="alert alert-warning fade in">
+  					<strong>Warning!</strong> Your New Passwords Do Not Match!</div>');
+			}
+		}//if isset password fields
+	}
+			
+###########################################################
+#								Populate Personal Information							#	
+###########################################################
 					 
     try
     {
@@ -183,51 +316,9 @@ session_start();
           echo 'Caught exception: ',  $e->getMessage(), "\n";
       }
 ?>
-<?	
-###########################################################
-#							Begin Change Password											 #	
-###########################################################	
-			 
-	if(isset($_POST['update']))
-	{
-		
-		if( isset($_POST['oldpw']) && isset($_POST['newpw']) && isset($_POST['confirmpw']))
-		{	
-			$newPassword1 = $_POST['newpw'];
-			$newPassword2 = $_POST['confirmpw'];
-			$oldPw = $_POST['oldpw'];
-			if($newPassword1 == $newPassword2)// <-- this check for matching, if they match, it is then safe to query DB to check if oldPW matches the stored pw for the user.
-			{
-				//Be sure to use the same hashing algorithm that is used on the home.php login.
-				// to implement this you will first need to hash the oldPw, then compare that has to the hash from the DB.
-				// then when writing the password chjange to the DB you will first have to hash $newPassword1 before storing it as the password for the user in the DB.-+9*
-				//Query to the DB to check if $oldPw matches the password stored in the database
-				
-				
-				
-				
-				//If it matches, then query the database to update the new password
-				
-				
-				
-				
-				
-				
-				
-			}
-		}
-	}
-	else
-	{
-		echo("Error: Must both passwords must match to update information.");
-	}
-					 
-					 
-				 
-?>
+
 	
 <form action="account.php" method="post">
-	
   <br><br>
    Please edit your details below to update your account information.
   <br><br>
@@ -251,17 +342,17 @@ session_start();
 		</td></tr><tr><td>
 		<label>Old Password:</label>
 		</td><td>
-    <input type="text" name="oldpw" id="oldpw" value="">
+    <input type="password" name="oldpw" id="oldpw" value="">
 		</td></tr><tr><td>
 		
 		<label>New Password:</label>
 		</td><td>
-    <input type="text" name="newpw" id="newpw" value="">
+    <input type="password" name="newpw" id="newpw" value="">
 		</td></tr><tr><td>
 	
 		<label>Confirm Password:</label>
 		</td><td>
-    <input type="text" name="confirmpw" id="confirmpw" value="">
+    <input type="password" name="confirmpw" id="confirmpw" value="">
 		</td></tr></table></td><td valign=top>
 		
 		<table border=0>
@@ -288,6 +379,17 @@ session_start();
     </form>  
 	
 </form>
-					 	 
+	<?  } #end if logged in == true
+		} #end if logged in insset
+		else
+		{
+			echo "Please login to access this page.";
+		?>
+		<form method='post' action="login.php">
+			<button type='submit' class="btn btn-default" name='NoAction' value=''>Login</button>  		
+		</form>
+					 
+	</div>
+			<? } ?>		 	 
   </body>
   </html>		
