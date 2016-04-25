@@ -27,6 +27,10 @@ namespace FormsProject
         private int[,] checkGroupTracker = new int[100, 1];
         private int indexForCheck = 0;
         private int indexForCheckTitle = 0;
+        private int indexForHeader = 0;
+        private int indexForRadioButton = 0;
+        private int indexForCheckButton = 0;
+        private int indexForComboList = 0;
         private List<TextBox> labelText = new List<TextBox>();
         private List<TextBox> textBox = new List<TextBox>();
         private List<TextBox> multiLineTextBox = new List<TextBox>();
@@ -38,6 +42,10 @@ namespace FormsProject
         private List<TextBox> checkTextBox = new List<TextBox>();
         private List<TextBox> checkGroupTitleBox = new List<TextBox>();
         private List<TextBox> dynamicComboTitleBox = new List<TextBox>();
+        private List<TextBox> headerText = new List<TextBox>();
+        private List<ComboBox> dynamicCombo = new List<ComboBox>();
+        private List<RadioButton> dynamicRadio = new List<RadioButton>();
+        private List<CheckBox> dynamicCheck = new List<CheckBox>();
         private string[,] ComboSelection = new string[100, 100];
         private int indexForCombo = 0;
         private ComboSelection cs;
@@ -61,6 +69,8 @@ namespace FormsProject
                 order.Add(NewObjectCombo.SelectedIndex);
                 indexForUser = indexForText;
                 label = "User Name: ";
+                showDeleteButton();
+
                 textBoxSelected(label);
                 indexForText++;
 
@@ -70,6 +80,7 @@ namespace FormsProject
                 order.Add(NewObjectCombo.SelectedIndex);
                 indexForPassword = indexForText;
                 label = "Password: ";
+                showDeleteButton();
                 textBoxSelected(label);
                 indexForText++;
 
@@ -78,6 +89,7 @@ namespace FormsProject
             {
                 label = "(Enter Label Here)";
                 order.Add(NewObjectCombo.SelectedIndex);
+                showDeleteButton();
                 textBoxSelected(label);
                 indexForText++;
 
@@ -97,6 +109,7 @@ namespace FormsProject
                 ComboChange.Visible = true;
                 radioLabel.Text = "Press done when finished adding selections";
                 radioLabel.Location = new Point(Add1.Location.X - 260, Add1.Location.Y);
+                deleteButton.Visible = false;
 
                 cs.ShowDialog();
             }
@@ -139,9 +152,37 @@ namespace FormsProject
                 order.Add(NewObjectCombo.SelectedIndex);
                 multiLineTextBoxSelected(label);
                 indexForMultiLineText++;
-
+            }
+            else if (NewObjectCombo.SelectedIndex == 9)//Header
+            {
+                label = "(Enter Header Here)";
+                order.Add(NewObjectCombo.SelectedIndex);
+                headerSelected(label);
+                indexForHeader++;
             }
         }
+
+        private void showDeleteButton()
+        {
+            deleteButton.Location = new Point(Add1.Location.X, Add1.Location.Y);
+            deleteButton.Visible = true;
+        }//showDeleteButton
+
+        private void headerSelected(string input)
+        {
+            headerText.Add(new TextBox());
+            headerText[indexForHeader].Text = input;
+            headerText[indexForHeader].TextAlign = HorizontalAlignment.Center;
+            headerText[indexForHeader].Location = new Point(Add1.Location.X - 175, Add1.Location.Y);
+
+            ButtonSplitter.Panel2.Controls.Add(headerText[indexForHeader]);
+
+            showDeleteButton();
+            Add1.Location = new Point(Add1.Location.X, Add1.Location.Y + 50);
+            NewObjectContainer.Location = new Point(NewObjectContainer.Location.X, NewObjectContainer.Location.Y + 50);
+            NewObjectCombo.SelectedIndex = 0;
+        }//headerSelected(string)
+
         private void multiLineTextBoxSelected(string label) //adds text box to form
         {
             multiLineLabelText.Add(new TextBox());
@@ -160,6 +201,7 @@ namespace FormsProject
             //ButtonSplitter.Panel2.Controls.Add(labelText[indexForText]);
             //ButtonSplitter.Panel2.Controls.Add(textBox[indexForText]);
 
+            showDeleteButton();
             Add1.Location = new Point(Add1.Location.X, Add1.Location.Y + 125);
             //comboBox1.Location = new Point(comboBox1.Location.X, comboBox1.Location.Y + 75);
             NewObjectContainer.Location = new Point(NewObjectContainer.Location.X, NewObjectContainer.Location.Y + 125);
@@ -182,6 +224,7 @@ namespace FormsProject
             //ButtonSplitter.Panel2.Controls.Add(labelText[indexForText]);
             //ButtonSplitter.Panel2.Controls.Add(textBox[indexForText]);
 
+            showDeleteButton();
             Add1.Location = new Point(Add1.Location.X, Add1.Location.Y + 75);
             //comboBox1.Location = new Point(comboBox1.Location.X, comboBox1.Location.Y + 75);
             NewObjectContainer.Location = new Point(NewObjectContainer.Location.X, NewObjectContainer.Location.Y + 75);
@@ -232,19 +275,20 @@ namespace FormsProject
                 for (int i = 0; i < radioGroupTracker[indexForRadioTitle, 0]; i++) //generates total number of radio buttons selected by user
                 {
                     locChange = i * 91;
-                    RadioButton dynamicRadio = new RadioButton();
-                    dynamicRadio.Size = new Size(14, 13);
-                    dynamicRadio.Location = new Point(Add1.Location.X - (315 - locChange), Add1.Location.Y + 30);
+                    dynamicRadio.Add(new RadioButton());
+                    dynamicRadio[indexForRadioButton].Size = new Size(14, 13);
+                    dynamicRadio[indexForRadioButton].Location = new Point(Add1.Location.X - (315 - locChange), Add1.Location.Y + 30);
                     radioTextBox.Add(new TextBox());
                     radioTextBox[indexForRadio].Size = new Size(64, 20);
                     radioTextBox[indexForRadio].Text = "(Label " + (i + 1) + ")";
                     radioTextBox[indexForRadio].Location = new Point(Add1.Location.X - (295 - locChange), Add1.Location.Y + 27);
-                    ButtonSplitter.Panel2.Controls.Add(dynamicRadio);
+                    ButtonSplitter.Panel2.Controls.Add(dynamicRadio[indexForRadioButton]);
                     ButtonSplitter.Panel2.Controls.Add(radioTextBox[indexForRadio]);
                     indexForRadio++;
+                    indexForRadioButton++;
                 }
 
-
+                showDeleteButton();
                 Add1.Location = new Point(Add1.Location.X, Add1.Location.Y + 75);
                 NewObjectContainer.Location = new Point(NewObjectContainer.Location.X, NewObjectContainer.Location.Y + 75);
                 NewObjectCombo.SelectedIndex = 0;
@@ -284,19 +328,20 @@ namespace FormsProject
                 for (int i = 0; i < checkGroupTracker[indexForCheckTitle, 0]; i++)
                 {
                     locChange = i * 91;
-                    CheckBox dynamicCheck = new CheckBox();
-                    dynamicCheck.Size = new Size(14, 13);
-                    dynamicCheck.Location = new Point(Add1.Location.X - (315 - locChange), Add1.Location.Y + 30);
+                    dynamicCheck.Add(new CheckBox());
+                    dynamicCheck[indexForCheckButton].Size = new Size(14, 13);
+                    dynamicCheck[indexForCheckButton].Location = new Point(Add1.Location.X - (315 - locChange), Add1.Location.Y + 30);
                     checkTextBox.Add(new TextBox());
                     checkTextBox[indexForCheck].Size = new Size(64, 20);
                     checkTextBox[indexForCheck].Text = "(Label " + (i + 1) + ")";
                     checkTextBox[indexForCheck].Location = new Point(Add1.Location.X - (295 - locChange), Add1.Location.Y + 27);
-                    ButtonSplitter.Panel2.Controls.Add(dynamicCheck);
+                    ButtonSplitter.Panel2.Controls.Add(dynamicCheck[indexForCheckButton]);
                     ButtonSplitter.Panel2.Controls.Add(checkTextBox[indexForCheck]);
                     indexForCheck++;
+                    indexForCheckButton++;
                 }
 
-
+                showDeleteButton();
                 Add1.Location = new Point(Add1.Location.X, Add1.Location.Y + 75);
                 NewObjectContainer.Location = new Point(NewObjectContainer.Location.X, NewObjectContainer.Location.Y + 75);
                 NewObjectCombo.SelectedIndex = 0;
@@ -326,8 +371,8 @@ namespace FormsProject
         {
             string[] temp = (string []) cs.getResult().Clone();
 
-            ComboBox dynamicCombo = new ComboBox();
-            dynamicCombo.Location = new Point(radioLabel.Location.X + 70, radioLabel.Location.Y);
+            dynamicCombo.Add(new ComboBox());
+            dynamicCombo[indexForComboList].Location = new Point(radioLabel.Location.X + 70, radioLabel.Location.Y);
             dynamicComboTitleBox.Add(new TextBox());
 
             dynamicComboTitleBox[indexForCombo].Location = new Point(Add1.Location.X - 295, Add1.Location.Y);
@@ -336,14 +381,17 @@ namespace FormsProject
             for (int i = 0; i < temp.Length; i++)
             {
                 ComboSelection[indexForCombo, i] = temp[i];
-                dynamicCombo.Items.Add(temp[i]);
+                dynamicCombo[indexForComboList].Items.Add(temp[i]);
                 
             }
             indexForCombo++;
             cs.Close();
-            dynamicCombo.SelectedIndex = 0;
+            dynamicCombo[indexForComboList].SelectedIndex = 0;
 
-            ButtonSplitter.Panel2.Controls.Add(dynamicCombo);
+            ButtonSplitter.Panel2.Controls.Add(dynamicCombo[indexForComboList]);
+            indexForComboList++;
+
+            showDeleteButton();
             Add1.Location = new Point(Add1.Location.X, Add1.Location.Y + 75);
             NewObjectContainer.Location = new Point(NewObjectContainer.Location.X, NewObjectContainer.Location.Y + 75);
             NewObjectCombo.SelectedIndex = 0;
@@ -430,6 +478,11 @@ namespace FormsProject
                     html.createMulitLineTextBox(multiLineLabelText[indexForMultiLineText].Text);
                     indexForMultiLineText++;
                 }
+                else if (i == 9)
+                {
+                    html.createHeader(headerText[indexForHeader].Text);
+                    indexForHeader++;
+                }
 
             }
 
@@ -454,6 +507,7 @@ namespace FormsProject
             int indexCheck = 0;
             int indexCheckTitle = 0;
             int indexCombo = 0;
+            int indexHeader = 0;
 
             html.setTitle(Title.Text);
             foreach (int i in order)
@@ -521,6 +575,11 @@ namespace FormsProject
                     html.createMulitLineTextBox(multiLineLabelText[indexForMultiLineText].Text);
                     indexForMultiLineText++;
                 }
+                else if (i == 9)
+                {
+                    html.createHeader(headerText[indexHeader].Text);
+                    indexHeader++;
+                }
             }
                 
             
@@ -576,6 +635,120 @@ namespace FormsProject
                 wfs.assignChoices();
 
             wfs.ShowDialog();
+        }
+
+        private void deleteButton_Click(object sender, EventArgs e)
+        {
+            if ((order.Last() > 0) && (order.Last() < 4))
+                deleteTextBox();
+            else if (order.Last() == 4)
+                deleteCombo();
+            else if (order.Last() == 5)
+                deleteRadio();
+            else if (order.Last() == 6)
+                deleteCheck();
+            else if (order.Last() == 7)
+                deleteDate();
+            else if (order.Last() == 8)
+                deleteMultiLineText();
+            else if (order.Last() == 9)
+                deleteHeader();
+
+
+
+        }//deleteButton_Click
+
+        private void deleteTextBox()
+        {
+            moveContainerBack(75);
+            indexForText--;
+            ButtonSplitter.Panel2.Controls.Remove(labelText[indexForText]);
+            ButtonSplitter.Panel2.Controls.Remove(textBox[indexForText]);
+
+        }
+
+        private void deleteCombo()
+        {
+            moveContainerBack(75);
+            indexForCombo--;
+            indexForComboList--;
+
+            ButtonSplitter.Panel2.Controls.Remove(dynamicComboTitleBox[indexForCombo]);
+            ButtonSplitter.Panel2.Controls.Remove(dynamicCombo[indexForComboList]);
+        }
+
+        private void deleteRadio()
+        {
+            moveContainerBack(75);
+            indexForRadioTitle--;
+            ButtonSplitter.Panel2.Controls.Remove(radioGroupTitleBox[indexForRadioTitle]);
+            for (int i = 0; i < radioGroupTracker[indexForRadioTitle, 0]; i++) //generates total number of radio buttons selected by user
+            {
+                indexForRadio--;
+                indexForRadioButton--;
+                ButtonSplitter.Panel2.Controls.Remove(dynamicRadio[indexForRadioButton]);
+                ButtonSplitter.Panel2.Controls.Remove(radioTextBox[indexForRadio]);
+            }
+        }
+
+        private void deleteCheck()
+        {
+            moveContainerBack(75);
+            indexForCheckTitle--;
+            ButtonSplitter.Panel2.Controls.Remove(checkGroupTitleBox[indexForCheckTitle]);
+            for (int i = 0; i < checkGroupTracker[indexForCheckTitle, 0]; i++) //generates total number of radio buttons selected by user
+            {
+                indexForCheck--;
+                indexForCheckButton--;
+                ButtonSplitter.Panel2.Controls.Remove(dynamicCheck[indexForCheckButton]);
+                ButtonSplitter.Panel2.Controls.Remove(checkTextBox[indexForCheck]);
+            }
+        }
+
+        private void deleteDate()
+        {
+            moveContainerBack(75);
+            indexForDate--;
+            ButtonSplitter.Panel2.Controls.Remove(dateTextLabel[indexForDate]);
+            ButtonSplitter.Panel2.Controls.Remove(dateTextBox[indexForDate]);
+        }
+
+        private void deleteMultiLineText()
+        {
+            moveContainerBack(125);
+            indexForMultiLineText--;
+            ButtonSplitter.Panel2.Controls.Remove(multiLineLabelText[indexForMultiLineText]);
+            ButtonSplitter.Panel2.Controls.Remove(multiLineTextBox[indexForMultiLineText]);
+        }
+        
+        private void deleteHeader()
+        {
+            moveContainerBack(50);
+            indexForHeader--;
+            ButtonSplitter.Panel2.Controls.Remove(headerText[indexForHeader]);
+
+        }
+
+        private void moveContainerBack(int panelLoc)
+        {
+            Add1.Location = new Point(Add1.Location.X, Add1.Location.Y - panelLoc);
+            NewObjectContainer.Location = new Point(NewObjectContainer.Location.X, NewObjectContainer.Location.Y - panelLoc);
+            NewObjectCombo.SelectedIndex = 0;
+            if (order.Count > 1)
+            {
+                if(order[order.Count - 2] == 8)
+                    deleteButton.Location = new Point(Add1.Location.X, Add1.Location.Y - 125);
+                else if(order[order.Count - 2] == 9)
+                    deleteButton.Location = new Point(Add1.Location.X, Add1.Location.Y - 50);
+                else
+                    deleteButton.Location = new Point(Add1.Location.X, Add1.Location.Y - 75);
+            }
+            else
+            {
+                deleteButton.Visible = false;
+            }
+
+            order.Remove(order.Last());
         }
     }
 }

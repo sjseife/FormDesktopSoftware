@@ -44,6 +44,7 @@
             this.AddWorkflow = new System.Windows.Forms.Button();
             this.SubmitButton = new System.Windows.Forms.Button();
             this.CancelButton = new System.Windows.Forms.Button();
+            this.deleteButton = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.NewObjectContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ButtonSplitter)).BeginInit();
@@ -86,7 +87,8 @@
             "Add Radio Buttons",
             "Add Checkboxes",
             "Add Date",
-            "Add Multi-Line Textbox"});
+            "Add Multi-Line Textbox",
+            "Add Header"});
             this.NewObjectCombo.Location = new System.Drawing.Point(21, 17);
             this.NewObjectCombo.Name = "NewObjectCombo";
             this.NewObjectCombo.Size = new System.Drawing.Size(263, 21);
@@ -210,6 +212,7 @@
             // ButtonSplitter.Panel2
             // 
             this.ButtonSplitter.Panel2.AutoScroll = true;
+            this.ButtonSplitter.Panel2.Controls.Add(this.deleteButton);
             this.ButtonSplitter.Panel2.Controls.Add(this.Add1);
             this.ButtonSplitter.Panel2.Controls.Add(this.ComboDone);
             this.ButtonSplitter.Panel2.Controls.Add(this.ComboChange);
@@ -255,6 +258,18 @@
             this.CancelButton.UseVisualStyleBackColor = true;
             this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
+            // deleteButton
+            // 
+            this.deleteButton.BackColor = System.Drawing.SystemColors.Control;
+            this.deleteButton.Image = global::FormsProject.Properties.Resources.remove_16;
+            this.deleteButton.Location = new System.Drawing.Point(596, 536);
+            this.deleteButton.Name = "deleteButton";
+            this.deleteButton.Size = new System.Drawing.Size(22, 22);
+            this.deleteButton.TabIndex = 20;
+            this.deleteButton.UseVisualStyleBackColor = false;
+            this.deleteButton.Visible = false;
+            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
+            // 
             // FormCreator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -296,6 +311,7 @@
         private System.Windows.Forms.Button CancelButton;
         private System.Windows.Forms.Button AddWorkflow;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.Button deleteButton;
     }
 }
 
