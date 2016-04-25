@@ -42,6 +42,15 @@ namespace FormsProject
             form_elementPopulator.textBox_text(input);
         }//createTextBox(string)
 
+        public void createHeader(string input)
+        {
+            string output = String.Format("\n<h3>\n{0}\n</h3>\n", input);
+            formBody += output;
+
+            form_elementPopulator.header_type();
+            form_elementPopulator.header_text(input);
+        }//createHeader(string)
+
         public void createMulitLineTextBox(string input)
         {
             string formattedInput = formatString(input);

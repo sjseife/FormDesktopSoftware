@@ -53,10 +53,16 @@ namespace FormsProject
             element_type.Add("check");
         }
 
+        public void header_type()
+        {
+            element_type.Add("header");
+        }
+
         public void multiLineText_type()
         {
             element_type.Add("multiLineText");
         }
+
         public void date_type()
         {
             element_type.Add("date");
@@ -84,6 +90,11 @@ namespace FormsProject
         }
 
         public void textBox_text(string input)
+        {
+            element_text.Add(input);
+        }
+
+        public void header_text(string input)
         {
             element_text.Add(input);
         }
